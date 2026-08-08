@@ -1,10 +1,8 @@
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
 import { MEMBERS } from '../data/members';
 import { CardVisual } from '../components/MemberCardVisual';
+import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
-import logoMark from '../assets/logo-mark.png';
 
 // No opacity in "hidden" — see the note in the other section components:
 // whileInView never fires without a real scroll event, so gating on
@@ -20,26 +18,13 @@ const cardVariants = {
 export const RosterPage: React.FC = () => {
   return (
     <div className="bg-bg-primary text-text-primary min-h-screen relative font-sans selection:bg-brand-crimson selection:text-text-primary">
-      {/* Minimal top bar — a purpose-built header for this page rather than
-          reusing the site Header, since Header's nav links are in-page
-          anchors (#about, #team, ...) that only resolve on the home page. */}
-      <header className="w-full border-b border-text-primary/5 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
-        <div className="w-full max-w-[1800px] mx-auto flex items-center justify-between px-6 md:px-12 lg:px-16 py-5">
-          <Link to="/" className="flex items-center gap-3 font-heading font-bold text-lg text-text-primary tracking-wide">
-            <img src={logoMark} alt="Rotary International emblem" className="w-9 h-9 object-contain" />
-            <span>Salem Midtown</span>
-          </Link>
-          <Link
-            to="/"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-heading font-bold border border-text-primary/5 hover:border-brand-crimson/20 bg-text-primary/2 hover:bg-brand-crimson/5 text-text-primary hover:text-brand-crimson transition-all duration-200"
-          >
-            <ArrowLeft size={14} />
-            <span>Back to Home</span>
-          </Link>
-        </div>
-      </header>
+      {/* The real site Header, not a bespoke lookalike — its nav Links all
+          point to "/#section" and HomePage's useHashScroll handles getting
+          there and scrolling correctly from any page, including this one. */}
+      <Header />
 
-      <section className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 py-16 relative z-10">
+      {/* pt-28 clears the fixed Header (it's out of normal document flow) */}
+      <section className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 pt-28 pb-16 relative z-10">
         <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col items-center text-center mb-16 max-w-3xl mx-auto relative">

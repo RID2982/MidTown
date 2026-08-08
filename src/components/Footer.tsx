@@ -2,10 +2,6 @@ import React from 'react';
 import { Mail, Globe } from 'lucide-react';
 import { InstagramIcon } from './MemberCardVisual';
 
-// All three are pending — not yet provided. Intentionally not fabricating a
-// plausible-looking handle/URL/address here: a wrong or made-up one would
-// actively mislead a visitor trying to reach the club, which is worse than
-// just rendering the icon inert until the real value arrives.
 const CLUB_EMAIL: string | null = null;
 const INSTAGRAM_URL: string | null = null;
 const WEBSITE_URL: string | null = null;
@@ -18,47 +14,108 @@ const FOOTER_LINKS = [
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="border-t border-text-primary/5 py-12 px-6 text-center text-sm text-text-muted bg-bg-secondary relative z-10">
-      <p className="font-sans">
-        Rotaract Club of Salem Midtown &copy; 2026. All rights reserved.
-      </p>
-      <p className="font-sans text-xs text-text-muted/65 mt-2">
-        Sponsored by the{' '}
-        <a
-          href="https://district2982.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-text-primary hover:text-brand-crimson transition-colors underline"
-        >
-          Rotary Club of Salem Midtown
-        </a>{' '}
-        • District 2982
-      </p>
+    <footer className="bg-theme-dark text-white border-t border-white/10 py-20 px-6 relative overflow-hidden z-10">
+      {/* Decorative vertical lines */}
+      <div className="absolute inset-0 flex justify-between pointer-events-none opacity-5 z-0 px-12 max-w-[1550px] mx-auto">
+        <div className="w-[1px] h-full bg-white" />
+        <div className="w-[1px] h-full bg-white hidden md:block" />
+        <div className="w-[1px] h-full bg-white hidden md:block" />
+        <div className="w-[1px] h-full bg-white" />
+      </div>
 
-      <div className="flex items-center justify-center gap-3 mt-5">
-        {FOOTER_LINKS.map(({ key, label, icon: Icon, href }) =>
-          href ? (
+      {/* Huge Outline Watermark "Midtown" in background (adapted from "Crowdix") */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center select-none pointer-events-none z-0 overflow-hidden">
+        <p className="watermark-text text-outline opacity-40">
+          Midtown
+        </p>
+      </div>
+
+      <div className="w-full max-w-[1550px] mx-auto relative z-10 flex flex-col gap-16">
+        {/* Widget Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+          
+          {/* Widget 1: About Salem Midtown */}
+          <div className="md:col-span-5 flex flex-col gap-4">
+            <h4 className="font-display text-2xl uppercase tracking-wider text-theme-blue">
+              Rotaract Salem Midtown
+            </h4>
+            <p className="text-xs text-white/50 font-sans leading-relaxed max-w-sm">
+              Sponsored by the Rotary Club of Salem Midtown • District 2982. Guided by our motto "Dream to Deserve", we mobilize local youth for regional welfare.
+            </p>
+            {CLUB_EMAIL && (
+              <a href={`mailto:${CLUB_EMAIL}`} className="text-xs text-brand-crimson hover:underline font-sans mt-2">
+                {CLUB_EMAIL}
+              </a>
+            )}
+          </div>
+
+          {/* Widget 2: Quick Links */}
+          <div className="md:col-span-3 flex flex-col gap-4">
+            <h5 className="font-heading font-extrabold text-xs uppercase tracking-widest text-theme-blue/70">
+              Quick Links
+            </h5>
+            <div className="flex flex-col gap-2.5">
+              <a href="#home" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Home</a>
+              <a href="#district" className="text-xs text-white/60 hover:text-white transition-colors font-sans">RID 2982</a>
+              <a href="#about" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Our Club</a>
+              <a href="#projects" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Projects</a>
+              <a href="#team" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Members</a>
+            </div>
+          </div>
+
+          {/* Widget 3: Social Newsletter Widget */}
+          <div className="md:col-span-4 flex flex-col gap-4">
+            <h5 className="font-heading font-extrabold text-xs uppercase tracking-widest text-theme-blue/70">
+              Connect With Us
+            </h5>
+            <p className="text-xs text-white/50 font-sans leading-relaxed">
+              Reach out to our club directors or follow us on our channels to get involved in our next project.
+            </p>
+            
+            <div className="flex items-center gap-3 mt-2">
+              {FOOTER_LINKS.map(({ key, label, icon: Icon, href }) =>
+                href ? (
+                  <a
+                    key={key}
+                    href={href}
+                    target={key === 'email' ? undefined : '_blank'}
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:border-brand-crimson/50 hover:text-brand-crimson flex items-center justify-center text-white/60 transition-colors shadow-sm cursor-pointer"
+                  >
+                    <Icon size={14} />
+                  </a>
+                ) : (
+                  <span
+                    key={key}
+                    aria-hidden="true"
+                    title={`${label} coming soon`}
+                    className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/5 flex items-center justify-center text-white/20"
+                  >
+                    <Icon size={14} />
+                  </span>
+                )
+              )}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Bottom copyright strip */}
+        <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] text-white/40 font-sans tracking-wide uppercase">
+          <p>© Copyright 2026 Rotaract Club of Salem Midtown. All rights reserved.</p>
+          <p>
+            District 2982 • Sponsored by{' '}
             <a
-              key={key}
-              href={href}
-              target={key === 'email' ? undefined : '_blank'}
+              href="https://district2982.org"
+              target="_blank"
               rel="noopener noreferrer"
-              aria-label={label}
-              className="w-9 h-9 rounded-full bg-white border border-text-primary/10 hover:border-brand-crimson/30 hover:text-brand-crimson flex items-center justify-center text-text-muted transition-colors shadow-sm cursor-pointer"
+              className="text-theme-blue hover:text-brand-crimson transition-colors underline"
             >
-              <Icon size={14} />
+              Rotary Club of Salem Midtown
             </a>
-          ) : (
-            <span
-              key={key}
-              aria-hidden="true"
-              title={`${label} coming soon`}
-              className="w-9 h-9 rounded-full bg-white/50 border border-text-primary/5 flex items-center justify-center text-text-muted/30"
-            >
-              <Icon size={14} />
-            </span>
-          )
-        )}
+          </p>
+        </div>
       </div>
     </footer>
   );

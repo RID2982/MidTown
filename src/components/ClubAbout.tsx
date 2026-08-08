@@ -1,126 +1,158 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useScrollSkew } from '../hooks/useScrollSkew';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+import clubGroupPhoto from '../assets/club-group-photo.jpg';
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export const ClubAbout: React.FC = () => {
-  const headingRef = useScrollSkew<HTMLHeadingElement>();
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const leftColRef = useRef<HTMLDivElement>(null);
+  const rightColRef = useRef<HTMLDivElement>(null);
 
-  // Note: these variants intentionally never set opacity in the "hidden"
-  // state. whileInView only fires on a real scroll/intersection event — a
-  // one-shot "capture entire page" screenshot tool never scrolls, so it
-  // never fires. Content gated behind opacity: 0 would render permanently
-  // invisible in that case; animating only position keeps it always legible
-  // while still playing the slide-in motion for real visitors.
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Title Scroll Trigger. No opacity, and a small px offset rather than
+      // a full-height mask: whileInView/ScrollTrigger only fires on a real
+      // scroll event, so a one-shot full-page capture (or the GSAP bundle
+      // failing to load) would otherwise leave this permanently invisible —
+      // see the same note in the other section components.
+      if (titleRef.current) {
+        const split = new SplitText(titleRef.current, { type: 'lines,words' });
+
+        gsap.from(split.words, {
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          y: 24,
+          stagger: 0.03,
+          duration: 1,
+          ease: 'power3.out',
+        });
       }
-    }
-  };
 
-  // Small px offset, not a full-height mask: a masked 100% slide-up clips
-  // the text entirely whenever whileInView never fires (see note above) —
-  // for headings that's a missing title, not just a static card, so it's
-  // worth trading the wipe-reveal flourish for guaranteed legibility.
-  const revealVariants = {
-    hidden: { y: 24 },
-    visible: {
-      y: 0,
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }
-    }
-  };
+      // Left Column elements stagger
+      if (leftColRef.current) {
+        gsap.from(leftColRef.current.children, {
+          scrollTrigger: {
+            trigger: leftColRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          y: 40,
+          stagger: 0.12,
+          duration: 0.8,
+          ease: 'power3.out',
+        });
+      }
 
-  const itemVariants = {
-    hidden: { y: 30 },
-    visible: {
-      y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' as const }
-    }
-  };
+      // Right Column Photo Slot Reveal
+      if (rightColRef.current) {
+        gsap.from(rightColRef.current, {
+          scrollTrigger: {
+            trigger: rightColRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          scale: 0.95,
+          y: 45,
+          duration: 0.8,
+          ease: 'power3.out',
+        });
+      }
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section id="about" className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 py-20 relative z-10 bg-white">
-      <div className="absolute top-1/2 right-10 w-80 h-80 bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
-      
-      {/* Title block */}
-      <div className="flex flex-col items-center text-center mb-16 max-w-3xl mx-auto">
-        <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest mb-3">
-          Rotaract Salem Midtown History
-        </span>
-        <h2 ref={headingRef} className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
-          <motion.span
-            initial={{ y: 24 }}
-            whileInView={{ y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
-            className="block"
-          >
-            About Our <span className="bg-gradient-to-r from-brand-crimson to-red-800 bg-clip-text text-transparent">Midtown Club</span>
-          </motion.span>
+    <section id="about" className="w-full max-w-[1550px] mx-auto px-6 md:px-12 py-24 relative z-10 bg-white">
+      {/* Background Glow */}
+      <div className="absolute top-1/2 right-10 w-96 h-96 bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Header Block matching Crowdix about-section title */}
+      <div className="flex flex-col items-center text-center mb-20 max-w-3xl mx-auto">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="w-2.5 h-2.5 rounded-full bg-theme-dark" />
+          <span className="text-theme-dark text-[10px] md:text-xs uppercase tracking-widest font-heading font-extrabold">
+            Rotaract Salem Midtown History
+          </span>
+        </div>
+        <h2 
+          ref={titleRef} 
+          className="text-4xl md:text-6xl font-display uppercase tracking-tight text-theme-dark"
+        >
+          About Our <span className="text-sweep">Midtown Club</span>
         </h2>
       </div>
-      
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-100px' }}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
-      >
-        {/* Left: About Text */}
-        <div className="lg:col-span-7 flex flex-col gap-6">
-          <motion.div variants={itemVariants} className="text-brand-crimson text-xs uppercase font-heading font-bold tracking-widest">
-            Sponsored by Rotary Club of Salem Midtown
-          </motion.div>
-          
-          <div className="overflow-hidden pb-1">
-            <motion.h3 variants={revealVariants} className="text-xl md:text-3xl font-heading font-bold text-text-primary">
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        {/* Left Column: About text and structured features */}
+        <div ref={leftColRef} className="lg:col-span-7 flex flex-col gap-8">
+          <div className="flex flex-col gap-2">
+            <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest">
+              Sponsored by Rotary Club of Salem Midtown
+            </span>
+            <h3 className="font-heading font-extrabold text-2xl md:text-3xl text-theme-dark leading-tight">
               Dream to Deserve
-            </motion.h3>
+            </h3>
           </div>
-          
-          <motion.p variants={itemVariants} className="text-text-muted font-sans text-sm md:text-base leading-relaxed">
+
+          <p className="text-text-muted font-sans text-sm md:text-base leading-relaxed">
             Chartered to mobilize Salem's youth, our club serves as a platform for college students, young working professionals, and entrepreneurs to grow as leaders, coordinate community service, and build international ties.
-          </motion.p>
-          <motion.p variants={itemVariants} className="text-text-muted font-sans text-sm md:text-base leading-relaxed">
+          </p>
+
+          <p className="text-text-muted font-sans text-sm md:text-base leading-relaxed">
             Through targeted social development efforts (blood donation drives, environment initiatives, computer literacy campaigns, and public speaking modules), we aim to translate club fellowship into life-changing service.
-          </motion.p>
-          
-          {/* Avenue Objectives — staggered floating tag pills */}
-          <motion.ul variants={containerVariants} className="flex flex-wrap gap-3 mt-6">
-            <motion.li variants={itemVariants} className="flex items-center gap-2 pl-3 pr-4 py-2 rounded-full bg-brand-crimson/5 border border-brand-crimson/10 text-sm font-heading font-semibold text-text-primary w-fit">
-              <span className="w-2 h-2 rounded-full bg-brand-crimson shadow-md shadow-brand-crimson/50 shrink-0" />
-              <span>Club Service & Fellowship</span>
-            </motion.li>
-            <motion.li variants={itemVariants} className="flex items-center gap-2 pl-3 pr-4 py-2 rounded-full bg-brand-crimson/5 border border-brand-crimson/10 text-sm font-heading font-semibold text-text-primary w-fit">
-              <span className="w-2 h-2 rounded-full bg-brand-crimson shadow-md shadow-brand-crimson/50 shrink-0" />
-              <span>Community Development</span>
-            </motion.li>
-            <motion.li variants={itemVariants} className="flex items-center gap-2 pl-3 pr-4 py-2 rounded-full bg-brand-crimson/5 border border-brand-crimson/10 text-sm font-heading font-semibold text-text-primary w-fit">
-              <span className="w-2 h-2 rounded-full bg-brand-crimson shadow-md shadow-brand-crimson/50 shrink-0" />
-              <span>Professional Growth</span>
-            </motion.li>
-            <motion.li variants={itemVariants} className="flex items-center gap-2 pl-3 pr-4 py-2 rounded-full bg-brand-crimson/5 border border-brand-crimson/10 text-sm font-heading font-semibold text-text-primary w-fit">
-              <span className="w-2 h-2 rounded-full bg-brand-crimson shadow-md shadow-brand-crimson/50 shrink-0" />
-              <span>International Service</span>
-            </motion.li>
-          </motion.ul>
+          </p>
+
+          {/* Structured list cards (Avenues of Service) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-2">
+            <div className="rounded-2xl border border-black/5 bg-theme-blue/20 p-6 hover-beige-gradient transition-all duration-300">
+              <h4 className="text-sm font-heading font-extrabold uppercase tracking-wider text-brand-crimson mb-2">Club Service & Fellowship</h4>
+              <p className="text-xs text-text-muted font-sans leading-relaxed">
+                Fostering strong interpersonal relationships and networking ties among Salem's young leaders.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-black/5 bg-theme-blue/20 p-6 hover-beige-gradient transition-all duration-300">
+              <h4 className="text-sm font-heading font-extrabold uppercase tracking-wider text-brand-navy mb-2">Community Development</h4>
+              <p className="text-xs text-text-muted font-sans leading-relaxed">
+                Implementing local welfare projects, blood donation camps, and literacy campaigns.
+              </p>
+            </div>
+          </div>
+
+          {/* Badges for other avenues */}
+          <div className="flex flex-wrap gap-3 mt-2">
+            <span className="px-4 py-2 rounded-full border border-black/5 bg-bg-secondary font-heading font-extrabold text-[10px] uppercase tracking-wider text-text-primary">
+              Professional Growth
+            </span>
+            <span className="px-4 py-2 rounded-full border border-black/5 bg-bg-secondary font-heading font-extrabold text-[10px] uppercase tracking-wider text-text-primary">
+              International Service
+            </span>
+            <span className="px-4 py-2 rounded-full border border-black/5 bg-bg-secondary font-heading font-extrabold text-[10px] uppercase tracking-wider text-text-primary">
+              Public Image
+            </span>
+          </div>
         </div>
-        
-        {/* Right: Group Photo Placeholder */}
+
+        {/* Right Column: Club Group Photo */}
         <div className="lg:col-span-5 w-full">
-          <motion.div 
-            variants={itemVariants}
-            className="w-full aspect-[4/3] rounded-3xl border border-dashed border-text-primary/10 bg-white hover-beige-gradient flex flex-col items-center justify-center text-center p-6 transition-all duration-300 shadow-sm"
+          <div
+            ref={rightColRef}
+            className="w-full aspect-[4/3] rounded-[2.5rem] border border-black/10 overflow-hidden shadow-[0_20px_45px_-15px_rgba(225,29,72,0.45)] hover:shadow-[0_25px_55px_-15px_rgba(225,29,72,0.6)] transition-all duration-500 hover:scale-[1.01]"
           >
-            <span className="text-text-muted text-sm font-heading font-bold mb-2">Club Group Photo Slot</span>
-            <span className="text-xs text-text-muted/65 font-sans">Place your final group photo or club logo file here</span>
-          </motion.div>
+            <img
+              src={clubGroupPhoto}
+              alt="Rotaract Club of Salem Midtown members and guests at a club installation event"
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

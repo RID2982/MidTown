@@ -29,14 +29,21 @@ export const InstagramIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
 // Used by both the home page leadership duo and the full roster page.
 export const CardVisual: React.FC<{ member: Member }> = ({ member }) => {
   return (
-    <div className="w-full h-full rounded-[2.5rem] bg-slate-900 border border-white/5 shadow-2xl relative overflow-hidden">
+    <div className="w-full h-full rounded-[2.5rem] bg-slate-900 border border-white/5 shadow-2xl relative overflow-hidden group">
       {/* Photo / illustration slot */}
-      <div className="absolute inset-0 bg-gradient-to-b from-brand-navy via-slate-800 to-slate-950 flex flex-col items-center justify-center p-6 text-center select-none pb-48">
-        <div className="w-24 h-24 rounded-full border border-dashed border-white/20 flex items-center justify-center text-white/50 mb-3 bg-white/5 shadow-inner">
+      <div className="absolute inset-0 bg-gradient-to-b from-brand-navy via-slate-800 to-slate-950 flex flex-col items-center justify-center p-6 text-center select-none pb-48 transition-transform duration-500 group-hover:scale-105">
+        <div className="w-24 h-24 rounded-full border border-dashed border-white/20 flex items-center justify-center text-white/50 mb-3 bg-white/5 shadow-inner transition-transform duration-500 group-hover:scale-90">
           <User size={36} className="opacity-40" />
         </div>
         <div className="text-[10px] text-white/30 font-sans tracking-wide uppercase font-semibold">
           {member.photoSlot}
+        </div>
+        
+        {/* Crowdix Hover Floating Text Animation */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 bg-theme-blue/15 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap">
+          <span className="text-[8px] uppercase tracking-[0.2em] font-heading font-extrabold text-theme-blue">
+            Midtown Leader
+          </span>
         </div>
       </div>
 

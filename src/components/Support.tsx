@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CheckCircle2, ChevronDown } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useScrollSkew } from '../hooks/useScrollSkew';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export const Support: React.FC = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', category: 'General Inquiry', message: '' });
-  const headingRef = useScrollSkew<HTMLHeadingElement>();
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -19,45 +23,82 @@ export const Support: React.FC = () => {
     setFormSubmitted(true);
   };
 
-  return (
-    <section id="support" className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 py-20 relative z-10 bg-white">
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-brand-navy/5 rounded-full blur-3xl pointer-events-none" />
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // No opacity, and a small px offset rather than a full-height mask —
+      // see the note in ClubAbout.tsx.
+      if (titleRef.current) {
+        const split = new SplitText(titleRef.current, { type: 'lines,words' });
 
-      <div className="flex flex-col items-center text-center mb-16 max-w-3xl mx-auto">
-        <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest mb-3">
-          We're Here To Help
-        </span>
-        <h2 ref={headingRef} className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
-          <motion.span
-            initial={{ y: 24 }}
-            whileInView={{ y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
-            className="block"
-          >
-            Get <span className="bg-gradient-to-r from-brand-crimson to-red-800 bg-clip-text text-transparent">Support & Help</span>
-          </motion.span>
+        gsap.from(split.words, {
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          y: 24,
+          stagger: 0.03,
+          duration: 1,
+          ease: 'power3.out',
+        });
+      }
+
+      // Card Fade Up
+      if (cardRef.current) {
+        gsap.from(cardRef.current, {
+          scrollTrigger: {
+            trigger: cardRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          y: 40,
+          duration: 0.8,
+          ease: 'power3.out',
+        });
+      }
+    });
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section id="support" className="w-full max-w-[1550px] mx-auto px-6 md:px-12 py-24 relative z-10 bg-theme-dark rounded-[3rem] text-white overflow-hidden">
+      {/* Background soft glows */}
+      <div className="absolute inset-0 bg-radial-[circle_at_20%_30%] from-brand-crimson/10 via-transparent to-transparent z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-radial-[circle_at_80%_70%] from-brand-gold/10 via-transparent to-transparent z-0 pointer-events-none" />
+
+      {/* Header Block matching Crowdix CTA title layout */}
+      <div className="flex flex-col items-center text-center mb-16 max-w-3xl mx-auto relative z-10">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="w-2.5 h-2.5 rounded-full bg-theme-blue" />
+          <span className="text-theme-blue text-[10px] md:text-xs uppercase tracking-widest font-heading font-extrabold">
+            We're Here To Help
+          </span>
+        </div>
+        <h2 
+          ref={titleRef} 
+          className="text-4xl md:text-6xl font-display uppercase tracking-tight text-white"
+        >
+          Get <span className="text-sweep">Support & Help</span>
         </h2>
-        <p className="text-text-muted font-sans text-sm md:text-base mt-4 leading-relaxed">
+        <p className="text-white/60 font-sans text-sm md:text-base mt-4 leading-relaxed max-w-xl">
           Didn't find your answer above? Drop us a ticket and our team will follow up directly.
         </p>
       </div>
 
-      <motion.div
-        initial={{ y: 30 }}
-        whileInView={{ y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="max-w-2xl mx-auto"
+      {/* Dark styled glass card matching Crowdix CTA boxes */}
+      <div
+        ref={cardRef}
+        className="max-w-2xl mx-auto relative z-10"
       >
-        <div className="glass-card hover-beige-gradient rounded-3xl p-8 md:p-10 border border-text-primary/5 relative min-h-[380px] shadow-sm bg-white">
+        <div className="rounded-[2rem] p-8 md:p-12 border border-white/10 bg-white/[0.02] backdrop-blur-xl relative min-h-[380px] shadow-2xl">
           {formSubmitted ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center animate-fade-in">
               <CheckCircle2 size={48} className="text-brand-crimson mb-4" />
-              <h4 className="text-lg font-heading font-bold text-text-primary mb-2">
+              <h4 className="text-lg font-heading font-extrabold uppercase tracking-wider text-white mb-2">
                 Ticket Created Successfully!
               </h4>
-              <p className="text-sm text-text-muted max-w-sm">
+              <p className="text-sm text-white/70 max-w-sm font-sans leading-relaxed">
                 Thank you, <strong>{formData.name}</strong>. Our team will verify your query and reach out to you at <strong>{formData.email}</strong>.
               </p>
               <button
@@ -65,20 +106,20 @@ export const Support: React.FC = () => {
                   setFormSubmitted(false);
                   setFormData({ name: '', email: '', category: 'General Inquiry', message: '' });
                 }}
-                className="mt-6 px-6 py-2.5 rounded-full font-heading font-semibold text-xs border border-text-primary/5 hover:border-brand-crimson/25 bg-text-primary/2 hover:bg-brand-crimson/5 text-text-primary hover:text-brand-crimson transition-all duration-300 cursor-pointer"
+                className="mt-8 px-6 py-2.5 rounded-full font-heading font-extrabold text-[10px] uppercase tracking-widest border border-white/20 hover:border-brand-crimson/50 bg-white/5 hover:bg-brand-crimson/10 text-white transition-all duration-300 cursor-pointer"
               >
                 Submit Another Query
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <h3 className="text-lg font-heading font-bold text-text-primary mb-2">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+              <h3 className="text-lg font-heading font-extrabold uppercase tracking-wider text-theme-blue mb-2 border-b border-white/5 pb-4">
                 Submit a Support Ticket
               </h3>
 
               {/* Name */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-heading font-bold uppercase tracking-wider text-text-muted">
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
                   Name
                 </label>
                 <input
@@ -88,13 +129,13 @@ export const Support: React.FC = () => {
                   onChange={handleInputChange}
                   placeholder="Enter your name"
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-text-primary/5 focus:border-brand-crimson/30 focus:bg-white focus:ring-1 focus:ring-brand-crimson outline-none transition-all text-sm font-sans"
+                  className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white placeholder-white/30"
                 />
               </div>
 
               {/* Email */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-heading font-bold uppercase tracking-wider text-text-muted">
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
                   Email Address
                 </label>
                 <input
@@ -104,13 +145,13 @@ export const Support: React.FC = () => {
                   onChange={handleInputChange}
                   placeholder="name@example.com"
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-text-primary/5 focus:border-brand-crimson/30 focus:bg-white focus:ring-1 focus:ring-brand-crimson outline-none transition-all text-sm font-sans"
+                  className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white placeholder-white/30"
                 />
               </div>
 
               {/* Category */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-heading font-bold uppercase tracking-wider text-text-muted">
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
                   Query Category
                 </label>
                 <div className="relative">
@@ -118,23 +159,23 @@ export const Support: React.FC = () => {
                     name="category"
                     value={formData.category}
                     onChange={handleInputChange}
-                    className="w-full appearance-none px-4 py-3 pr-10 rounded-xl bg-bg-secondary border border-text-primary/5 focus:border-brand-crimson/30 focus:bg-white focus:ring-1 focus:ring-brand-crimson outline-none transition-all text-sm font-sans text-text-primary cursor-pointer"
+                    className="w-full appearance-none px-4 py-3 pr-10 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white cursor-pointer"
                   >
-                    <option value="General Inquiry">General Inquiry</option>
-                    <option value="Join the Club">Join the Club</option>
-                    <option value="Sponsorship / Partnership">Sponsorship & Partnership</option>
-                    <option value="Event Inquiry">Event Inquiry</option>
+                    <option value="General Inquiry" className="bg-theme-dark">General Inquiry</option>
+                    <option value="Join the Club" className="bg-theme-dark">Join the Club</option>
+                    <option value="Sponsorship / Partnership" className="bg-theme-dark">Sponsorship & Partnership</option>
+                    <option value="Event Inquiry" className="bg-theme-dark">Event Inquiry</option>
                   </select>
                   <ChevronDown
                     size={16}
-                    className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-text-muted"
+                    className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white/50"
                   />
                 </div>
               </div>
 
               {/* Message */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-heading font-bold uppercase tracking-wider text-text-muted">
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
                   Message
                 </label>
                 <textarea
@@ -144,20 +185,20 @@ export const Support: React.FC = () => {
                   placeholder="Describe your question or request"
                   required
                   rows={4}
-                  className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-text-primary/5 focus:border-brand-crimson/30 focus:bg-white focus:ring-1 focus:ring-brand-crimson outline-none transition-all text-sm font-sans resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white placeholder-white/30 resize-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-4 rounded-xl font-heading font-bold text-sm bg-gradient-to-r from-brand-crimson to-red-800 hover:from-brand-crimson/95 hover:to-red-750 text-white shadow-md shadow-brand-crimson/20 hover:shadow-lg border border-white/5 cursor-pointer text-center"
+                className="w-full py-4 rounded-xl font-heading font-extrabold text-xs uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-800 text-white shadow-lg shadow-brand-crimson/25 hover:shadow-xl hover:shadow-brand-crimson/40 border border-white/5 cursor-pointer text-center mt-2"
               >
                 Create Support Ticket
               </button>
             </form>
           )}
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

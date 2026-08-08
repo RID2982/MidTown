@@ -1,107 +1,139 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import clubLogo from '../assets/club-logo-full.png';
-import { useScrollSkew } from '../hooks/useScrollSkew';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+import clubLogo from '../assets/1.svg';
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export const District: React.FC = () => {
-  const headingRef = useScrollSkew<HTMLHeadingElement>();
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const leftColRef = useRef<HTMLDivElement>(null);
+  const rightColRef = useRef<HTMLDivElement>(null);
 
-  // Note: these variants intentionally never set opacity in the "hidden"
-  // state. whileInView only fires on a real scroll/intersection event — a
-  // one-shot "capture entire page" screenshot tool never scrolls, so it
-  // never fires. Content gated behind opacity: 0 would render permanently
-  // invisible in that case; animating only position keeps it always legible
-  // while still playing the slide-in motion for real visitors.
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // No opacity, and a small px offset rather than a full-height mask —
+      // see the note in ClubAbout.tsx: ScrollTrigger only fires on a real
+      // scroll event, so a static capture (or GSAP failing to load) would
+      // otherwise leave this permanently invisible.
+      if (titleRef.current) {
+        const split = new SplitText(titleRef.current, { type: 'lines,words' });
+
+        gsap.from(split.words, {
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          y: 24,
+          stagger: 0.03,
+          duration: 1,
+          ease: 'power3.out',
+        });
       }
-    }
-  };
 
-  // Small px offset, not a full-height mask: a masked 100% slide-up clips
-  // the text entirely whenever whileInView never fires (see note above) —
-  // for headings that's a missing title, not just a static card, so it's
-  // worth trading the wipe-reveal flourish for guaranteed legibility.
-  const revealVariants = {
-    hidden: { y: 24 },
-    visible: {
-      y: 0,
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }
-    }
-  };
+      // Left Column Fade in
+      if (leftColRef.current) {
+        gsap.from(leftColRef.current.children, {
+          scrollTrigger: {
+            trigger: leftColRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          y: 40,
+          stagger: 0.15,
+          duration: 0.8,
+          ease: 'power3.out',
+        });
+      }
 
-  const cardVariants = {
-    hidden: { y: 30 },
-    visible: {
-      y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' as const }
-    }
-  };
+      // Right Column scale & lift
+      if (rightColRef.current) {
+        gsap.from(rightColRef.current, {
+          scrollTrigger: {
+            trigger: rightColRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          scale: 0.95,
+          y: 40,
+          duration: 0.8,
+          ease: 'power3.out',
+        });
+      }
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section id="district" className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 py-20 -mt-12 md:-mt-16 rounded-t-[3rem] relative z-10 bg-white">
-      <div className="absolute top-10 left-10 w-96 h-96 bg-brand-navy/5 rounded-full blur-3xl pointer-events-none" />
-      
-      {/* Title block */}
-      <div className="flex flex-col items-center text-center mb-16 max-w-3xl mx-auto">
-        <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest mb-3">
-          Rotary International District Hierarchy
-        </span>
-        <h2 ref={headingRef} className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
-          <motion.span
-            initial={{ y: 24 }}
-            whileInView={{ y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
-            className="block"
-          >
-            Rotary District <span className="bg-gradient-to-r from-brand-crimson to-red-800 bg-clip-text text-transparent">2982</span>
-          </motion.span>
+    <section id="district" className="w-full max-w-[1550px] mx-auto px-6 md:px-12 py-24 relative z-10 bg-white">
+      {/* Background soft glows */}
+      <div className="absolute top-10 left-10 w-96 h-96 bg-theme-blue/20 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Header Block matching Crowdix overview subtitle/title layout */}
+      <div className="flex flex-col items-center text-center mb-20 max-w-3xl mx-auto">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="w-2.5 h-2.5 rounded-full bg-theme-dark" />
+          <span className="text-theme-dark text-[10px] md:text-xs uppercase tracking-widest font-heading font-extrabold">
+            Rotary District Hierarchy
+          </span>
+        </div>
+        <h2 
+          ref={titleRef} 
+          className="text-4xl md:text-6xl font-display uppercase tracking-tight text-theme-dark"
+        >
+          Rotary District <span className="text-sweep">2982</span>
         </h2>
       </div>
-      
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-100px' }}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start"
-      >
-        {/* Left Column: District Info */}
-        <div className="lg:col-span-7 flex flex-col gap-6">
-          <div className="overflow-hidden pb-1">
-            <motion.h3 
-              variants={revealVariants}
-              className="text-xl md:text-3xl font-heading font-bold text-brand-gold"
-            >
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        {/* Left Column: District info & feature cards */}
+        <div ref={leftColRef} className="lg:col-span-7 flex flex-col gap-8">
+          <div className="flex flex-col gap-3">
+            <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest">
               Service Above Self
-            </motion.h3>
+            </span>
+            <h3 className="font-heading font-extrabold text-2xl md:text-3xl text-theme-dark leading-tight">
+              Empowering regional clubs to create sustainable local change.
+            </h3>
           </div>
-          <motion.p variants={cardVariants} className="text-text-muted font-sans text-sm md:text-base leading-relaxed">
+          
+          <p className="text-text-muted font-sans text-sm md:text-base leading-relaxed">
             Rotary District 2982 is a network of Rotary and Rotaract clubs spanning Salem, Namakkal, Dharmapuri, and Krishnagiri in Tamil Nadu. Think of it as the regional umbrella that connects clubs like ours to a much larger family — one that shares resources, coordinates large-scale service projects, and helps young leaders like our members grow through structured training and mentorship.
-          </motion.p>
-          <motion.p variants={cardVariants} className="text-text-muted font-sans text-sm md:text-base leading-relaxed">
-            In practice, that means everything from joint blood donation camps and environmental drives to leadership summits and career-building workshops — organized at a scale no single club could manage alone. Being part of District 2982 is what lets Salem Midtown turn local energy into regional impact, and connect our members to thousands of young professionals doing the same work across the district.
-          </motion.p>
+          </p>
+
+          {/* Mini Accent Feature Cards styled like overview blocks */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-2">
+            <div className="rounded-2xl border border-black/5 bg-bg-secondary p-6 hover-beige-gradient transition-all duration-300">
+              <span className="text-xs font-heading font-extrabold uppercase tracking-wider text-brand-gold block mb-2">Leadership</span>
+              <p className="text-xs text-text-muted font-sans leading-relaxed">
+                Structured leadership summits, district assemblies, and officer training modules to empower young professionals.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-black/5 bg-bg-secondary p-6 hover-beige-gradient transition-all duration-300">
+              <span className="text-xs font-heading font-extrabold uppercase tracking-wider text-brand-crimson block mb-2">Impact</span>
+              <p className="text-xs text-text-muted font-sans leading-relaxed">
+                Coordinating massive blood drives, environmental campaigns, and health screening services across the state.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Right Column: Rotaract emblem card */}
         <div className="lg:col-span-5 w-full">
-          <motion.div
-            variants={cardVariants}
-            className="w-full h-full rounded-3xl bg-gradient-to-br from-brand-gold/10 via-white to-white border border-brand-gold/10 shadow-sm flex flex-col items-center justify-center text-center p-10 gap-4"
+          <div
+            ref={rightColRef}
+            className="w-full rounded-[2.5rem] bg-gradient-to-br from-theme-blue/30 via-white to-white border border-theme-blue/40 shadow-xl flex flex-col items-center justify-center text-center p-12 gap-6"
           >
-            <img src={clubLogo} alt="Rotaract Club of Salem Midtown" className="w-full max-w-[280px] h-auto object-contain" />
-            <span className="text-xs text-text-muted font-sans leading-relaxed max-w-xs">
+            <img src={clubLogo} alt="Rotaract Club of Salem Midtown Logo" className="w-full max-w-[320px] h-auto object-contain hover:scale-105 transition-transform duration-500" />
+            <span className="text-xs text-text-muted font-sans leading-relaxed max-w-xs block border-t border-black/5 pt-6">
               Part of Rotary International District 2982 — service above self, together.
             </span>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

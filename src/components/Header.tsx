@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import logoMark from '../assets/logo-mark.png';
 
@@ -38,71 +39,82 @@ export const Header: React.FC = () => {
   }, []);
 
   const desktopLinkClass = (id: string) =>
-    `px-4 py-2 rounded-full font-heading text-sm font-semibold whitespace-nowrap transition-all duration-300 ${
-      activeId === id
-        ? 'bg-gradient-to-r from-brand-crimson to-red-800 text-white shadow-md shadow-brand-crimson/25'
-        : 'text-text-muted hover:text-brand-crimson'
-    }`;
-
-  const mobileLinkClass = (id: string) =>
-    `block font-heading text-base font-bold rounded-2xl px-4 py-3 transition-colors ${
-      activeId === id
-        ? 'bg-gradient-to-r from-brand-crimson to-red-800 text-white'
-        : 'text-text-muted hover:text-brand-crimson'
+    `relative flex flex-col items-center justify-center h-6 shrink-0 overflow-hidden font-heading text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${
+      activeId === id ? 'text-theme-blue' : 'text-white/60 hover:text-theme-blue'
     }`;
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 px-4 md:px-6 py-4">
-      <div className="w-full max-w-[1800px] mx-auto flex justify-between items-center gap-4">
-        {/* Logo — its own floating pill, separate from the nav */}
-        <div className="flex items-center gap-2.5 pl-3 pr-5 py-2 rounded-full bg-white/90 backdrop-blur-xl border border-text-primary/5 shadow-sm">
-          <img src={logoMark} alt="Rotary International emblem" className="w-8 h-8 object-contain shrink-0" />
-          <span className="font-heading font-bold text-base text-text-primary tracking-wide whitespace-nowrap">
-            Rotaract club of Salem Midtown
-          </span>
-        </div>
-
-        {/* Nav — a second, separate floating pill */}
-        <nav className="hidden md:flex items-center gap-1 px-2 py-2 rounded-full bg-white/90 backdrop-blur-xl border border-text-primary/5 shadow-sm">
+    <header className="fixed top-0 left-0 w-full z-50 bg-theme-dark/90 backdrop-blur-md border-b border-white/10 px-6 py-4">
+      <div className="w-full max-w-[1550px] mx-auto grid grid-cols-3 items-center">
+        {/* Left Col: Desktop Navigation Menu. shrink-0 on each link plus a
+            tighter gap keeps every label (notably "Club Members" and
+            "RID 2982") fully on-screen at desktop widths instead of being
+            silently compressed and clipped by the link's own overflow-hidden
+            (needed for the hover text-swap effect) — flex items shrink below
+            their content width by default, and getBoundingClientRect() on
+            the clipped element doesn't reveal that visually. */}
+        <nav className="hidden md:flex items-center gap-5 justify-start">
           {NAV_ITEMS.map((item) => (
-            <a key={item.id} href={`#${item.id}`} className={desktopLinkClass(item.id)}>
-              {item.label}
-            </a>
+            <Link key={item.id} to={`/#${item.id}`} className={desktopLinkClass(item.id)}>
+              <span className="menu-link-container h-5 overflow-hidden">
+                <span className="menu-link-text block h-5 shrink-0 transition-transform duration-300">{item.label}</span>
+                <span className="menu-link-text block h-5 shrink-0 text-brand-crimson transition-transform duration-300">{item.label}</span>
+              </span>
+            </Link>
           ))}
         </nav>
 
-        {/* Mobile Nav Button */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="flex md:hidden items-center justify-center w-11 h-11 rounded-full bg-white/90 backdrop-blur-xl border border-text-primary/5 shadow-sm text-text-primary hover:text-brand-crimson transition-colors cursor-pointer"
-          aria-label="Toggle Menu"
-        >
-          {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        {/* Center Col: Centered Club Logo */}
+        <Link to="/" className="flex justify-start md:justify-center items-center gap-3">
+          <img src={logoMark} alt="Rotary International emblem" className="w-9 h-9 object-contain shrink-0" />
+          <span className="font-display text-lg text-white uppercase tracking-wider whitespace-nowrap">
+            Salem Midtown
+          </span>
+        </Link>
+
+        {/* Right Col: CTA Button & Mobile Trigger */}
+        <div className="flex justify-end items-center gap-4">
+          <Link
+            to="/#support"
+            className="hidden sm:inline-flex px-6 py-2.5 rounded-full font-heading font-extrabold text-[11px] uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-800 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+          >
+            Get Support
+          </Link>
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="flex md:hidden items-center justify-center w-10 h-10 rounded-full border border-white/10 text-white hover:text-brand-crimson transition-colors cursor-pointer"
+            aria-label="Toggle Menu"
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="mt-3 w-full max-w-[1800px] mx-auto bg-white/95 border border-text-primary/5 backdrop-blur-2xl rounded-3xl p-6 flex flex-col gap-3 md:hidden shadow-lg">
+        <div className="absolute top-full left-0 w-full bg-theme-dark/95 border-b border-white/10 backdrop-blur-2xl p-6 flex flex-col gap-3 md:hidden shadow-lg animate-fade-in">
           {NAV_ITEMS.map((item) => (
-            <a
+            <Link
               key={item.id}
-              href={`#${item.id}`}
+              to={`/#${item.id}`}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={mobileLinkClass(item.id)}
+              className={`block font-heading text-sm font-bold uppercase tracking-wider py-3 border-b border-white/5 transition-colors ${
+                activeId === item.id ? 'text-brand-crimson' : 'text-white/70 hover:text-white'
+              }`}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
-          <a
-            href="#support"
+          <Link
+            to="/#support"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="w-full text-center py-3.5 mt-1 rounded-2xl font-heading font-bold bg-gradient-to-r from-brand-crimson to-red-700 hover:from-brand-crimson/95 hover:to-red-650 text-white text-sm shadow-md shadow-brand-crimson/20 transition-all duration-200"
+            className="w-full text-center py-3.5 mt-2 rounded-xl font-heading font-extrabold text-xs uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-700 text-white shadow-md transition-all duration-200"
           >
             Get Support
-          </a>
+          </Link>
         </div>
       )}
     </header>
   );
 };
+

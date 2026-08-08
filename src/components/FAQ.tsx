@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { HelpCircle, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useScrollSkew } from '../hooks/useScrollSkew';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 interface FaqItem {
   question: string;
@@ -45,73 +48,96 @@ const FAQS: FaqItem[] = [
 
 export const FAQ: React.FC = () => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-  const headingRef = useScrollSkew<HTMLHeadingElement>();
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   const toggleFaq = (index: number) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
   };
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // No opacity, and a small px offset rather than a full-height mask —
+      // see the note in ClubAbout.tsx.
+      if (titleRef.current) {
+        const split = new SplitText(titleRef.current, { type: 'lines,words' });
+
+        gsap.from(split.words, {
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          y: 24,
+          stagger: 0.03,
+          duration: 1,
+          ease: 'power3.out',
+        });
+      }
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="faq" className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 py-20 relative z-10 bg-white">
+    <section id="faq" className="w-full max-w-[1550px] mx-auto px-6 md:px-12 py-24 relative z-10 bg-white">
       <div className="absolute top-10 left-10 w-96 h-96 bg-brand-gold/5 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="flex flex-col items-center text-center mb-16 max-w-3xl mx-auto">
-        <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest mb-3">
-          Common Questions
-        </span>
-        <h2 ref={headingRef} className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
-          <motion.span
-            initial={{ y: 24 }}
-            whileInView={{ y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
-            className="block"
-          >
-            Frequently Asked <span className="bg-gradient-to-r from-brand-crimson to-red-800 bg-clip-text text-transparent">Questions</span>
-          </motion.span>
+      {/* Header Block matching Crowdix FAQ section header */}
+      <div className="flex flex-col items-center text-center mb-20 max-w-3xl mx-auto">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="w-2.5 h-2.5 rounded-full bg-theme-dark" />
+          <span className="text-theme-dark text-[10px] md:text-xs uppercase tracking-widest font-heading font-extrabold">
+            FAQS ( We're Here to Help )
+          </span>
+        </div>
+        <h2 
+          ref={titleRef} 
+          className="text-4xl md:text-6xl font-display uppercase tracking-tight text-theme-dark"
+        >
+          Ask Anything — <span className="text-sweep">We're Ready to Answer</span>
         </h2>
-        <p className="text-text-muted font-sans text-sm md:text-base mt-4 leading-relaxed">
-          Have questions about operations, membership, or collaborations? Start here.
-        </p>
       </div>
 
-      <motion.div
-        initial={{ y: 30 }}
-        whileInView={{ y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="max-w-3xl mx-auto flex flex-col gap-3"
-      >
+      {/* FAQ Grid Cards in Blue matching Crowdix Dropdowns */}
+      <div className="max-w-4xl mx-auto flex flex-col gap-4">
         {FAQS.map((faq, index) => {
           const isOpen = openFaqIndex === index;
           return (
             <div
               key={index}
-              className="glass-card hover-beige-gradient rounded-2xl overflow-hidden transition-all duration-300 border border-text-primary/5 shadow-sm"
+              className="bg-theme-blue rounded-xl overflow-hidden transition-all duration-300 border border-black/5 shadow-sm"
             >
               <button
                 onClick={() => toggleFaq(index)}
-                className="w-full px-6 py-5 flex items-center justify-between gap-4 text-left font-heading font-semibold text-sm hover:text-brand-crimson transition-colors cursor-pointer"
+                className="w-full px-8 py-6 flex items-center justify-between gap-6 text-left cursor-pointer"
               >
-                <span className="flex items-center gap-2.5">
-                  <HelpCircle className="text-brand-gold shrink-0" size={16} />
-                  <span>{faq.question}</span>
+                <span className="font-heading font-extrabold text-sm md:text-base text-black tracking-wide">
+                  {faq.question}
                 </span>
-                <ChevronDown
-                  size={18}
-                  className={`shrink-0 transform transition-transform duration-300 ${isOpen ? 'rotate-180 text-brand-crimson' : 'text-text-muted'}`}
-                />
+
+                {/* Custom Webflow Indicator: vertical line rotates/vanishes */}
+                <div className="faq-icon-box w-9 h-9 rounded-full bg-white/20 border border-black/5 flex items-center justify-center relative shrink-0">
+                  {/* Vertical Line */}
+                  <div 
+                    className={`absolute w-0.5 h-5 bg-black transition-transform duration-350 ${
+                      isOpen ? 'rotate-90 scale-y-0 opacity-0' : 'rotate-0 scale-y-100 opacity-100'
+                    }`} 
+                  />
+                  {/* Horizontal Line */}
+                  <div className="absolute w-5 h-0.5 bg-black" />
+                </div>
               </button>
+              
               <AnimatePresence initial={false}>
                 {isOpen && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="px-6 pb-5 pt-2 text-xs md:text-sm text-text-muted font-sans border-t border-text-primary/5 bg-bg-secondary leading-relaxed">
+                    <div className="px-8 pb-6 pt-2 text-xs md:text-sm text-[#444] font-sans leading-relaxed border-t border-black/5">
                       {faq.answer}
                     </div>
                   </motion.div>
@@ -120,7 +146,7 @@ export const FAQ: React.FC = () => {
             </div>
           );
         })}
-      </motion.div>
+      </div>
     </section>
   );
 };
