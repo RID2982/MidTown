@@ -17,6 +17,7 @@
   --font-sans: 'Inter', sans-serif;
   --font-heading: 'Outfit', sans-serif;
   --font-display: 'Anton SC', sans-serif;
+  --font-script: 'Dancing Script', cursive;
 }
 
 /* --- BASE STYLES --- */
@@ -139,23 +140,6 @@ body {
   100% { background-position: -200% center; }
 }
 
-/* --- FLAT AUTO-SCROLLING STRIP (Hero project cards) --- */
-/* Pure CSS autoplay, not JS-driven, so it always runs regardless of
-   whether GSAP has finished mounting. animation-play-state pauses/resumes
-   exactly where it left off on hover, so reading a card never jumps. */
-@keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-.animate-marquee {
-  animation-name: marquee-scroll;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-.animate-marquee:hover,
-.animate-marquee:focus-within {
-  animation-play-state: paused;
-}
 
 /* --- DOUBLE TEXT LINK TRANSLATION --- */
 .menu-link-container {

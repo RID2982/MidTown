@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import logoMark from '../assets/logo-mark.png';
-
+import logoMark from '../assets/2.svg';
 const NAV_ITEMS = [
   { id: 'home', label: 'Home' },
   { id: 'district', label: 'RID 2982' },
@@ -64,12 +63,9 @@ export const Header: React.FC = () => {
           ))}
         </nav>
 
-        {/* Center Col: Centered Club Logo */}
-        <Link to="/" className="flex justify-start md:justify-center items-center gap-3">
-          <img src={logoMark} alt="Rotary International emblem" className="w-9 h-9 object-contain shrink-0" />
-          <span className="font-display text-lg text-white uppercase tracking-wider whitespace-nowrap">
-            Salem Midtown
-          </span>
+        {/* Center Col: Club Logo (full lockup, unaltered — not cropped) */}
+        <Link to="/" className="flex justify-start md:justify-center items-center">
+          <img src={logoMark} alt="Rotaract Club of Salem Midtown" className="h-16 w-auto object-contain shrink-0" />
         </Link>
 
         {/* Right Col: CTA Button & Mobile Trigger */}
