@@ -6,7 +6,7 @@ import type { Member } from '../data/members';
 // Facebook, etc. are all absent), so the glyph is a small inline SVG instead,
 // sized and styled to match the surrounding lucide icons (stroke-based,
 // currentColor, same 14/16px scale).
-const InstagramIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
+export const InstagramIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   <svg
     width={size}
     height={size}

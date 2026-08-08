@@ -1,7 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useScrollSkew } from '../hooks/useScrollSkew';
 
 export const ClubAbout: React.FC = () => {
+  const headingRef = useScrollSkew<HTMLHeadingElement>();
+
   // Note: these variants intentionally never set opacity in the "hidden"
   // state. whileInView only fires on a real scroll/intersection event — a
   // one-shot "capture entire page" screenshot tool never scrolls, so it
@@ -47,7 +50,7 @@ export const ClubAbout: React.FC = () => {
         <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest mb-3">
           Rotaract Salem Midtown History
         </span>
-        <h2 className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
+        <h2 ref={headingRef} className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
           <motion.span
             initial={{ y: 24 }}
             whileInView={{ y: 0 }}

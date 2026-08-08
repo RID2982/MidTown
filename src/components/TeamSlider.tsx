@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { LEADERS } from '../data/members';
 import type { Member } from '../data/members';
 import { CardVisual } from './MemberCardVisual';
+import { useScrollSkew } from '../hooks/useScrollSkew';
 
 // Leadership duo — President + Secretary, always visible. Cards sit directly
 // on the section background, no bordered/shadowed frame around them.
@@ -25,6 +26,8 @@ const LeadershipDuo: React.FC<{ members: Member[] }> = ({ members }) => (
 );
 
 export const TeamSlider: React.FC = () => {
+  const headingRef = useScrollSkew<HTMLHeadingElement>();
+
   return (
     <section id="team" className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 py-20 relative z-10 bg-bg-secondary">
       <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
@@ -37,7 +40,7 @@ export const TeamSlider: React.FC = () => {
             Salem Midtown Board
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
+          <h2 ref={headingRef} className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
             <motion.span
               initial={{ y: 24 }}
               whileInView={{ y: 0 }}

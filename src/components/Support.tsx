@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useScrollSkew } from '../hooks/useScrollSkew';
 
 export const Support: React.FC = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', category: 'General Inquiry', message: '' });
+  const headingRef = useScrollSkew<HTMLHeadingElement>();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -25,7 +27,7 @@ export const Support: React.FC = () => {
         <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest mb-3">
           We're Here To Help
         </span>
-        <h2 className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
+        <h2 ref={headingRef} className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
           <motion.span
             initial={{ y: 24 }}
             whileInView={{ y: 0 }}
@@ -111,17 +113,23 @@ export const Support: React.FC = () => {
                 <label className="text-[10px] font-heading font-bold uppercase tracking-wider text-text-muted">
                   Query Category
                 </label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-text-primary/5 focus:border-brand-crimson/30 focus:bg-white focus:ring-1 focus:ring-brand-crimson outline-none transition-all text-sm font-sans text-text-primary"
-                >
-                  <option value="General Inquiry">General Inquiry</option>
-                  <option value="Join Midtown">Join Midtown Rotaract</option>
-                  <option value="Sponsorship / Partnership">Sponsorship & Partnership</option>
-                  <option value="Event Inquiry">Event Inquiry</option>
-                </select>
+                <div className="relative">
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    className="w-full appearance-none px-4 py-3 pr-10 rounded-xl bg-bg-secondary border border-text-primary/5 focus:border-brand-crimson/30 focus:bg-white focus:ring-1 focus:ring-brand-crimson outline-none transition-all text-sm font-sans text-text-primary cursor-pointer"
+                  >
+                    <option value="General Inquiry">General Inquiry</option>
+                    <option value="Join the Club">Join the Club</option>
+                    <option value="Sponsorship / Partnership">Sponsorship & Partnership</option>
+                    <option value="Event Inquiry">Event Inquiry</option>
+                  </select>
+                  <ChevronDown
+                    size={16}
+                    className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-text-muted"
+                  />
+                </div>
               </div>
 
               {/* Message */}

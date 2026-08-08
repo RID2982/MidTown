@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HelpCircle, ChevronDown } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useScrollSkew } from '../hooks/useScrollSkew';
 
 interface FaqItem {
   question: string;
@@ -24,10 +25,27 @@ const FAQS: FaqItem[] = [
     question: 'Are there any fees or commitments involved in joining?',
     answer: 'There is a nominal annual induction fee to cover district registry and resources. Members are expected to actively participate in weekly or bi-weekly meetings and volunteer for key project execution.',
   },
+  {
+    question: 'How often does the club meet, and where?',
+    answer: 'We hold general body meetings on a bi-weekly basis, alongside additional project-specific planning sessions as needed. Venue and timing are shared with members in advance through our official communication channels.',
+  },
+  {
+    question: "What are the 'avenues of service' I keep hearing about?",
+    answer: 'Rotaract organizes all its work into five avenues — Club Service, Community Service, Professional Service, International Service, and Public Image. Every project we run falls under one of these, and most members gravitate toward the avenue that matches their interests.',
+  },
+  {
+    question: "I'm not a college student — can I still join?",
+    answer: 'Yes. Rotaract membership is open to young working professionals and entrepreneurs as well as students, generally between 18 and 30 years old. What matters most is a genuine interest in community service and fellowship.',
+  },
+  {
+    question: 'Does Salem Midtown take part in district or international events?',
+    answer: "Yes — our members regularly attend District 2982 conferences, leadership summits, and inter-club fellowship events, and Rotaract's global network also opens doors to international project collaborations and exchange programs.",
+  },
 ];
 
 export const FAQ: React.FC = () => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const headingRef = useScrollSkew<HTMLHeadingElement>();
 
   const toggleFaq = (index: number) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -41,7 +59,7 @@ export const FAQ: React.FC = () => {
         <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest mb-3">
           Common Questions
         </span>
-        <h2 className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
+        <h2 ref={headingRef} className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
           <motion.span
             initial={{ y: 24 }}
             whileInView={{ y: 0 }}
@@ -84,11 +102,21 @@ export const FAQ: React.FC = () => {
                   className={`shrink-0 transform transition-transform duration-300 ${isOpen ? 'rotate-180 text-brand-crimson' : 'text-text-muted'}`}
                 />
               </button>
-              {isOpen && (
-                <div className="px-6 pb-5 pt-2 text-xs md:text-sm text-text-muted font-sans border-t border-text-primary/5 bg-bg-secondary leading-relaxed">
-                  {faq.answer}
-                </div>
-              )}
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-6 pb-5 pt-2 text-xs md:text-sm text-text-muted font-sans border-t border-text-primary/5 bg-bg-secondary leading-relaxed">
+                      {faq.answer}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           );
         })}

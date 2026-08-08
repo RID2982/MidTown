@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FEATURED_PROJECTS } from '../data/projects';
 import { ProjectCard } from './ProjectCard';
+import { useScrollSkew } from '../hooks/useScrollSkew';
 
 const containerVariants = {
   hidden: {},
@@ -22,6 +23,8 @@ const cardVariants = {
 };
 
 export const Projects: React.FC = () => {
+  const headingRef = useScrollSkew<HTMLHeadingElement>();
+
   return (
     <section id="projects" className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 py-20 relative z-10 bg-white">
       <div className="absolute top-10 right-10 w-96 h-96 bg-brand-navy/5 rounded-full blur-3xl pointer-events-none" />
@@ -31,7 +34,7 @@ export const Projects: React.FC = () => {
         <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest mb-3">
           Impact Tracker
         </span>
-        <h2 className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
+        <h2 ref={headingRef} className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
           <motion.span
             initial={{ y: 24 }}
             whileInView={{ y: 0 }}

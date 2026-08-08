@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CountUp } from './CountUp';
+import clubLogo from '../assets/club-logo-full.png';
+import { useScrollSkew } from '../hooks/useScrollSkew';
 
 export const District: React.FC = () => {
+  const headingRef = useScrollSkew<HTMLHeadingElement>();
+
   // Note: these variants intentionally never set opacity in the "hidden"
   // state. whileInView only fires on a real scroll/intersection event — a
   // one-shot "capture entire page" screenshot tool never scrolls, so it
@@ -48,7 +51,7 @@ export const District: React.FC = () => {
         <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest mb-3">
           Rotary International District Hierarchy
         </span>
-        <h2 className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
+        <h2 ref={headingRef} className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight overflow-hidden pb-1">
           <motion.span
             initial={{ y: 24 }}
             whileInView={{ y: 0 }}
@@ -79,37 +82,23 @@ export const District: React.FC = () => {
             </motion.h3>
           </div>
           <motion.p variants={cardVariants} className="text-text-muted font-sans text-sm md:text-base leading-relaxed">
-            Rotary District 2982 operates as a powerhouse of service in Tamil Nadu, India, coordinating projects and fostering fellowship across Salem, Namakkal, Dharmapuri, and Krishnagiri. Under the guidance of District Governor <strong>Rtn. Chinniah Senthil Kumar</strong> (RY 2026–27), we coordinate youth networks to drive community welfare.
+            Rotary District 2982 is a network of Rotary and Rotaract clubs spanning Salem, Namakkal, Dharmapuri, and Krishnagiri in Tamil Nadu. Think of it as the regional umbrella that connects clubs like ours to a much larger family — one that shares resources, coordinates large-scale service projects, and helps young leaders like our members grow through structured training and mentorship.
           </motion.p>
           <motion.p variants={cardVariants} className="text-text-muted font-sans text-sm md:text-base leading-relaxed">
-            We foster dynamic projects focusing on basic education, environmental preservation, disease prevention, and youth development. Our joint efforts bring together community-based and institutional Rotaract clubs to build local leaders.
+            In practice, that means everything from joint blood donation camps and environmental drives to leadership summits and career-building workshops — organized at a scale no single club could manage alone. Being part of District 2982 is what lets Salem Midtown turn local energy into regional impact, and connect our members to thousands of young professionals doing the same work across the district.
           </motion.p>
         </div>
-        
-        {/* Right Column: Statistics Grid */}
-        <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-          <motion.div 
-            variants={cardVariants}
-            className="glass-card hover-beige-gradient rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-sm"
-          >
-            <CountUp to={2982} duration={1.2} className="text-4xl font-heading font-extrabold text-brand-crimson mb-2" />
-            <span className="text-xs text-text-muted uppercase tracking-wider font-bold font-heading">District ID</span>
-          </motion.div>
 
+        {/* Right Column: Rotaract emblem card */}
+        <div className="lg:col-span-5 w-full">
           <motion.div
             variants={cardVariants}
-            className="glass-card hover-beige-gradient rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-sm"
+            className="w-full h-full rounded-3xl bg-gradient-to-br from-brand-gold/10 via-white to-white border border-brand-gold/10 shadow-sm flex flex-col items-center justify-center text-center p-10 gap-4"
           >
-            <CountUp to={1.2} duration={1.2} decimals={1} suffix="M+" className="text-4xl font-heading font-extrabold text-brand-crimson mb-2" />
-            <span className="text-xs text-text-muted uppercase tracking-wider font-bold font-heading">Global Network</span>
-          </motion.div>
-          
-          <motion.div 
-            variants={cardVariants}
-            className="glass-card hover-beige-gradient rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-sm sm:col-span-2"
-          >
-            <span className="text-lg font-heading font-bold text-text-primary mb-1">Rtn. C. Senthil Kumar</span>
-            <span className="text-[10px] text-brand-gold uppercase tracking-wider font-extrabold font-heading">District Governor (RY 2026-27)</span>
+            <img src={clubLogo} alt="Rotaract Club of Salem Midtown" className="w-full max-w-[280px] h-auto object-contain" />
+            <span className="text-xs text-text-muted font-sans leading-relaxed max-w-xs">
+              Part of Rotary International District 2982 — service above self, together.
+            </span>
           </motion.div>
         </div>
       </motion.div>

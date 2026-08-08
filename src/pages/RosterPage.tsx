@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { MEMBERS } from '../data/members';
 import { CardVisual } from '../components/MemberCardVisual';
 import { Footer } from '../components/Footer';
+import logoMark from '../assets/logo-mark.png';
 
 // No opacity in "hidden" — see the note in the other section components:
 // whileInView never fires without a real scroll event, so gating on
@@ -25,9 +26,7 @@ export const RosterPage: React.FC = () => {
       <header className="w-full border-b border-text-primary/5 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="w-full max-w-[1800px] mx-auto flex items-center justify-between px-6 md:px-12 lg:px-16 py-5">
           <Link to="/" className="flex items-center gap-3 font-heading font-bold text-lg text-text-primary tracking-wide">
-            <div className="w-9 h-9 rounded-full border border-dashed border-brand-crimson bg-brand-crimson/5 flex items-center justify-center">
-              <span className="text-brand-crimson text-xs font-bold font-heading">SM</span>
-            </div>
+            <img src={logoMark} alt="Rotary International emblem" className="w-9 h-9 object-contain" />
             <span>Salem Midtown</span>
           </Link>
           <Link

@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
-import { PROJECTS_DATA } from '../data/projects';
+import { PROJECTS_DATA, AVENUES, type Avenue } from '../data/projects';
 import { ProjectCard } from '../components/ProjectCard';
 import { Footer } from '../components/Footer';
+import logoMark from '../assets/logo-mark.png';
 
 // No opacity in "hidden" — see the note in the other page/section
 // components: whileInView never fires without a real scroll event, so
@@ -18,7 +20,9 @@ const cardVariants = {
 };
 
 export const ProjectsPage: React.FC = () => {
+  const [activeAvenue, setActiveAvenue] = useState<Avenue | 'All'>('All');
   const completedCount = PROJECTS_DATA.filter((p) => p.status === 'Completed').length;
+  const visibleProjects = activeAvenue === 'All' ? PROJECTS_DATA : PROJECTS_DATA.filter((p) => p.avenue === activeAvenue);
 
   return (
     <div className="bg-bg-primary text-text-primary min-h-screen relative font-sans selection:bg-brand-crimson selection:text-text-primary">
@@ -28,9 +32,7 @@ export const ProjectsPage: React.FC = () => {
       <header className="w-full border-b border-text-primary/5 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="w-full max-w-[1800px] mx-auto flex items-center justify-between px-6 md:px-12 lg:px-16 py-5">
           <Link to="/" className="flex items-center gap-3 font-heading font-bold text-lg text-text-primary tracking-wide">
-            <div className="w-9 h-9 rounded-full border border-dashed border-brand-crimson bg-brand-crimson/5 flex items-center justify-center">
-              <span className="text-brand-crimson text-xs font-bold font-heading">SM</span>
-            </div>
+            <img src={logoMark} alt="Rotary International emblem" className="w-9 h-9 object-contain" />
             <span>Salem Midtown</span>
           </Link>
           <Link
@@ -58,8 +60,31 @@ export const ProjectsPage: React.FC = () => {
           </p>
         </div>
 
+        {/* Avenue filter */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5 mb-12 relative">
+          {(['All', ...AVENUES] as const).map((avenue) => (
+            <button
+              key={avenue}
+              onClick={() => setActiveAvenue(avenue)}
+              className={`px-4 py-2 rounded-full text-xs font-heading font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                activeAvenue === avenue
+                  ? 'bg-gradient-to-r from-brand-crimson to-red-800 text-white shadow-md shadow-brand-crimson/25'
+                  : 'bg-white border border-text-primary/10 text-text-muted hover:border-brand-crimson/30 hover:text-brand-crimson'
+              }`}
+            >
+              {avenue}
+            </button>
+          ))}
+        </div>
+
+        {visibleProjects.length === 0 && (
+          <p className="text-center text-text-muted font-sans text-sm mb-12">
+            No {activeAvenue} projects yet — check back soon.
+          </p>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto relative">
-          {PROJECTS_DATA.map((project, index) => (
+          {visibleProjects.map((project, index) => (
             <motion.div
               key={project.title}
               initial="hidden"
