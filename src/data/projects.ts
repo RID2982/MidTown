@@ -6,6 +6,12 @@ export type Avenue = 'Club Service' | 'Community Service' | 'Professional Servic
 
 export const AVENUES: Avenue[] = ['Club Service', 'Community Service', 'Professional Service', 'International Service', 'Public Image'];
 
+// URL-friendly slug for each avenue's dedicated /projects/:slug page.
+export const avenueToSlug = (avenue: Avenue): string => avenue.toLowerCase().replace(/ /g, '-');
+
+export const slugToAvenue = (slug: string): Avenue | undefined =>
+  AVENUES.find((avenue) => avenueToSlug(avenue) === slug);
+
 export interface Project {
   title: string;
   category: string;

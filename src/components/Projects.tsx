@@ -4,7 +4,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { FEATURED_PROJECTS } from '../data/projects';
+import { FEATURED_PROJECTS, avenueToSlug } from '../data/projects';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -137,8 +137,8 @@ export const Projects: React.FC = () => {
                 </div>
 
                 <div className="flex justify-end pt-2">
-                  <Link 
-                    to="/projects"
+                  <Link
+                    to={`/projects/${avenueToSlug(project.avenue)}`}
                     className="flex items-center gap-1.5 text-[10px] font-heading font-extrabold uppercase tracking-widest text-brand-crimson hover:opacity-80 transition-opacity"
                   >
                     <span>View Project</span>
