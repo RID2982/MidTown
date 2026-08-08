@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f7f5f1; /* Warm off-white so cards/sections read as distinct containers against the white page */
+  --color-text-primary: #0f172a;
+  --color-text-muted: #64748b;
+  
+  --color-brand-crimson: #e11d48;
+  --color-brand-navy: #1e293b;
+  --color-brand-gold: #d97706;
+  
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+}
+
+/* --- BASE STYLES --- */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #ffffff;
+  color: #0f172a;
+  overflow-x: hidden;
+}
+
+/* --- CUSTOM SCROLLBAR --- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.08);
+  border-radius: 99px;
+  border: 2px solid #ffffff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e11d48;
+}
+
+/* --- GLASSMORPHISM CLASS (LIGHT STYLE) --- */
+.glass-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04), 0 12px 32px rgba(15, 23, 42, 0.06);
+  border-radius: 2rem; /* Heavy rounding (32px) inspired by HopeRise */
+}
+
+/* --- INTERACTIVE WARM BEIGE GRADIENT --- */
+.hover-beige-gradient {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-beige-gradient:hover,
+.hover-beige-gradient:active {
+  background: linear-gradient(135deg, #fdfbf7 0%, #f6f0e2 100%) !important;
+  border-color: rgba(217, 119, 6, 0.25) !important;
+  box-shadow: 0 12px 32px rgba(217, 119, 6, 0.06), 0 0 15px rgba(217, 119, 6, 0.04);
+}
+
+/* --- STICKY CARD STACK SHADOW OVERLAYS --- */
+.sticky-card-shadow {
+  box-shadow: 0 -10px 25px -5px rgba(15, 23, 42, 0.04), 0 10px 25px -5px rgba(15, 23, 42, 0.03);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* --- SVG ACCENT DRAWING ANIMATIONS --- */
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
