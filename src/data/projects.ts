@@ -20,6 +20,10 @@ export interface Project {
   description: string;
   status: 'Completed' | 'In Progress';
   featured: boolean;
+  /** Board colour in the stacked deck — one curated colour per project. */
+  color: string;
+  /** Which text colour that board needs. 'dark' = dark ink on a light board. */
+  fg: 'light' | 'dark';
 }
 
 export const PROJECTS_DATA: Project[] = [
@@ -31,6 +35,8 @@ export const PROJECTS_DATA: Project[] = [
     description: 'Coordinated with Salem Government Hospital to collect 120+ units of blood for emergency reserves.',
     status: 'Completed',
     featured: true,
+    color: '#1d4ed8',
+    fg: 'light',
   },
   {
     title: 'Green Salem Sapling Campaign',
@@ -40,6 +46,8 @@ export const PROJECTS_DATA: Project[] = [
     description: 'Planted 500 native tree saplings along Salem bypass roads to foster urban forestation.',
     status: 'Completed',
     featured: true,
+    color: '#059669',
+    fg: 'light',
   },
   {
     title: 'Government School Computer Literacy',
@@ -49,6 +57,8 @@ export const PROJECTS_DATA: Project[] = [
     description: 'Conducted basic computing, spreadsheet, and safe internet seminars for 80+ high school children.',
     status: 'Completed',
     featured: true,
+    color: '#6d28d9',
+    fg: 'light',
   },
   {
     title: 'Polio Vaccination Support Drive',
@@ -58,6 +68,8 @@ export const PROJECTS_DATA: Project[] = [
     description: 'Partnered with Salem Primary Health Center to administer polio vaccine drops at local transit hubs.',
     status: 'Completed',
     featured: false,
+    color: '#e11d48',
+    fg: 'light',
   },
   {
     title: 'Midtown Fellowship & Sports Meet',
@@ -67,6 +79,8 @@ export const PROJECTS_DATA: Project[] = [
     description: 'Fostered inter-club relations and internal fellowship through friendly volleyball and cricket tournaments.',
     status: 'In Progress',
     featured: false,
+    color: '#f59e0b',
+    fg: 'dark',
   },
   {
     title: 'Skill Development & Resume Workshop',
@@ -76,6 +90,8 @@ export const PROJECTS_DATA: Project[] = [
     description: 'Organized career counselling, mock interviews, and resume reviews for local final-year graduates.',
     status: 'In Progress',
     featured: false,
+    color: '#0f172a',
+    fg: 'light',
   },
 ];
 

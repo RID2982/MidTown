@@ -17,7 +17,7 @@
   --font-sans: 'Inter', sans-serif;
   --font-heading: 'Outfit', sans-serif;
   --font-display: 'Anton SC', sans-serif;
-  --font-script: 'Dancing Script', cursive;
+  --font-script: 'Outfit', Sans-serif;
 }
 
 /* --- BASE STYLES --- */
@@ -73,9 +73,14 @@ body {
   box-shadow: 0 12px 32px rgba(217, 119, 6, 0.06), 0 0 15px rgba(217, 119, 6, 0.04);
 }
 
-/* --- STICKY CARD STACK SHADOW OVERLAYS --- */
+/* --- STICKY CARD STACK SHADOW OVERLAYS ---
+   Strong enough to read as a card-stack seam even between two sections
+   with near-identical backgrounds (white-on-white, dark-on-dark) — a
+   faint shadow disappears entirely in those cases, which is why only the
+   high-contrast boundaries (a dark section landing on a light one) used
+   to look like they were overlapping at all. */
 .sticky-card-shadow {
-  box-shadow: 0 -10px 25px -5px rgba(15, 23, 42, 0.04), 0 10px 25px -5px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 -24px 48px -12px rgba(15, 23, 42, 0.22), 0 -2px 0 0 rgba(15, 23, 42, 0.06);
 }
 
 /* Hide scrollbar utility */
@@ -141,24 +146,6 @@ body {
 }
 
 
-/* --- DOUBLE TEXT LINK TRANSLATION --- */
-.menu-link-container {
-  display: flex;
-  flex-direction: column;
-  height: 20px;
-  overflow: hidden;
-}
-.menu-link-text {
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-/* Triggered off .nav-pill (the whole padded link), not the text span itself
-   — otherwise hovering the pill's padding without touching the text
-   wouldn't roll it. */
-.nav-pill:hover .menu-link-text,
-.nav-pill:focus-visible .menu-link-text {
-  transform: translateY(-100%);
-}
-
 /* --- NAV PILL "SELECTING" ANIMATION --- */
 /* A fill grows from the bottom edge on hover/focus, like a spotlight
    switching on — same interaction the reference header uses. isolate +
@@ -181,11 +168,105 @@ body {
   z-index: -1;
 }
 .nav-pill:hover::before,
-.nav-pill:focus-visible::before {
+.nav-pill:focus-visible::before,
+.nav-pill-active::before {
   transform: translate(-50%, -50%) scale(1);
 }
 @media (hover: none) {
   .nav-pill:active::before {
     transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* --- SCENE STACK: sticky full-viewport overlap ---
+   Each .scene-hold is `position: sticky; top: 0; height: 100svh`,
+   clipped. Siblings share ONE containing block (the stack wrapper in
+   HomePage), so an earlier hold stays pinned once reached — a later
+   sibling with a higher z-index rises up and visually covers it once IT
+   becomes stuck in turn. Driven entirely by the single page scrollbar.
+
+   A hold is always exactly one screen tall. When a section's own content
+   is taller than that, Scene.tsx measures the excess and reserves a
+   `.scene-runway` sibling of exactly that height — pure scroll distance,
+   paints nothing — across which it translates the content upward in
+   lockstep with scroll (see Scene.tsx). That's what reveals the rest of a
+   long section: not a nested scrollbar, not a static overlap that hides
+   part of it, just the section's own content panning into view before
+   the next hold is ever allowed to cover it. */
+.scene-hold {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+.scene-hold-inner {
+  will-change: transform;
+}
+.scene-runway {
+  pointer-events: none;
+}
+
+@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+  .scene-hold {
+    position: static;
+    height: auto;
+    overflow: visible;
+    isolation: auto;
+  }
+  .scene-runway {
+    display: none;
+  }
+
+  /* A scene that drives its own scroll-scrubbed animation (the Members
+     arc) keeps its pinned full-screen frame on phones too — the whole
+     point is that the animation runs there as well, and it can't scrub
+     against a runway that has been collapsed away. Scenes that merely
+     pan tall content still release into normal flow above. */
+  .scene-hold.scene-hold-pinned {
+    position: sticky;
+    height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .scene-runway.scene-runway-pinned {
+    display: block;
+  }
+}
+
+/* --- PROJECT DECK: stacked boards ---
+   Waiting boards expose only their identity strip; the full write-up
+   belongs to whichever board is currently active, so the text of two
+   boards can never overlap. Adapted from the reference site's Experience
+   section, where the same rule keeps a deep stack readable. */
+.deck-detail {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.deck-board.is-active .deck-detail {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.14s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-detail {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Motion is off: nothing scrubs, so the pinned frame would just trap a
+   static screen. Release it. */
+@media (prefers-reduced-motion: reduce) {
+  .scene-hold.scene-hold-pinned {
+    position: static;
+    height: auto;
+    overflow: visible;
+    isolation: auto;
+  }
+  .scene-runway.scene-runway-pinned {
+    display: none;
   }
 }

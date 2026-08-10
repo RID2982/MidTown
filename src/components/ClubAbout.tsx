@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import clubGroupPhoto from '../assets/club-group-photo.jpg';
+import { SectionHeading } from './SectionHeading';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -73,21 +74,16 @@ export const ClubAbout: React.FC = () => {
       {/* Background Glow */}
       <div className="absolute top-1/2 right-10 w-96 h-96 bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Header Block matching Crowdix about-section title */}
-      <div className="flex flex-col items-center text-center mb-20 max-w-3xl mx-auto">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="w-2.5 h-2.5 rounded-full bg-theme-dark" />
-          <span className="text-theme-dark text-[10px] md:text-xs uppercase tracking-widest font-heading font-extrabold">
-            Rotaract Salem Midtown History
-          </span>
-        </div>
-        <h2 
-          ref={titleRef} 
-          className="text-4xl md:text-6xl font-display uppercase tracking-tight text-theme-dark"
-        >
-          About Our <span className="text-sweep">Midtown Club</span>
-        </h2>
-      </div>
+      <SectionHeading
+        number="03"
+        label="Rotaract Salem Midtown History"
+        titleTop="About our"
+        titleBottom="Midtown"
+        accent="club"
+        description="Chartered to mobilize Salem's youth — students, young professionals and entrepreneurs growing as leaders together."
+        titleRef={titleRef}
+        className="mb-16"
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
         {/* Left Column: About text and structured features */}

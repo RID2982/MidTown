@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Mail, Globe } from 'lucide-react';
 import { InstagramIcon } from './MemberCardVisual';
 
@@ -55,11 +56,11 @@ export const Footer: React.FC = () => {
               Quick Links
             </h5>
             <div className="flex flex-col gap-2.5">
-              <a href="#home" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Home</a>
-              <a href="#district" className="text-xs text-white/60 hover:text-white transition-colors font-sans">RID 2982</a>
-              <a href="#about" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Our Club</a>
-              <a href="#projects" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Projects</a>
-              <a href="#team" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Members</a>
+              <Link to="/#home" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Home</Link>
+              <Link to="/#district" className="text-xs text-white/60 hover:text-white transition-colors font-sans">RID 2982</Link>
+              <Link to="/#about" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Our Club</Link>
+              <Link to="/#projects" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Projects</Link>
+              <Link to="/#team" className="text-xs text-white/60 hover:text-white transition-colors font-sans">Members</Link>
             </div>
           </div>
 

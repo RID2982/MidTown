@@ -6,8 +6,7 @@ import { Footer } from '../components/Footer';
 import { VelocityMarquee } from '../components/VelocityMarquee';
 
 const MARQUEE_ROWS = [
-  { items: ['Club Service', 'Community Service', 'Professional Service'], velocity: 45 },
-  { items: ['Service Above Self', 'Dream To Deserve', 'International Service', 'Public Image'], velocity: 38, outline: true },
+  { items: [{ text: 'President', bold: true }, { text: 'Vice President', outline: true }, { text: 'Secretary', bold: true }, { text: 'Treasurer', outline: true }, { text: 'Sergeant at Arms', bold: true }, { text: 'Club Service Director', outline: true }, { text: 'Community Service Director', bold: true }, { text: 'Professional Service Director', outline: true }, { text: 'International Service Director', bold: true }, { text: 'Public Image Director', outline: true }, { text: 'Project Chairs', bold: true }, { text: 'Committee Chairs', outline: true }, { text: 'Event Chairs', bold: true }, { text: 'Proud Rotaract Members', outline: true }], velocity: 45 }
 ];
 
 // No opacity in "hidden" — see the note in the other section components:

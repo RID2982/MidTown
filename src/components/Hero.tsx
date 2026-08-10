@@ -60,7 +60,7 @@ export const Hero: React.FC = () => {
             display title below per the sketch — not its own animation
             group, so it stays visually attached to the subtitle rather
             than floating in the gap. */}
-        <p className="hero-fade-up text-center font-script text-white text-2xl md:text-4xl -mb-2 md:-mb-4">
+        <p className="hero-fade-up text-center font-script text-white text-2xl md:text-2xl -mb-2 md:-mb-4">
           Rotaract Club of
         </p>
 

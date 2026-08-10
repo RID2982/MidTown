@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Mail, Check, CalendarDays, Target, UserCheck } from 'lucide-react';
+import { User, Mail, Check } from 'lucide-react';
 import type { Member } from '../data/members';
 
 // lucide-react in this project ships no brand/logo icons (Instagram,
@@ -24,35 +24,94 @@ export const InstagramIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   </svg>
 );
 
+export const RotaryIcon: React.FC<{ className?: string; size?: number }> = ({ className, size = 12 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2.2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="6" />
+    <circle cx="12" cy="12" r="2.5" />
+    <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" />
+  </svg>
+);
+
 // Shared visual content of the "Natasha Romanoff" style card — photo panel,
 // verified name, tagline and a stat strip mirroring the reference design.
 // Used by both the home page leadership duo and the full roster page.
 export const CardVisual: React.FC<{ member: Member }> = ({ member }) => {
   return (
-    <div className="w-full h-full rounded-[2.5rem] bg-slate-900 border border-white/5 shadow-2xl relative overflow-hidden group">
+    <article className="w-full h-full rounded-[2.5rem] bg-slate-900 relative overflow-hidden group shadow-[0_24px_60px_-18px_rgba(0,0,0,0.75)]">
       {/* Photo / illustration slot */}
       <div className="absolute inset-0 bg-gradient-to-b from-brand-navy via-slate-800 to-slate-950 flex flex-col items-center justify-center p-6 text-center select-none pb-48 transition-transform duration-500 group-hover:scale-105">
-        <div className="w-24 h-24 rounded-full border border-dashed border-white/20 flex items-center justify-center text-white/50 mb-3 bg-white/5 shadow-inner transition-transform duration-500 group-hover:scale-90">
-          <User size={36} className="opacity-40" />
-        </div>
-        <div className="text-[10px] text-white/30 font-sans tracking-wide uppercase font-semibold">
-          {member.photoSlot}
-        </div>
-        
-        {/* Crowdix Hover Floating Text Animation */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 bg-theme-blue/15 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap">
-          <span className="text-[8px] uppercase tracking-[0.2em] font-heading font-extrabold text-theme-blue">
-            Midtown Leader
-          </span>
-        </div>
+        {member.photo ? (
+          // Photos are cropped to head-and-torso before being added (see
+          // the note on Member.photo), so object-top reliably keeps the
+          // face in the strip above this card's frosted info panel.
+          // object-center for everyone — a per-person position override
+          // doesn't scale past the one photo it was tuned against. Photos
+          // are cropped to a centred head-and-torso portrait before being
+          // added (see the note on Member.photo), which is what actually
+          // makes a single rule work for the whole roster.
+          <img
+            src={member.photo}
+            alt={`${member.name}, ${member.role}`}
+            className="absolute inset-0 w-full h-full object-cover object-center"
+            loading="lazy"
+          />
+        ) : (
+          <>
+            <div className="w-24 h-24 rounded-full border border-dashed border-white/20 flex items-center justify-center text-white/50 mb-3 bg-white/5 shadow-inner transition-transform duration-500 group-hover:scale-90">
+              <User size={36} className="opacity-40" />
+            </div>
+            <div className="text-[10px] text-white/30 font-sans tracking-wide uppercase font-semibold">
+              {member.photoSlot}
+            </div>
+          </>
+        )}
+
       </div>
 
-      {/* Bottom overlay panel — frosted glass over the photo, matching the
-          .glass-card treatment used elsewhere on the site (District stats,
-          FAQ, Support form), adapted for a dark background: backdrop-blur
-          lets the photo show through softened, with a gradient tint for
-          text contrast rather than a flat opaque panel. */}
-      <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-slate-950/80 via-slate-950/55 to-transparent backdrop-blur-xl border-t border-white/10 text-white flex flex-col gap-2.5 pt-28 z-10">
+      {/* Vignette — darkens the card's edges inward so the subject is
+          framed by falloff rather than by a hard border line. */}
+      <div
+        className="absolute inset-0 pointer-events-none z-5"
+        style={{
+          background:
+            'radial-gradient(120% 85% at 50% 38%, transparent 45%, rgba(2,6,23,0.35) 78%, rgba(2,6,23,0.7) 100%)',
+        }}
+      />
+
+      {/* Readability gradient — no backdrop-filter, so it darkens for text
+          contrast without smearing the photo. Weighted strongly enough to
+          carry white text over a BRIGHT photo: this subject is lit against
+          a white backdrop, and at larger card sizes (phones) the text
+          block lands on that bright area rather than on his suit. */}
+      <div className="absolute bottom-0 left-0 w-full h-[62%] bg-gradient-to-t from-slate-950 via-slate-950/75 to-transparent pointer-events-none z-5" />
+
+      {/* Blur, masked to fade out going up: solid over the name/content
+          block at the bottom, gone by the halfway mark so the face stays
+          sharp. Every stop of the previous mask sat at 0%, which made the
+          whole layer transparent — the blur was never actually visible. */}
+      <div
+        className="absolute bottom-0 left-0 w-full h-[55%] backdrop-blur-md pointer-events-none z-5"
+        style={{
+          WebkitMaskImage: 'linear-gradient(to top, #000 0%, #000 42%, transparent 100%)',
+          maskImage: 'linear-gradient(to top, #000 0%, #000 42%, transparent 100%)',
+        }}
+      />
+
+      {/* Info panel */}
+      {/* No border-t: the blur/gradient falloff above already separates
+          this from the photo, and a hard rule cut across it. */}
+      <div className="absolute bottom-0 left-0 w-full p-5 text-white flex flex-col gap-2 z-10">
         <div className="flex items-center gap-1.5">
           <h4 className="text-lg font-heading font-extrabold tracking-wide truncate">
             {member.name}
@@ -70,29 +129,18 @@ export const CardVisual: React.FC<{ member: Member }> = ({ member }) => {
           {member.quote}
         </p>
 
-        {/* Stat strip — mirrors the reference card's rating / earned / rate row */}
-        <div className="flex items-center justify-between border-y border-white/10 py-3 my-1">
-          <div className="flex-1 flex flex-col items-center gap-1 border-r border-white/10">
-            <div className="flex items-center gap-1 text-white text-xs font-heading font-bold">
-              <CalendarDays size={11} className="text-brand-gold" />
-              <span>{member.term}</span>
-            </div>
-            <span className="text-[9px] text-white/40 uppercase tracking-wider font-sans">Term</span>
-          </div>
-          <div className="flex-1 flex flex-col items-center gap-1 border-r border-white/10">
-            <div className="flex items-center gap-1 text-white text-xs font-heading font-bold">
-              <Target size={11} className="text-brand-gold" />
-              <span>{member.projects}</span>
-            </div>
-            <span className="text-[9px] text-white/40 uppercase tracking-wider font-sans">Projects</span>
-          </div>
-          <div className="flex-1 flex flex-col items-center gap-1">
-            <div className="flex items-center gap-1 text-white text-xs font-heading font-bold">
-              <UserCheck size={11} className="text-brand-gold" />
-              <span>{member.since}</span>
-            </div>
-            <span className="text-[9px] text-white/40 uppercase tracking-wider font-sans">Since</span>
-          </div>
+        {/* Team strip — the Rotary wheel and the term said the same thing
+            twice ("26-27 TEAM" beside "2026-27"), so only the wheel-marked
+            label remains. Hard border-y rules replaced by a single hairline
+            that fades out across its width, so nothing reads as a boxed
+            divider. */}
+        <div className="flex items-center gap-1.5 text-white text-xs font-heading font-bold py-2.5 my-0.5 relative">
+          <span
+            className="absolute top-0 left-0 right-0 h-px"
+            style={{ background: 'linear-gradient(to right, rgba(255,255,255,0.18), transparent)' }}
+          />
+          <RotaryIcon className="text-brand-gold" size={14} />
+          <span>26-27 TEAM</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -134,6 +182,6 @@ export const CardVisual: React.FC<{ member: Member }> = ({ member }) => {
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 };

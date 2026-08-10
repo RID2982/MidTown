@@ -1,30 +1,103 @@
-import React, { useEffect, useRef } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { FEATURED_PROJECTS, avenueToSlug } from '../data/projects';
+import { PROJECTS_DATA, avenueToSlug } from '../data/projects';
+import { SectionHeading } from './SectionHeading';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-export const Projects: React.FC = () => {
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const cardsContainerRef = useRef<HTMLDivElement>(null);
+const N = PROJECTS_DATA.length;
+const pad = (n: number) => String(n).padStart(2, '0');
 
-  useEffect(() => {
+/* Stack geometry, from the reference site's Experience deck: waiting
+ * boards recede UP-and-BACK along a diagonal, and a passed board exits
+ * DOWN + back + blur rather than simply disappearing. */
+const DEPTH = 3; // how many boards stay visible behind the active one
+const UP = 74; // px each waiting board rises — this is what exposes its strip
+const RIGHT = 26; // px lateral drift, so the stack reads as a diagonal
+const BACK = 96; // px of Z recession per step
+
+// Phones can't spare 74px per step without the stack running off the top,
+// so the same geometry is scaled down rather than switched off.
+const narrow = () => window.innerWidth < 768;
+const geom = () => (narrow() ? { up: 40, right: 12, back: 60 } : { up: UP, right: RIGHT, back: BACK });
+
+export interface ProjectsHandle {
+  render: (progress01: number) => void;
+}
+
+export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const boardRefs = useRef<(HTMLElement | null)[]>([]);
+  const navRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const tintRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef(-1);
+
+  const place = React.useCallback((p: number) => {
+    const { up, right, back } = geom();
+
+    boardRefs.current.forEach((b, i) => {
+      if (!b) return;
+      const d = i - p;
+
+      // Cull anything far behind or already gone past — keeps the DOM cheap
+      // and stops stale boards ghosting at the edges.
+      if (d > DEPTH + 0.6 || d < -1.1) {
+        b.style.visibility = 'hidden';
+        return;
+      }
+      b.style.visibility = 'visible';
+
+      if (d >= 0) {
+        // Still to come: stacked up-and-back behind the active board.
+        const k = Math.min(d, DEPTH);
+        b.style.transform =
+          `translate3d(${(k * right).toFixed(1)}px, ${(-k * up).toFixed(1)}px, ${(-k * back).toFixed(1)}px)` +
+          ` scale(${(1 - k * 0.028).toFixed(3)})`;
+        b.style.opacity = String(Math.max(0, 1 - k * 0.16));
+        b.style.filter = k > 1.2 ? `blur(${Math.min(3, (k - 1.2) * 1.2).toFixed(2)}px)` : '';
+        b.style.zIndex = String(200 - Math.round(k * 10));
+      } else {
+        // Passed: travels down and back out of the stack, blurring as it goes.
+        const t = Math.min(1, -d / 1.1);
+        b.style.transform =
+          `translate3d(${(-t * 40).toFixed(1)}px, ${(t * 230).toFixed(1)}px, ${(-t * 320).toFixed(1)}px)` +
+          ` scale(${(1 - t * 0.06).toFixed(3)})`;
+        b.style.opacity = String(Math.max(0, 1 - t * 1.35));
+        b.style.filter = t > 0.25 ? `blur(${((t - 0.25) * 5).toFixed(2)}px)` : '';
+        b.style.zIndex = '210';
+      }
+    });
+
+    const active = Math.round(gsap.utils.clamp(0, N - 1, p));
+    if (active === activeRef.current) return;
+    activeRef.current = active;
+
+    boardRefs.current.forEach((b, i) => b?.classList.toggle('is-active', i === active));
+    navRefs.current.forEach((nv, i) => {
+      if (!nv) return;
+      nv.classList.toggle('opacity-100', i === active);
+      nv.classList.toggle('opacity-40', i !== active);
+    });
+    if (counterRef.current) counterRef.current.textContent = `${pad(active + 1)} / ${pad(N)}`;
+    // Whole-section wash in the active board's colour, at low alpha.
+    if (tintRef.current) tintRef.current.style.background = `${PROJECTS_DATA[active].color}12`;
+  }, []);
+
+  useImperativeHandle(ref, () => ({ render: place }), [place]);
+
+  React.useEffect(() => {
+    place(0); // resting layout before the first scrub
+
     const ctx = gsap.context(() => {
-      // No opacity, and a small px offset rather than a full-height mask —
-      // see the note in ClubAbout.tsx.
       if (titleRef.current) {
         const split = new SplitText(titleRef.current, { type: 'lines,words' });
-
         gsap.from(split.words, {
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
+          scrollTrigger: { trigger: titleRef.current, start: 'top 85%', toggleActions: 'play none none none' },
           y: 24,
           stagger: 0.03,
           duration: 1,
@@ -32,134 +105,158 @@ export const Projects: React.FC = () => {
         });
       }
     });
-
     return () => ctx.revert();
-  }, []);
-
-  // Reveal cards on scroll into view — mount-once, not tied to any filter
-  // state now that this section always shows the fixed FEATURED_PROJECTS
-  // list (see data/projects.ts: "The home page shows only these").
-  useEffect(() => {
-    if (!cardsContainerRef.current) return;
-
-    const ctx = gsap.context(() => {
-      gsap.from(cardsContainerRef.current!.children, {
-        scrollTrigger: {
-          trigger: cardsContainerRef.current,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-        y: 30,
-        stagger: 0.12,
-        duration: 0.6,
-        ease: 'power2.out',
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
+  }, [place]);
 
   return (
-    <section id="projects" className="w-full max-w-[1550px] mx-auto px-6 md:px-12 py-24 relative z-10 bg-white">
-      <div className="absolute top-10 right-10 w-96 h-96 bg-theme-blue/20 rounded-full blur-3xl pointer-events-none" />
+    <section
+      id="projects"
+      className="w-full h-full flex flex-col justify-center px-6 md:px-12 pt-20 pb-5 relative overflow-hidden"
+    >
+      <div ref={tintRef} className="absolute inset-0 pointer-events-none transition-colors duration-700" aria-hidden="true" />
 
-      {/* Header Block matching Crowdix Agenda title layout */}
-      <div className="flex flex-col items-center text-center gap-3 mb-16 max-w-2xl mx-auto">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-brand-crimson" />
-          <span className="text-brand-crimson text-[10px] md:text-xs uppercase tracking-widest font-heading font-extrabold">
-            Impact Tracker
-          </span>
-        </div>
-        <h2
-          ref={titleRef}
-          className="text-4xl md:text-6xl font-display uppercase tracking-tight text-theme-dark"
-        >
-          Our Project <span className="text-sweep">Lineup</span>
-        </h2>
-      </div>
+      <SectionHeading
+        number="04"
+        label="Impact Tracker"
+        titleTop="Selected projects,"
+        titleBottom="built for"
+        accent="impact"
+        description="Blood drives, tree plantations, skill workshops — each project driven end-to-end by one of our five avenues of service."
+        titleRef={titleRef}
+        className="mb-4 shrink-0 z-60"
+      />
 
-      {/* Event Cards List (Vertical List of Horizontal Cards matching Crowdix Event Cards) */}
+      {/* Stage — perspective lives on the wrapper, the tilt on the stage,
+          so the boards inherit one shared 3D space. */}
       <div
-        ref={cardsContainerRef}
-        className="flex flex-col gap-6 max-w-5xl mx-auto min-h-[300px]"
+        className="flex-1 min-h-0 flex items-center justify-center relative"
+        style={{ perspective: '1900px', perspectiveOrigin: '50% 46%' }}
       >
-        {FEATURED_PROJECTS.map((project, index) => {
-          // Select placeholder gradients based on index
-          const gradients = [
-            'from-[#e11d48]/20 to-[#9f1239]/20 border-brand-crimson/10 text-brand-crimson',
-            'from-[#d97706]/20 to-[#92400e]/20 border-brand-gold/10 text-brand-gold',
-            'from-brand-navy/20 to-text-primary/20 border-brand-navy/10 text-brand-navy'
-          ];
-          const gradClass = gradients[index % gradients.length];
-
-          return (
-            <div 
+        <div
+          className="relative w-full max-w-[1180px]"
+          style={{
+            transformStyle: 'preserve-3d',
+            transform: 'rotateX(6deg)',
+            height: 'clamp(260px, calc(100vh - 380px), 520px)',
+          }}
+        >
+          {PROJECTS_DATA.map((project, i) => (
+            <article
               key={project.title}
-              className="flex flex-col md:flex-row items-stretch gap-6 md:gap-8 rounded-3xl border border-black/5 bg-bg-secondary hover-beige-gradient p-6 transition-all duration-300 shadow-sm"
+              ref={(el) => {
+                boardRefs.current[i] = el;
+              }}
+              className={`deck-board absolute inset-x-0 bottom-0 rounded-2xl overflow-hidden shadow-[0_30px_70px_-25px_rgba(0,0,0,0.5)] ${
+                project.fg === 'dark' ? 'text-slate-950' : 'text-white'
+              }`}
+              style={{
+                height: '100%',
+                background: project.color,
+                zIndex: 200 - i,
+                willChange: 'transform, opacity',
+              }}
             >
-              {/* Left Side: Date Box (matches event-time-box) */}
-              <div className="flex md:flex-col justify-between md:justify-center items-start md:w-[180px] shrink-0 border-b md:border-b-0 md:border-r border-black/5 pb-4 md:pb-0 md:pr-6 gap-2">
-                <span className="font-heading font-extrabold text-theme-dark text-xs uppercase tracking-wider">
-                  Project Date
-                </span>
-                <span className="font-display text-2xl text-brand-crimson uppercase leading-none">
-                  {project.date}
+              {/* Identity strip — the only part a waiting board shows. */}
+              <div
+                className={`h-[50px] shrink-0 flex items-center gap-3 px-5 md:px-8 text-[10px] md:text-xs font-heading font-extrabold uppercase tracking-widest border-b ${
+                  project.fg === 'dark' ? 'border-black/10' : 'border-white/15'
+                }`}
+              >
+                <span className="opacity-70">{project.date}</span>
+                <span className="opacity-40">/</span>
+                <span className="truncate">{project.category}</span>
+                <span
+                  className={`ml-auto shrink-0 px-2.5 py-1 rounded-full text-[9px] ${
+                    project.fg === 'dark' ? 'bg-black/10' : 'bg-white/15'
+                  }`}
+                >
+                  {project.status}
                 </span>
               </div>
 
-              {/* Center Side: Image placeholder box (matches event-image-box) */}
-              <div className="w-full md:w-[150px] aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden shrink-0 relative">
-                <div className={`absolute inset-0 bg-gradient-to-br ${gradClass} flex items-center justify-center font-heading font-extrabold text-xs uppercase tracking-wider`}>
-                  {project.category}
-                </div>
-              </div>
-
-              {/* Right Side: Content & Actions */}
-              <div className="flex-grow flex flex-col justify-between gap-4">
-                <div className="flex flex-col gap-2">
-                  <div className="flex justify-between items-center">
-                    <span className="inline-block px-3 py-1 bg-brand-navy/5 border border-brand-navy/10 rounded-full text-[9px] font-heading font-extrabold uppercase tracking-wider text-brand-navy">
-                      {project.category}
-                    </span>
-                    <span className={`text-[10px] font-heading font-extrabold uppercase tracking-wider ${
-                      project.status === 'Completed' ? 'text-green-600' : 'text-orange-500'
-                    }`}>
-                      {project.status}
-                    </span>
-                  </div>
-                  <h3 className="font-heading font-extrabold text-lg md:text-xl text-theme-dark leading-tight">
+              {/* Full write-up — revealed only on the active board (see the
+                  .deck-detail rules in index.css). */}
+              <div className="deck-detail h-[calc(100%-50px)] px-5 md:px-8 py-5 md:py-7 grid grid-cols-1 md:grid-cols-[1.6fr_1fr] gap-4 md:gap-10">
+                <div className="flex flex-col min-h-0">
+                  <h3 className="font-heading font-extrabold text-xl md:text-3xl leading-tight">
                     {project.title}
                   </h3>
-                  <p className="text-xs md:text-sm text-text-muted font-sans leading-relaxed">
+                  <p
+                    className={`mt-3 text-xs md:text-sm leading-relaxed line-clamp-4 ${
+                      project.fg === 'dark' ? 'text-slate-950/70' : 'text-white/75'
+                    }`}
+                  >
                     {project.description}
                   </p>
-                </div>
 
-                <div className="flex justify-end pt-2">
                   <Link
                     to={`/projects/${avenueToSlug(project.avenue)}`}
-                    className="flex items-center gap-1.5 text-[10px] font-heading font-extrabold uppercase tracking-widest text-brand-crimson hover:opacity-80 transition-opacity"
+                    className={`mt-auto self-start inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full font-heading font-extrabold text-[10px] md:text-xs uppercase tracking-widest transition-transform duration-300 hover:-translate-y-0.5 ${
+                      project.fg === 'dark'
+                        ? 'bg-slate-950 text-white'
+                        : 'bg-white text-slate-950'
+                    }`}
                   >
                     <span>View Project</span>
-                    <ArrowUpRight size={12} />
+                    <ArrowUpRight size={13} />
                   </Link>
                 </div>
+
+                <div className="hidden md:flex flex-col gap-4">
+                  <div>
+                    <p className={`text-[10px] font-heading font-extrabold uppercase tracking-widest ${project.fg === 'dark' ? 'text-slate-950/50' : 'text-white/50'}`}>
+                      Avenue
+                    </p>
+                    <p className="mt-1 text-sm font-heading font-bold">{project.avenue}</p>
+                  </div>
+                  <div>
+                    <p className={`text-[10px] font-heading font-extrabold uppercase tracking-widest ${project.fg === 'dark' ? 'text-slate-950/50' : 'text-white/50'}`}>
+                      Status
+                    </p>
+                    <p className="mt-1 text-sm font-heading font-bold">{project.status}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            </article>
+          ))}
+        </div>
       </div>
 
-      {/* Roster Redirect Link */}
-      <div className="flex justify-center mt-16">
+      {/* Counter + colour-dot legend, mirroring the Members section's
+          counter/dots so both scroll-driven sections read the same way. */}
+      <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-2 mt-5 shrink-0 relative z-60">
+        <span ref={counterRef} className="font-heading font-extrabold text-xs text-theme-dark tabular-nums">
+          {`01 / ${pad(N)}`}
+        </span>
+        <div className="flex items-center gap-3 flex-wrap justify-center">
+          {PROJECTS_DATA.map((project, i) => (
+            <button
+              key={project.title}
+              type="button"
+              ref={(el) => {
+                navRefs.current[i] = el;
+              }}
+              className={`flex items-center gap-1.5 text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-dark transition-opacity duration-300 ${
+                i === 0 ? 'opacity-100' : 'opacity-40'
+              }`}
+            >
+              <i className="w-2 h-2 rounded-full shrink-0" style={{ background: project.color }} />
+              <span className="hidden sm:inline">{project.category}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-center mt-4 shrink-0 relative z-60">
         <Link
           to="/projects"
-          className="px-8 py-3.5 rounded-full bg-gradient-to-r from-brand-crimson to-red-800 hover:from-brand-crimson/95 hover:to-red-755 text-white font-heading font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-brand-crimson/20 hover:shadow-xl hover:shadow-brand-crimson/30 hover:-translate-y-0.5 transition-all duration-300"
+          className="px-8 py-3.5 rounded-full bg-gradient-to-r from-brand-crimson to-red-800 text-white font-heading font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-brand-crimson/20 hover:shadow-xl hover:shadow-brand-crimson/30 hover:-translate-y-0.5 transition-all duration-300"
         >
           View All Projects
         </Link>
       </div>
     </section>
   );
-};
+});
+
+Projects.displayName = 'Projects';

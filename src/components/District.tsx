@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import clubLogo from '../assets/1.svg';
+import { SectionHeading } from './SectionHeading';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -72,25 +73,20 @@ export const District: React.FC = () => {
       {/* Background soft glows */}
       <div className="absolute top-10 left-10 w-96 h-96 bg-theme-blue/20 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Header Block matching Crowdix overview subtitle/title layout */}
-      <div className="flex flex-col items-center text-center mb-20 max-w-3xl mx-auto">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="w-2.5 h-2.5 rounded-full bg-theme-dark" />
-          <span className="text-theme-dark text-[10px] md:text-xs uppercase tracking-widest font-heading font-extrabold">
-            Rotary District Hierarchy
-          </span>
-        </div>
-        <h2 
-          ref={titleRef} 
-          className="text-4xl md:text-6xl font-display uppercase tracking-tight text-theme-dark"
-        >
-          Rotary District <span className="text-sweep">2982</span>
-        </h2>
-      </div>
+      <SectionHeading
+        number="02"
+        label="Rotary District Hierarchy"
+        titleTop="One district,"
+        titleBottom="many clubs, one"
+        accent="family"
+        description="Salem, Namakkal, Dharmapuri and Krishnagiri — the regional umbrella that connects our club to a much larger network."
+        titleRef={titleRef}
+        className="mb-2"
+      />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
         {/* Left Column: District info & feature cards */}
-        <div ref={leftColRef} className="lg:col-span-7 flex flex-col gap-8">
+        <div ref={leftColRef} className="lg:col-span-7 flex flex-col gap-5">
           <div className="flex flex-col gap-3">
             <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest">
               Service Above Self

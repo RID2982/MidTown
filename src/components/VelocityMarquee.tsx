@@ -1,12 +1,31 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
+/**
+ * A single marquee word. Plain strings take the row's styling; the object
+ * form overrides it per word, so one row can alternate solid and outlined
+ * text instead of every row being uniform.
+ */
+export type MarqueeItem = string | { text: string; outline?: boolean; bold?: boolean };
+
 export interface MarqueeRow {
-  items: string[];
+  items: MarqueeItem[];
   /** px/s base speed; sign sets base scroll direction */
   velocity: number;
+  /** Default styling for items in this row that don't specify their own. */
   outline?: boolean;
 }
+
+const itemText = (item: MarqueeItem) => (typeof item === 'string' ? item : item.text);
+
+// An item's own `outline` wins; `bold: true` is the explicit opposite of
+// outlined. Otherwise it inherits the row default.
+const itemOutlined = (item: MarqueeItem, rowOutline?: boolean) => {
+  if (typeof item === 'string') return !!rowOutline;
+  if (item.outline !== undefined) return item.outline;
+  if (item.bold) return false;
+  return !!rowOutline;
+};
 
 // Scroll-velocity-reactive marquee: rows drift continuously in their own
 // base direction, speed up when the page is scrolled, and reverse when
@@ -19,16 +38,16 @@ function prefersReducedMotion() {
   return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-const RowCopy: React.FC<{ items: string[]; outline?: boolean }> = ({ items, outline }) => (
+const RowCopy: React.FC<{ items: MarqueeItem[]; outline?: boolean }> = ({ items, outline }) => (
   <span className="flex items-center shrink-0" aria-hidden="true">
-    {items.map((text, i) => (
+    {items.map((item, i) => (
       <span key={i} className="flex items-center gap-6 px-6">
         <span
           className={`font-display uppercase text-3xl md:text-5xl whitespace-nowrap ${
-            outline ? 'text-outline' : 'text-white'
+            itemOutlined(item, outline) ? 'text-outline' : 'text-white'
           }`}
         >
-          {text}
+          {itemText(item)}
         </span>
         <span className="text-brand-crimson text-2xl md:text-3xl">&#10022;</span>
       </span>
@@ -96,7 +115,7 @@ export const VelocityMarquee: React.FC<{ rows: MarqueeRow[]; className?: string 
 
   return (
     <div ref={rootRef} className={className}>
-      <p className="sr-only">{rows.flatMap((r) => r.items).join(', ')}</p>
+      <p className="sr-only">{rows.flatMap((r) => r.items.map(itemText)).join(', ')}</p>
       {rows.map((row, i) => (
         <div key={i} className="overflow-hidden py-2">
           <div data-track className="flex w-max">

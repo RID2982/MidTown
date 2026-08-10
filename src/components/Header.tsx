@@ -14,6 +14,7 @@ const NAV_ITEMS = [
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeId, setActiveId] = useState('home');
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Scroll-spy: highlight whichever section is currently centered in the
   // viewport, rather than just reacting to clicks.
@@ -37,36 +38,50 @@ export const Header: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Condense the header pill slightly once the page has scrolled — keeps it
+  // feeling like part of the page rather than a static floating panel.
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const desktopLinkClass = (id: string) =>
     `nav-pill relative flex flex-col items-center justify-center h-6 shrink-0 overflow-hidden rounded-full px-3 -mx-3 font-heading text-xs font-bold uppercase tracking-wider transition-colors duration-300 hover:text-white focus-visible:text-white ${
-      activeId === id ? 'text-theme-blue' : 'text-white/60'
+      activeId === id ? 'nav-pill-active text-white' : 'text-white/60'
     }`;
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-theme-dark/90 backdrop-blur-md border-b border-white/10 px-6 py-4">
-      <div className="w-full max-w-[1550px] mx-auto grid grid-cols-3 items-center">
-        {/* Left Col: Desktop Navigation Menu. shrink-0 on each link plus a
+    <header className="fixed top-4 left-0 w-full z-100 px-4 md:px-6">
+      <div
+        className={`w-full max-w-[1300px] mx-auto grid grid-cols-3 items-center rounded-full bg-theme-dark/90 backdrop-blur-md border border-white/10 shadow-lg shadow-black/20 px-6 transition-all duration-300 ${
+          isScrolled ? 'py-2' : 'py-3'
+        }`}
+      >
+        {/* Left Col: Club Logo (full lockup, unaltered — not cropped) */}
+        <Link to="/" className="flex justify-start items-center">
+          <img
+            src={logoMark}
+            alt="Rotaract Club of Salem Midtown"
+            className={`w-auto object-contain shrink-0 transition-all duration-300 ${isScrolled ? 'h-10' : 'h-12'}`}
+          />
+        </Link>
+
+        {/* Center Col: Desktop Navigation Menu. shrink-0 on each link plus a
             tighter gap keeps every label (notably "Club Members" and
             "RID 2982") fully on-screen at desktop widths instead of being
             silently compressed and clipped by the link's own overflow-hidden
-            (needed for the hover text-swap effect) — flex items shrink below
-            their content width by default, and getBoundingClientRect() on
-            the clipped element doesn't reveal that visually. */}
-        <nav className="hidden md:flex items-center gap-5 justify-start">
+            (needed for the pink select-fill effect). Selection is shown by
+            the pink background fill alone (.nav-pill::before) — no text
+            motion. */}
+        <nav className="hidden md:flex items-center gap-5 justify-center">
           {NAV_ITEMS.map((item) => (
             <Link key={item.id} to={`/#${item.id}`} className={desktopLinkClass(item.id)}>
-              <span className="menu-link-container h-5 overflow-hidden">
-                <span className="menu-link-text block h-5 shrink-0 transition-transform duration-300">{item.label}</span>
-                <span className="menu-link-text block h-5 shrink-0 text-white transition-transform duration-300">{item.label}</span>
-              </span>
+              <span className="h-5 flex items-center">{item.label}</span>
             </Link>
           ))}
         </nav>
-
-        {/* Center Col: Club Logo (full lockup, unaltered — not cropped) */}
-        <Link to="/" className="flex justify-start md:justify-center items-center">
-          <img src={logoMark} alt="Rotaract Club of Salem Midtown" className="h-16 w-auto object-contain shrink-0" />
-        </Link>
 
         {/* Right Col: CTA Button & Mobile Trigger */}
         <div className="flex justify-end items-center gap-4">
@@ -88,7 +103,7 @@ export const Header: React.FC = () => {
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-theme-dark/95 border-b border-white/10 backdrop-blur-2xl p-6 flex flex-col gap-3 md:hidden shadow-lg animate-fade-in">
+        <div className="absolute top-[calc(100%+8px)] left-4 right-4 md:left-6 md:right-6 rounded-3xl bg-theme-dark/95 border border-white/10 backdrop-blur-2xl p-6 flex flex-col gap-3 md:hidden shadow-lg animate-fade-in">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.id}

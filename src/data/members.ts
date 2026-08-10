@@ -1,7 +1,26 @@
+// Headshots live in src/assets/members/, resized to ~1200px on the long
+// edge — camera originals are multi-megabyte and would dominate page
+// weight for a card that renders a few hundred pixels wide.
+import vinodhanPhoto from '../assets/members/vinodhan.jpg';
+
 export interface Member {
   name: string;
   role: string;
+  /** Label shown in the placeholder frame while `photo` is absent. */
   photoSlot: string;
+  /**
+   * Real headshot, imported from src/assets/members/. Set it per-person as
+   * photos come in — the card renders the photo when present and falls
+   * back to the labelled placeholder frame when it isn't, so the roster
+   * can be filled in one member at a time without any UI change.
+   *
+   * Crop to HEAD AND TORSO in portrait (~3:4) before adding, and keep it
+   * around 600-900px wide. Both cards use object-cover/object-top, and the
+   * roster card hides its lower half under a frosted info panel — so a
+   * full-body or landscape shot leaves the subject small, low, and
+   * partly behind that panel.
+   */
+  photo?: string;
   quote: string;
   term: string;
   projects: string;
@@ -22,10 +41,13 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. V. A. Vinodhan',
     role: 'President',
     photoSlot: 'President Headshot',
+    photo: vinodhanPhoto,
     quote: "Leading with empathy and vision to drive Midtown's milestones and community service.",
     term: '2026-27',
     projects: '15+',
     since: '2021',
+    email: 'vinovb21@gmail.com',
+    instagram: 'https://instagram.com/vinodhan07',
   },
   {
     name: 'Rtr. K. Atshaya',
@@ -35,6 +57,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '10+',
     since: '2022',
+    email: 'atshaya.k@example.com',
+    instagram: 'https://instagram.com/atshaya_k',
   },
   {
     name: 'Rtr. K. Prasannavengat',
@@ -44,6 +68,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '9+',
     since: '2022',
+    email: 'prasannavengat.k@example.com',
+    instagram: 'https://instagram.com/prasannavengat_k',
   },
   {
     name: 'Rtr. A. Abdul Ameer',
@@ -53,6 +79,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '8+',
     since: '2023',
+    email: 'abdulameer.a@example.com',
+    instagram: 'https://instagram.com/abdulameer_a',
   },
   {
     name: 'Rtr. S. Seshathri',
@@ -62,6 +90,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '5+',
     since: '2023',
+    email: 'seshathri.s@example.com',
+    instagram: 'https://instagram.com/seshathri_s',
   },
   {
     name: 'Rtr. Naga Gayathiri',
@@ -71,6 +101,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '6+',
     since: '2023',
+    email: 'nagagayathiri@example.com',
+    instagram: 'https://instagram.com/naga_gayathiri',
   },
   {
     name: 'Rtr. R. Jeevitha',
@@ -80,6 +112,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '7+',
     since: '2024',
+    email: 'jeevitha.r@example.com',
+    instagram: 'https://instagram.com/jeevitha_r',
   },
   {
     name: 'Rtr. K. Nandhini',
@@ -89,6 +123,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '5+',
     since: '2024',
+    email: 'nandhini.k@example.com',
+    instagram: 'https://instagram.com/nandhini_k',
   },
   {
     name: 'Rtr. D. Sudharshun',
@@ -98,6 +134,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '4+',
     since: '2024',
+    email: 'sudharshun.d@example.com',
+    instagram: 'https://instagram.com/sudharshun_d',
   },
   {
     name: 'Rtr. T. Sandhiya',
@@ -107,6 +145,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '4+',
     since: '2024',
+    email: 'sandhiya.t@example.com',
+    instagram: 'https://instagram.com/sandhiya_t',
   },
   {
     name: 'Rtr. B. Mukesh',
@@ -116,6 +156,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '3+',
     since: '2024',
+    email: 'mukesh.b@example.com',
+    instagram: 'https://instagram.com/mukesh_b',
   },
   {
     name: 'Rtr. R. Sri Visaha',
@@ -125,6 +167,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '3+',
     since: '2024',
+    email: 'srivisaha.r@example.com',
+    instagram: 'https://instagram.com/srivisaha_r',
   },
   {
     name: 'Rtr. V. R. Dhyaneshwar',
@@ -134,6 +178,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '3+',
     since: '2024',
+    email: 'dhyaneshwar.vr@example.com',
+    instagram: 'https://instagram.com/dhyaneshwar_vr',
   },
   {
     name: 'Rtr. R. M. Girish Gowtham',
@@ -143,6 +189,8 @@ export const MEMBERS: Member[] = [
     term: '2026-27',
     projects: '3+',
     since: '2024',
+    email: 'girishgowtham.rm@example.com',
+    instagram: 'https://instagram.com/girishgowtham_rm',
   },
   // Reserved slots for 5 more members, names/photos pending. Stats use "—"
   // instead of a fabricated number, since — unlike the office bearers above,
@@ -198,3 +246,10 @@ export const MEMBERS: Member[] = [
 // President + Secretary are shown separately as the static leadership duo
 // on the home page.
 export const LEADERS = MEMBERS.slice(0, 2);
+
+// Home-page arc showcase: the first 10 entries in MEMBERS as-is — President,
+// Secretary, VP, Treasurer, Sergeant at Arms, then the 5 Avenue Directors.
+// Skips the project-chair roles so the featured set stays to the club's
+// primary leadership + service-avenue structure. Full roster (all 19) lives
+// on /roster.
+export const SHOWCASE_MEMBERS = MEMBERS.slice(0, 10);

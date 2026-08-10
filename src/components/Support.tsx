@@ -3,6 +3,7 @@ import { CheckCircle2, ChevronDown } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+import { SectionHeading } from './SectionHeading';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -67,24 +68,17 @@ export const Support: React.FC = () => {
       <div className="absolute inset-0 bg-radial-[circle_at_20%_30%] from-brand-crimson/10 via-transparent to-transparent z-0 pointer-events-none" />
       <div className="absolute inset-0 bg-radial-[circle_at_80%_70%] from-brand-gold/10 via-transparent to-transparent z-0 pointer-events-none" />
 
-      {/* Header Block matching Crowdix CTA title layout */}
-      <div className="flex flex-col items-center text-center mb-16 max-w-3xl mx-auto relative z-10">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="w-2.5 h-2.5 rounded-full bg-theme-blue" />
-          <span className="text-theme-blue text-[10px] md:text-xs uppercase tracking-widest font-heading font-extrabold">
-            We're Here To Help
-          </span>
-        </div>
-        <h2 
-          ref={titleRef} 
-          className="text-4xl md:text-6xl font-display uppercase tracking-tight text-white"
-        >
-          Get <span className="text-sweep">Support & Help</span>
-        </h2>
-        <p className="text-white/60 font-sans text-sm md:text-base mt-4 leading-relaxed max-w-xl">
-          Didn't find your answer above? Drop us a ticket and our team will follow up directly.
-        </p>
-      </div>
+      <SectionHeading
+        number="07"
+        label="We're Here To Help"
+        titleTop="Get support,"
+        titleBottom="get"
+        accent="involved"
+        description="Didn't find your answer above? Drop us a ticket and our team will follow up directly."
+        titleRef={titleRef}
+        dark
+        className="mb-16 z-10"
+      />
 
       {/* Dark styled glass card matching Crowdix CTA boxes */}
       <div

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+import { SectionHeading } from './SectionHeading';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -82,21 +83,16 @@ export const FAQ: React.FC = () => {
     <section id="faq" className="w-full max-w-[1550px] mx-auto px-6 md:px-12 py-24 relative z-10 bg-white">
       <div className="absolute top-10 left-10 w-96 h-96 bg-brand-gold/5 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Header Block matching Crowdix FAQ section header */}
-      <div className="flex flex-col items-center text-center mb-20 max-w-3xl mx-auto">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="w-2.5 h-2.5 rounded-full bg-theme-dark" />
-          <span className="text-theme-dark text-[10px] md:text-xs uppercase tracking-widest font-heading font-extrabold">
-            FAQS ( We're Here to Help )
-          </span>
-        </div>
-        <h2 
-          ref={titleRef} 
-          className="text-4xl md:text-6xl font-display uppercase tracking-tight text-theme-dark"
-        >
-          Ask Anything — <span className="text-sweep">We're Ready to Answer</span>
-        </h2>
-      </div>
+      <SectionHeading
+        number="06"
+        label="FAQs — We're Here to Help"
+        titleTop="Ask anything,"
+        titleBottom="we're ready to"
+        accent="answer"
+        description="Joining, meeting times, fees, avenues of service — the questions we're asked most, answered plainly."
+        titleRef={titleRef}
+        className="mb-16"
+      />
 
       {/* FAQ Grid Cards in Blue matching Crowdix Dropdowns */}
       <div className="max-w-4xl mx-auto flex flex-col gap-4">
