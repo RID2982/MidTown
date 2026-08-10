@@ -38,8 +38,8 @@ export const Header: React.FC = () => {
   }, []);
 
   const desktopLinkClass = (id: string) =>
-    `relative flex flex-col items-center justify-center h-6 shrink-0 overflow-hidden font-heading text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${
-      activeId === id ? 'text-theme-blue' : 'text-white/60 hover:text-theme-blue'
+    `nav-pill relative flex flex-col items-center justify-center h-6 shrink-0 overflow-hidden rounded-full px-3 -mx-3 font-heading text-xs font-bold uppercase tracking-wider transition-colors duration-300 hover:text-white focus-visible:text-white ${
+      activeId === id ? 'text-theme-blue' : 'text-white/60'
     }`;
 
   return (
@@ -57,7 +57,7 @@ export const Header: React.FC = () => {
             <Link key={item.id} to={`/#${item.id}`} className={desktopLinkClass(item.id)}>
               <span className="menu-link-container h-5 overflow-hidden">
                 <span className="menu-link-text block h-5 shrink-0 transition-transform duration-300">{item.label}</span>
-                <span className="menu-link-text block h-5 shrink-0 text-brand-crimson transition-transform duration-300">{item.label}</span>
+                <span className="menu-link-text block h-5 shrink-0 text-white transition-transform duration-300">{item.label}</span>
               </span>
             </Link>
           ))}

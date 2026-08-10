@@ -3,6 +3,12 @@ import { MEMBERS } from '../data/members';
 import { CardVisual } from '../components/MemberCardVisual';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { VelocityMarquee } from '../components/VelocityMarquee';
+
+const MARQUEE_ROWS = [
+  { items: ['Club Service', 'Community Service', 'Professional Service'], velocity: 45 },
+  { items: ['Service Above Self', 'Dream To Deserve', 'International Service', 'Public Image'], velocity: 38, outline: true },
+];
 
 // No opacity in "hidden" — see the note in the other section components:
 // whileInView never fires without a real scroll event, so gating on
@@ -38,6 +44,14 @@ export const RosterPage: React.FC = () => {
             Every office bearer, avenue director, and project chair leading Salem Midtown for the 2026-27 term.
           </p>
         </div>
+
+        {/* Full-bleed dark strip, broken out of this section's max-w
+            container. Speed reacts to how fast you're actually scrolling —
+            try it. */}
+        <VelocityMarquee
+          rows={MARQUEE_ROWS}
+          className="w-screen relative left-1/2 -translate-x-1/2 bg-theme-dark py-6 mb-16"
+        />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center relative">
           {MEMBERS.map((member, index) => (

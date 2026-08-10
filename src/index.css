@@ -151,6 +151,41 @@ body {
 .menu-link-text {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.menu-link-container:hover .menu-link-text {
+/* Triggered off .nav-pill (the whole padded link), not the text span itself
+   — otherwise hovering the pill's padding without touching the text
+   wouldn't roll it. */
+.nav-pill:hover .menu-link-text,
+.nav-pill:focus-visible .menu-link-text {
   transform: translateY(-100%);
+}
+
+/* --- NAV PILL "SELECTING" ANIMATION --- */
+/* A fill grows from the bottom edge on hover/focus, like a spotlight
+   switching on — same interaction the reference header uses. isolate +
+   the link's own overflow-hidden keep the circle clipped to the pill's
+   rounded shape and out of the surrounding layout. */
+.nav-pill {
+  isolation: isolate;
+}
+.nav-pill::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 240%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-brand-crimson);
+  transform: translate(-50%, 0) scale(0);
+  transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+  z-index: -1;
+}
+.nav-pill:hover::before,
+.nav-pill:focus-visible::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+@media (hover: none) {
+  .nav-pill:active::before {
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
