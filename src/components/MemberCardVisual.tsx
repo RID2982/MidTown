@@ -1,11 +1,13 @@
 import React from 'react';
-import { User, Mail, Check } from 'lucide-react';
+import { User, Check } from 'lucide-react';
 import type { Member } from '../data/members';
 
 // lucide-react in this project ships no brand/logo icons (Instagram,
 // Facebook, etc. are all absent), so the glyph is a small inline SVG instead,
 // sized and styled to match the surrounding lucide icons (stroke-based,
-// currentColor, same 14/16px scale).
+// currentColor, same 14/16px scale). Kept here (not in the card below, which
+// no longer shows per-member contact links) because Footer.tsx still uses it
+// for the club's own Instagram link.
 export const InstagramIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   <svg
     width={size}
@@ -21,25 +23,6 @@ export const InstagramIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-  </svg>
-);
-
-export const RotaryIcon: React.FC<{ className?: string; size?: number }> = ({ className, size = 12 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={2.2}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden="true"
-  >
-    <circle cx="12" cy="12" r="6" />
-    <circle cx="12" cy="12" r="2.5" />
-    <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" />
   </svg>
 );
 
@@ -128,59 +111,6 @@ export const CardVisual: React.FC<{ member: Member }> = ({ member }) => {
         <p className="text-xs text-white/60 font-sans leading-relaxed line-clamp-2 min-h-[32px]">
           {member.quote}
         </p>
-
-        {/* Team strip — the Rotary wheel and the term said the same thing
-            twice ("26-27 TEAM" beside "2026-27"), so only the wheel-marked
-            label remains. Hard border-y rules replaced by a single hairline
-            that fades out across its width, so nothing reads as a boxed
-            divider. */}
-        <div className="flex items-center gap-1.5 text-white text-xs font-heading font-bold py-2.5 my-0.5 relative">
-          <span
-            className="absolute top-0 left-0 right-0 h-px"
-            style={{ background: 'linear-gradient(to right, rgba(255,255,255,0.18), transparent)' }}
-          />
-          <RotaryIcon className="text-brand-gold" size={14} />
-          <span>26-27 TEAM</span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {/* Only wired up as a real mailto link once this member has an
-              email on file — everyone else keeps the same look, inert. */}
-          {member.email ? (
-            <a
-              href={`mailto:${member.email}`}
-              className="flex-1 py-3 rounded-full bg-white hover:bg-slate-100 text-slate-950 font-heading font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-md cursor-pointer"
-            >
-              <Mail size={12} />
-              <span>Get In Touch</span>
-            </a>
-          ) : (
-            <button className="flex-1 py-3 rounded-full bg-white hover:bg-slate-100 text-slate-950 font-heading font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-md cursor-pointer">
-              <Mail size={12} />
-              <span>Get In Touch</span>
-            </button>
-          )}
-
-          {/* Same treatment for Instagram — live link once a URL is on file. */}
-          {member.instagram ? (
-            <a
-              href={member.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${member.name} on Instagram`}
-              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-colors cursor-pointer shrink-0"
-            >
-              <InstagramIcon size={14} />
-            </a>
-          ) : (
-            <span
-              aria-hidden="true"
-              className="w-10 h-10 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/30 shrink-0"
-            >
-              <InstagramIcon size={14} />
-            </span>
-          )}
-        </div>
       </div>
     </article>
   );

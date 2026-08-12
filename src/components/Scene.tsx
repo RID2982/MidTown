@@ -8,6 +8,19 @@ gsap.registerPlugin(ScrollTrigger);
  * One stacked full-screen frame in a scroll-overlap sequence. Give later
  * scenes a higher `zIndex` so they rise up and cover earlier ones.
  *
+ * The stacking illusion itself, in plain terms: every `Scene` is CSS
+ * `position: sticky; top: 0`, one viewport tall, sitting directly under the
+ * same parent (see `.scene-hold` in index.css, and the `<div
+ * className="relative">` stack in HomePage.tsx). A sticky element "sticks"
+ * to the top of the viewport once its normal scroll position reaches it,
+ * and stays stuck until its parent's bottom edge forces it to scroll away
+ * again. With several of these siblings stacked in DOM order and each given
+ * a HIGHER `zIndex` than the one before it, scrolling down causes each new
+ * Scene to slide up from below and visually cover the previous one — which
+ * is still sitting there, stuck, underneath it. That's the whole trick;
+ * everything below this point is about handling content taller than one
+ * screen without breaking that illusion.
+ *
  * The hold itself is always exactly one viewport tall (`.scene-hold` in
  * index.css) and clips overflow. When a section's own content is taller
  * than that, the extra height is NOT handled by a nested scrollbar (that

@@ -23,7 +23,7 @@ export const AvenuePage: React.FC = () => {
   const avenue = avenueSlug ? slugToAvenue(avenueSlug) : undefined;
 
   if (!avenue) {
-    return <Navigate to="/projects" replace />;
+    return <Navigate to="/#projects" replace />;
   }
 
   const avenueProjects = PROJECTS_DATA.filter((p) => p.avenue === avenue);
@@ -37,11 +37,11 @@ export const AvenuePage: React.FC = () => {
 
       <section className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 pt-28 pb-16 relative z-10">
         <Link
-          to="/projects"
+          to="/#projects"
           className="inline-flex items-center gap-2 text-xs font-heading font-extrabold uppercase tracking-widest text-text-muted hover:text-brand-crimson transition-colors mb-10"
         >
           <ArrowLeft size={14} />
-          All Avenues
+          Back to Projects
         </Link>
 
         <div className="flex flex-col items-start text-left mb-16 max-w-3xl">
@@ -98,8 +98,9 @@ export const AvenuePage: React.FC = () => {
           })}
         </div>
 
-        {/* Avenue-to-avenue navigation, since these pages aren't all listed
-            in the header nav (5 more items wouldn't fit — see /projects hub). */}
+        {/* Avenue-to-avenue navigation — the header's Projects dropdown lists
+            all 5, but this keeps browsing possible without going back up to
+            the nav each time. */}
         <div className="flex justify-between items-center mt-24 pt-8 border-t border-black/5">
           <Link
             to={`/projects/${avenueToSlug(prevAvenue)}`}

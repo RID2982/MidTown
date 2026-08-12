@@ -1,16 +1,16 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { SHOWCASE_MEMBERS } from '../data/members';
+import { SHOWCASE_MEMBERS, BOARD_HISTORY, BOARD_TERMS } from '../data/members';
 import { MemberWorkCard } from './MemberWorkCard';
 import { SectionHeading } from './SectionHeading';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const pad = (n: number) => String(n).padStart(2, '0');
-const N = SHOWCASE_MEMBERS.length;
 
 // px between card centres on the arc. A fixed 370 pushed neighbouring
 // cards clean off a phone screen, so it scales with the viewport and only
@@ -37,6 +37,16 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const counterRef = useRef<HTMLSpanElement>(null);
   const dotRefs = useRef<(HTMLSpanElement | null)[]>([]);
+
+  // Board-of-directors year picker. Only one term exists today
+  // (BOARD_TERMS has one entry), but the roster/N below are already
+  // derived from the selection rather than hardcoded, so adding a prior
+  // year to data/members.ts's BOARD_HISTORY is enough to make it real —
+  // no further changes needed here.
+  const [selectedTerm, setSelectedTerm] = useState(BOARD_TERMS[0]);
+  const [isTermOpen, setIsTermOpen] = useState(false);
+  const roster = BOARD_HISTORY[selectedTerm] ?? SHOWCASE_MEMBERS;
+  const N = roster.length;
 
   useImperativeHandle(ref, () => ({
     render(progress01: number) {
@@ -66,22 +76,6 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
   }));
 
   React.useEffect(() => {
-    // Baseline layout, in case Scene hasn't scrubbed yet (e.g. the section
-    // mounts already in view). Same maths as render(0).
-    const sp = spread();
-    const narrow = isNarrow();
-    cardRefs.current.forEach((card, i) => {
-      if (!card) return;
-      const d = i;
-      gsap.set(card, {
-        x: d * sp,
-        rotationY: gsap.utils.clamp(-32, 32, -d * (narrow ? 7 : 11)),
-        scale: 1 - Math.min(d * (narrow ? 0.12 : 0.09), 0.45),
-        autoAlpha: d <= 2 ? 1 : Math.max(0.5, 1 - (d - 2) * 0.25),
-        zIndex: Math.round(50 - d * 10),
-      });
-    });
-
     const ctx = gsap.context(() => {
       if (titleRef.current) {
         const split = new SplitText(titleRef.current, { type: 'lines,words' });
@@ -97,6 +91,25 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
     return () => ctx.revert();
   }, []);
 
+  React.useEffect(() => {
+    // Baseline layout, in case Scene hasn't scrubbed yet (e.g. the section
+    // mounts already in view, or the board term just changed). Same maths
+    // as render(0).
+    const sp = spread();
+    const narrow = isNarrow();
+    cardRefs.current.forEach((card, i) => {
+      if (!card) return;
+      const d = i;
+      gsap.set(card, {
+        x: d * sp,
+        rotationY: gsap.utils.clamp(-32, 32, -d * (narrow ? 7 : 11)),
+        scale: 1 - Math.min(d * (narrow ? 0.12 : 0.09), 0.45),
+        autoAlpha: d <= 2 ? 1 : Math.max(0.5, 1 - (d - 2) * 0.25),
+        zIndex: Math.round(50 - d * 10),
+      });
+    });
+  }, [roster]);
+
   return (
     <section id="team" className="w-full h-full flex flex-col justify-center px-6 md:px-12 pt-20 pb-5 relative overflow-hidden">
       <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
@@ -105,15 +118,50 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
           can never be visually crossed by one, even with the slight
           vertical bleed 3D rotation causes on the outer cards. */}
       <SectionHeading
-        number="05"
+        number="06"
         label="Salem Midtown Board"
         titleTop="The people,"
         titleBottom="behind the"
         accent="work"
-        description="President to Avenue Directors — ten leaders, one board, driving every avenue of service forward."
+        description="Our President, Secretary, and Treasurer — see the full board, all avenue directors included, on the club roster."
         titleRef={titleRef}
         className="mb-4 shrink-0 z-60"
       />
+
+      {/* Board-year picker — swaps which term's roster the arc below
+          shows. Single option today (only 2026-27 exists), but the
+          dropdown and the roster/N it drives are real, not decorative. */}
+      <div className="flex justify-center mb-4 shrink-0 relative z-60">
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setIsTermOpen((open) => !open)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-black/10 bg-white font-heading font-extrabold text-[10px] uppercase tracking-widest text-theme-dark hover:border-brand-crimson/40 transition-colors cursor-pointer"
+          >
+            <span>Board {selectedTerm}</span>
+            <ChevronDown size={12} className={`transition-transform duration-200 ${isTermOpen ? 'rotate-180' : ''}`} />
+          </button>
+          {isTermOpen && (
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-40 rounded-2xl border border-black/10 bg-white shadow-lg p-1.5 flex flex-col gap-1 z-70">
+              {BOARD_TERMS.map((term) => (
+                <button
+                  key={term}
+                  type="button"
+                  onClick={() => {
+                    setSelectedTerm(term);
+                    setIsTermOpen(false);
+                  }}
+                  className={`px-4 py-2 rounded-xl text-left text-xs font-heading font-bold uppercase tracking-wider transition-colors cursor-pointer ${
+                    term === selectedTerm ? 'bg-brand-crimson/10 text-brand-crimson' : 'text-text-muted hover:bg-black/5'
+                  }`}
+                >
+                  {term}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Desktop: arc coverflow, driven by Scene's scroll-scrub. The stage
           takes whatever vertical space is left after the header and the
@@ -141,7 +189,7 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
             height: 'clamp(300px, calc(100vh - 300px), 600px)',
           }}
         >
-          {SHOWCASE_MEMBERS.map((member, i) => (
+          {roster.map((member, i) => (
             <div
               key={member.name}
               ref={(el) => {
@@ -165,7 +213,7 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
           {`01 / ${pad(N)}`}
         </span>
         <div className="flex items-center gap-2.5">
-          {SHOWCASE_MEMBERS.map((member, i) => (
+          {roster.map((member, i) => (
             <span
               key={member.name}
               ref={(el) => {

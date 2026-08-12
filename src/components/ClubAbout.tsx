@@ -75,7 +75,7 @@ export const ClubAbout: React.FC = () => {
       <div className="absolute top-1/2 right-10 w-96 h-96 bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
 
       <SectionHeading
-        number="03"
+        number="04"
         label="Rotaract Salem Midtown History"
         titleTop="About our"
         titleBottom="Midtown"

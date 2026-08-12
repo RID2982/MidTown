@@ -7,9 +7,9 @@ import React from 'react';
  * accent, and an optional description column set opposite it.
  *
  * Numbers run in page order — Hero is 01 (it's the hero, so it carries no
- * header block of its own), District 02, About 03, Projects 04, Members
- * 05, FAQ 06, Support 07 — so the number doubles as a "where am I" cue
- * while scrolling.
+ * header block of its own), District 02, RotaractValues 03, About 04,
+ * Projects 05, Members 06, FAQ 07, Support 08 — so the number doubles as a
+ * "where am I" cue while scrolling.
  */
 export const SectionHeading: React.FC<{
   /** Two-digit section number, e.g. "02" */

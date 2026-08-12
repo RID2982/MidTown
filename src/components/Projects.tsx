@@ -4,12 +4,12 @@ import { ArrowUpRight } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { PROJECTS_DATA, avenueToSlug } from '../data/projects';
+import { FEATURED_PROJECTS, avenueToSlug } from '../data/projects';
 import { SectionHeading } from './SectionHeading';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-const N = PROJECTS_DATA.length;
+const N = FEATURED_PROJECTS.length;
 const pad = (n: number) => String(n).padStart(2, '0');
 
 /* Stack geometry, from the reference site's Experience deck: waiting
@@ -37,8 +37,25 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
   const tintRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef(-1);
 
-  const place = React.useCallback((p: number) => {
+  // The scroll-overlap deck, explained plainly: Scene hands this a raw 0..1
+  // scroll fraction across the WHOLE runway, regardless of how many boards
+  // there are — so it's rescaled here into `p`, a fractional board index
+  // (e.g. p=1.5 means "halfway between board 1 and board 2"), by
+  // multiplying by (N - 1). Skipping that rescale was a real bug: with it
+  // missing, `p` topped out at 1 no matter how many boards existed, so
+  // anything beyond board index 1 could never become active — the deck
+  // would visibly hand off to the next page section after only ~2 boards,
+  // regardless of N. For every board `i`, `d = i - p` is simply "how many
+  // boards away from the front is this one, and in which direction" — d=0
+  // is the board currently front-and-center, d>0 are boards still waiting
+  // their turn (stacked up-and-back behind it), and d<0 are boards that
+  // have already had their turn (sliding away down and out). Scrolling
+  // just changes `p`, which changes every board's `d`, which is why the
+  // whole deck appears to advance smoothly — nothing here is a timed
+  // animation, every frame is a pure function of scroll position.
+  const place = React.useCallback((progress01: number) => {
     const { up, right, back } = geom();
+    const p = gsap.utils.clamp(0, N - 1, progress01 * (N - 1));
 
     boardRefs.current.forEach((b, i) => {
       if (!b) return;
@@ -85,7 +102,7 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
     });
     if (counterRef.current) counterRef.current.textContent = `${pad(active + 1)} / ${pad(N)}`;
     // Whole-section wash in the active board's colour, at low alpha.
-    if (tintRef.current) tintRef.current.style.background = `${PROJECTS_DATA[active].color}12`;
+    if (tintRef.current) tintRef.current.style.background = `${FEATURED_PROJECTS[active].color}12`;
   }, []);
 
   useImperativeHandle(ref, () => ({ render: place }), [place]);
@@ -116,12 +133,12 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
       <div ref={tintRef} className="absolute inset-0 pointer-events-none transition-colors duration-700" aria-hidden="true" />
 
       <SectionHeading
-        number="04"
+        number="05"
         label="Impact Tracker"
         titleTop="Selected projects,"
         titleBottom="built for"
         accent="impact"
-        description="Blood drives, tree plantations, skill workshops — each project driven end-to-end by one of our five avenues of service."
+        description="A few of our highlighted projects — blood drives, tree plantations, skill workshops — each driven end-to-end by one of our five avenues of service."
         titleRef={titleRef}
         className="mb-4 shrink-0 z-60"
       />
@@ -140,7 +157,7 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
             height: 'clamp(260px, calc(100vh - 380px), 520px)',
           }}
         >
-          {PROJECTS_DATA.map((project, i) => (
+          {FEATURED_PROJECTS.map((project, i) => (
             <article
               key={project.title}
               ref={(el) => {
@@ -229,7 +246,7 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
           {`01 / ${pad(N)}`}
         </span>
         <div className="flex items-center gap-3 flex-wrap justify-center">
-          {PROJECTS_DATA.map((project, i) => (
+          {FEATURED_PROJECTS.map((project, i) => (
             <button
               key={project.title}
               type="button"
@@ -247,14 +264,6 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
         </div>
       </div>
 
-      <div className="flex justify-center mt-4 shrink-0 relative z-60">
-        <Link
-          to="/projects"
-          className="px-8 py-3.5 rounded-full bg-gradient-to-r from-brand-crimson to-red-800 text-white font-heading font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-brand-crimson/20 hover:shadow-xl hover:shadow-brand-crimson/30 hover:-translate-y-0.5 transition-all duration-300"
-        >
-          View All Projects
-        </Link>
-      </div>
     </section>
   );
 });

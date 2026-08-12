@@ -95,5 +95,6 @@ export const PROJECTS_DATA: Project[] = [
   },
 ];
 
-// The home page shows only these — the full list lives on the /projects page.
+// The home page shows only these — the full list per avenue lives on each
+// /projects/:slug page, reachable from the header's Projects dropdown.
 export const FEATURED_PROJECTS = PROJECTS_DATA.filter((p) => p.featured);

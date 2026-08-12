@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { CheckCircle2, ChevronDown } from 'lucide-react';
+import { CheckCircle2, ChevronDown, ArrowUpRight } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { SectionHeading } from './SectionHeading';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
+
+// Set once the club's Google Form is ready — a free, cost-effective way to
+// collect membership applications without needing a backend. Same
+// null-placeholder pattern as Footer.tsx's CLUB_EMAIL/INSTAGRAM_URL.
+const JOIN_FORM_URL: string | null = null;
 
 export const Support: React.FC = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -69,7 +74,7 @@ export const Support: React.FC = () => {
       <div className="absolute inset-0 bg-radial-[circle_at_80%_70%] from-brand-gold/10 via-transparent to-transparent z-0 pointer-events-none" />
 
       <SectionHeading
-        number="07"
+        number="08"
         label="We're Here To Help"
         titleTop="Get support,"
         titleBottom="get"
@@ -79,6 +84,41 @@ export const Support: React.FC = () => {
         dark
         className="mb-16 z-10"
       />
+
+      {/* Join Us CTA — its own clear path to membership, separate from the
+          general-purpose ticket form below. Google Form keeps this free
+          and backend-free; JOIN_FORM_URL is null until the club sends the
+          link, same placeholder pattern as Footer.tsx's CLUB_EMAIL. */}
+      <div className="max-w-2xl mx-auto relative z-10 mb-8">
+        <div className="rounded-[2rem] p-8 md:p-10 border border-brand-crimson/20 bg-brand-crimson/[0.06] backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+          <div>
+            <h3 className="text-lg font-heading font-extrabold uppercase tracking-wider text-white mb-1">
+              Ready to Join?
+            </h3>
+            <p className="text-sm text-white/70 font-sans leading-relaxed">
+              Fill out our membership form — our Secretary will reach out to invite you to our next general body meeting.
+            </p>
+          </div>
+          {JOIN_FORM_URL ? (
+            <a
+              href={JOIN_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 inline-flex items-center gap-1.5 px-6 py-3 rounded-full font-heading font-extrabold text-xs uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-800 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+            >
+              <span>Join Us</span>
+              <ArrowUpRight size={14} />
+            </a>
+          ) : (
+            <span
+              title="Membership form coming soon"
+              className="shrink-0 px-6 py-3 rounded-full font-heading font-extrabold text-xs uppercase tracking-wider border border-white/10 bg-white/5 text-white/40"
+            >
+              Coming Soon
+            </span>
+          )}
+        </div>
+      </div>
 
       {/* Dark styled glass card matching Crowdix CTA boxes */}
       <div
@@ -156,7 +196,6 @@ export const Support: React.FC = () => {
                     className="w-full appearance-none px-4 py-3 pr-10 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white cursor-pointer"
                   >
                     <option value="General Inquiry" className="bg-theme-dark">General Inquiry</option>
-                    <option value="Join the Club" className="bg-theme-dark">Join the Club</option>
                     <option value="Sponsorship / Partnership" className="bg-theme-dark">Sponsorship & Partnership</option>
                     <option value="Event Inquiry" className="bg-theme-dark">Event Inquiry</option>
                   </select>

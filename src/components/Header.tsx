@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import logoMark from '../assets/2.svg';
+import { AVENUES, avenueToSlug } from '../data/projects';
 const NAV_ITEMS = [
   { id: 'home', label: 'Home' },
   { id: 'district', label: 'RID 2982' },
+  { id: 'values', label: 'Our Values' },
   { id: 'about', label: 'Our Club' },
   { id: 'projects', label: 'Projects' },
   { id: 'team', label: 'Club Members' },
@@ -13,6 +15,7 @@ const NAV_ITEMS = [
 
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileProjectsOpen, setIsMobileProjectsOpen] = useState(false);
   const [activeId, setActiveId] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -76,11 +79,37 @@ export const Header: React.FC = () => {
             the pink background fill alone (.nav-pill::before) — no text
             motion. */}
         <nav className="hidden md:flex items-center gap-5 justify-center">
-          {NAV_ITEMS.map((item) => (
-            <Link key={item.id} to={`/#${item.id}`} className={desktopLinkClass(item.id)}>
-              <span className="h-5 flex items-center">{item.label}</span>
-            </Link>
-          ))}
+          {NAV_ITEMS.map((item) =>
+            item.id === 'projects' ? (
+              // Hover-revealed dropdown, avenues jump straight to their
+              // dedicated /projects/:slug page rather than the /projects
+              // hub — clicking the "Projects" label itself still scrolls
+              // to the on-page section like every other nav item.
+              <div key={item.id} className="relative group">
+                <Link to={`/#${item.id}`} className={`${desktopLinkClass(item.id)} flex-row! gap-1`}>
+                  <span className="h-5 flex items-center">{item.label}</span>
+                  <ChevronDown size={12} className="transition-transform duration-200 group-hover:rotate-180" />
+                </Link>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 invisible -translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200">
+                  <div className="w-56 rounded-2xl bg-theme-dark/95 backdrop-blur-md border border-white/10 shadow-lg p-2 flex flex-col gap-1">
+                    {AVENUES.map((avenue) => (
+                      <Link
+                        key={avenue}
+                        to={`/projects/${avenueToSlug(avenue)}`}
+                        className="px-4 py-2.5 rounded-xl text-xs font-heading font-bold uppercase tracking-wider text-white/70 hover:text-white hover:bg-white/5 transition-colors"
+                      >
+                        {avenue}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link key={item.id} to={`/#${item.id}`} className={desktopLinkClass(item.id)}>
+                <span className="h-5 flex items-center">{item.label}</span>
+              </Link>
+            )
+          )}
         </nav>
 
         {/* Right Col: CTA Button & Mobile Trigger */}
@@ -104,18 +133,62 @@ export const Header: React.FC = () => {
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
         <div className="absolute top-[calc(100%+8px)] left-4 right-4 md:left-6 md:right-6 rounded-3xl bg-theme-dark/95 border border-white/10 backdrop-blur-2xl p-6 flex flex-col gap-3 md:hidden shadow-lg animate-fade-in">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.id}
-              to={`/#${item.id}`}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`block font-heading text-sm font-bold uppercase tracking-wider py-3 border-b border-white/5 transition-colors ${
-                activeId === item.id ? 'text-brand-crimson' : 'text-white/70 hover:text-white'
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {NAV_ITEMS.map((item) =>
+            item.id === 'projects' ? (
+              // No hover on touch devices, so "Projects" expands its avenue
+              // list in place via a separate chevron button — the label
+              // itself still navigates to the on-page section.
+              <div key={item.id} className="border-b border-white/5">
+                <div className="flex items-center justify-between py-3">
+                  <Link
+                    to={`/#${item.id}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`font-heading text-sm font-bold uppercase tracking-wider transition-colors ${
+                      activeId === item.id ? 'text-brand-crimson' : 'text-white/70 hover:text-white'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileProjectsOpen((open) => !open)}
+                    aria-label="Toggle avenues list"
+                    className="p-2 -m-2 text-white/50 hover:text-white transition-colors cursor-pointer"
+                  >
+                    <ChevronDown
+                      size={16}
+                      className={`transition-transform duration-200 ${isMobileProjectsOpen ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                </div>
+                {isMobileProjectsOpen && (
+                  <div className="flex flex-col gap-1 pb-3 pl-4">
+                    {AVENUES.map((avenue) => (
+                      <Link
+                        key={avenue}
+                        to={`/projects/${avenueToSlug(avenue)}`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="py-2 text-xs font-heading font-bold uppercase tracking-wider text-white/60 hover:text-white transition-colors"
+                      >
+                        {avenue}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                key={item.id}
+                to={`/#${item.id}`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block font-heading text-sm font-bold uppercase tracking-wider py-3 border-b border-white/5 transition-colors ${
+                  activeId === item.id ? 'text-brand-crimson' : 'text-white/70 hover:text-white'
+                }`}
+              >
+                {item.label}
+              </Link>
+            )
+          )}
           <Link
             to="/#support"
             onClick={() => setIsMobileMenuOpen(false)}

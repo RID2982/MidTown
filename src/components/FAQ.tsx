@@ -15,7 +15,7 @@ interface FaqItem {
 const FAQS: FaqItem[] = [
   {
     question: 'How do I join the Rotaract Club of Salem Midtown?',
-    answer: 'Membership is open to college students, professionals, and entrepreneurs aged 18-30 in Salem. Fill out the query form on this page, and our Secretary will reach out to invite you to our next general body meeting.',
+    answer: 'Membership is open to college students, professionals, and entrepreneurs aged 18-30 in Salem. Fill out our Join Us form, and our Secretary will reach out to invite you to our next general body meeting.',
   },
   {
     question: 'Are there any fees or commitments involved in joining?',
@@ -72,7 +72,7 @@ export const FAQ: React.FC = () => {
       <div className="absolute top-10 left-10 w-96 h-96 bg-brand-gold/5 rounded-full blur-3xl pointer-events-none" />
 
       <SectionHeading
-        number="06"
+        number="07"
         label="FAQs — We're Here to Help"
         titleTop="Ask anything,"
         titleBottom="we're ready to"

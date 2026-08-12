@@ -5,6 +5,7 @@ import { Header } from '../components/Header';
 import { Hero } from '../components/Hero';
 import { District } from '../components/District';
 import { Scene } from '../components/Scene';
+import { RotaractValues } from '../components/RotaractValues';
 import { ClubAbout } from '../components/ClubAbout';
 import { Projects, type ProjectsHandle } from '../components/Projects';
 import { MemberShowcase, type MemberShowcaseHandle } from '../components/MemberShowcase';
@@ -126,6 +127,9 @@ export const HomePage: React.FC = () => {
         </Scene>
         <Scene zIndex={20} bg="bg-white">
           <District />
+        </Scene>
+        <Scene zIndex={25} bg="bg-white">
+          <RotaractValues />
         </Scene>
         <Scene zIndex={30} bg="bg-white">
           <ClubAbout />
