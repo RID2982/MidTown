@@ -3,6 +3,7 @@ import { HeartHandshake, Scale } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+import clubLogo from '../assets/1.svg';
 import { SectionHeading } from './SectionHeading';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -156,11 +157,22 @@ export const RotaractValues: React.FC = () => {
           Prayer's illustration specifically pinned to the left, per the
           request this came from). */}
       <div ref={cardsRef} className="flex flex-col gap-8">
-        <div className="rounded-2xl border border-black/5 bg-bg-secondary p-6 md:p-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-stretch">
-          <div className="md:col-span-5 md:order-1">
+        <div className="relative overflow-hidden rounded-2xl border border-black/5 bg-bg-secondary p-6 md:p-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-stretch">
+          {/* Club's own Rotaract emblem, watermarked into the corner — the
+              same asset already used in the District section, at low
+              opacity so it reads as a background texture rather than
+              competing with the illustration/text. */}
+          <img
+            src={clubLogo}
+            alt=""
+            aria-hidden="true"
+            className="absolute -bottom-10 -right-10 w-56 h-56 md:w-72 md:h-72 object-contain opacity-[0.06] pointer-events-none select-none"
+          />
+
+          <div className="relative z-10 md:col-span-5 md:order-1">
             <IllustrationPanel icon={<HeartHandshake size={40} strokeWidth={1.75} />} tint="crimson" />
           </div>
-          <div className="md:col-span-7 md:order-2 flex flex-col gap-6 justify-center">
+          <div className="relative z-10 md:col-span-7 md:order-2 flex flex-col gap-6 justify-center">
             <h3 className="font-heading font-extrabold text-xl md:text-2xl text-theme-dark">
               The Rotaract Prayer
             </h3>

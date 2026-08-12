@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import logoMark from '../assets/2.svg';
 import { AVENUES, avenueToSlug } from '../data/projects';
+// "Support" isn't in this list — it had its own nav pill AND the "Get
+// Support" CTA button right next to it, both going to the same section.
+// The CTA alone covers it; NAV_ITEMS also doubles as the scroll-spy list
+// (below), so removing it here removes the duplicate from both the
+// desktop nav and the mobile drawer in one place.
 const NAV_ITEMS = [
   { id: 'home', label: 'Home' },
   { id: 'district', label: 'RID 2982' },
@@ -10,7 +15,6 @@ const NAV_ITEMS = [
   { id: 'about', label: 'Our Club' },
   { id: 'projects', label: 'Projects' },
   { id: 'team', label: 'Club Members' },
-  { id: 'support', label: 'Support' },
 ];
 
 export const Header: React.FC = () => {

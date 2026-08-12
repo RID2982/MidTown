@@ -12,6 +12,13 @@ export const avenueToSlug = (avenue: Avenue): string => avenue.toLowerCase().rep
 export const slugToAvenue = (slug: string): Avenue | undefined =>
   AVENUES.find((avenue) => avenueToSlug(avenue) === slug);
 
+// URL-friendly slug for a single project's anchor on its avenue page —
+// there's no dedicated one-project-per-page route, so "View Project"
+// deep-links to `/projects/:avenueSlug#<this>` and AvenuePage scrolls to
+// the matching project on load (see AvenuePage.tsx).
+export const projectToSlug = (title: string): string =>
+  title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
 export interface Project {
   title: string;
   category: string;

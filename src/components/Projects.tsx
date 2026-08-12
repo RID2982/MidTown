@@ -4,7 +4,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { FEATURED_PROJECTS, avenueToSlug } from '../data/projects';
+import { FEATURED_PROJECTS, avenueToSlug, projectToSlug } from '../data/projects';
 import { SectionHeading } from './SectionHeading';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -207,7 +207,7 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
                   </p>
 
                   <Link
-                    to={`/projects/${avenueToSlug(project.avenue)}`}
+                    to={`/projects/${avenueToSlug(project.avenue)}#${projectToSlug(project.title)}`}
                     className={`mt-auto self-start inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full font-heading font-extrabold text-[10px] md:text-xs uppercase tracking-widest transition-transform duration-300 hover:-translate-y-0.5 ${
                       project.fg === 'dark'
                         ? 'bg-slate-950 text-white'

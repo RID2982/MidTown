@@ -1,7 +1,8 @@
-import { Navigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Navigate, useParams, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { PROJECTS_DATA, AVENUES, avenueToSlug, slugToAvenue } from '../data/projects';
+import { PROJECTS_DATA, AVENUES, avenueToSlug, slugToAvenue, projectToSlug } from '../data/projects';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 
@@ -20,7 +21,22 @@ const GRADIENTS = [
 // numbered, large-format list) instead of a single page with filter pills.
 export const AvenuePage: React.FC = () => {
   const { avenueSlug } = useParams<{ avenueSlug: string }>();
+  const { hash } = useLocation();
   const avenue = avenueSlug ? slugToAvenue(avenueSlug) : undefined;
+
+  // "View Project" on the home page deep-links here with a #project-slug
+  // hash so it lands on that one project, not just the avenue in general —
+  // but react-router doesn't scroll to a hash on route change the way a
+  // real page load would (same gap HomePage's own hook exists for), so
+  // this does it manually. No settle-polling needed here unlike that hook:
+  // this page has plain document flow, nothing pinned/async-measuring.
+  useEffect(() => {
+    if (!hash) return;
+    const raf = requestAnimationFrame(() => {
+      document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [hash]);
 
   if (!avenue) {
     return <Navigate to="/#projects" replace />;
@@ -65,7 +81,8 @@ export const AvenuePage: React.FC = () => {
             return (
               <div
                 key={project.title}
-                className={`flex flex-col ${reversed ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-8 md:gap-14`}
+                id={projectToSlug(project.title)}
+                className={`flex flex-col ${reversed ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-8 md:gap-14 scroll-mt-24`}
               >
                 <div className="w-full md:w-1/2 shrink-0">
                   <div

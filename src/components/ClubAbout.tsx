@@ -11,6 +11,7 @@ export const ClubAbout: React.FC = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const leftColRef = useRef<HTMLDivElement>(null);
   const rightColRef = useRef<HTMLDivElement>(null);
+    const paragraphRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -64,6 +65,30 @@ export const ClubAbout: React.FC = () => {
           ease: 'power3.out',
         });
       }
+
+      // Body-copy blur reveal: each word sharpens into focus and settles
+      // upward as it scrolls into view, instead of the block just sliding
+      // up as one piece (which the leftColRef stagger above still also
+      // does — the two compose fine since one targets the paragraph as a
+      // whole and this targets the individual words inside it). This is
+      // our own build of a blur-wipe text reveal, not copied code.
+      paragraphRefs.current.forEach((p) => {
+        if (!p) return;
+        const split = new SplitText(p, { type: 'words' });
+        gsap.from(split.words, {
+          scrollTrigger: {
+            trigger: p,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          opacity: 0,
+          y: 10,
+          filter: 'blur(6px)',
+          stagger: 0.02,
+          duration: 0.6,
+          ease: 'power2.out',
+        });
+      });
     });
 
     return () => ctx.revert();
@@ -95,13 +120,26 @@ export const ClubAbout: React.FC = () => {
             <h3 className="font-heading font-extrabold text-2xl md:text-3xl text-theme-dark leading-tight">
               Dream to Deserve
             </h3>
+            <span className="text-text-muted text-xs font-sans">
+              Club ID 8826803 &middot; Chartered November 5, 2024
+            </span>
           </div>
 
-          <p className="text-text-muted font-sans text-sm md:text-base leading-relaxed">
+          <p
+            ref={(el) => {
+              paragraphRefs.current[0] = el;
+            }}
+            className="text-text-muted font-sans text-sm md:text-base leading-relaxed"
+          >
             Chartered to mobilize Salem's youth, our club serves as a platform for college students, young working professionals, and entrepreneurs to grow as leaders, coordinate community service, and build international ties.
           </p>
 
-          <p className="text-text-muted font-sans text-sm md:text-base leading-relaxed">
+          <p
+            ref={(el) => {
+              paragraphRefs.current[1] = el;
+            }}
+            className="text-text-muted font-sans text-sm md:text-base leading-relaxed"
+          >
             Through targeted social development efforts (blood donation drives, environment initiatives, computer literacy campaigns, and public speaking modules), we aim to translate club fellowship into life-changing service.
           </p>
 

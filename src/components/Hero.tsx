@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
+import clubGroupPhoto from '../assets/club-group-photo.jpg';
 
 gsap.registerPlugin(SplitText);
 
@@ -46,9 +47,33 @@ export const Hero: React.FC = () => {
 
   return (
     <section id="home" className="min-h-screen bg-theme-dark text-white flex flex-col justify-between relative overflow-hidden pt-36 pb-16 px-6">
-      {/* Background Radial Glow Grid */}
-      <div className="absolute inset-0 bg-radial-[circle_at_20%_20%] from-brand-crimson/10 via-transparent to-transparent z-0 pointer-events-none" />
-      <div className="absolute inset-0 bg-radial-[circle_at_80%_80%] from-brand-gold/10 via-transparent to-transparent z-0 pointer-events-none" />
+      {/* Full-bleed club photo — real members, not a stock/borrowed image.
+          Source is 1600x1200 (4:3) with the ceiling/room filling its top
+          third and the group standing in the lower two-thirds, so on a
+          much-wider-than-4:3 viewport (min-h-screen means object-cover has
+          to crop hard vertically) the anchor has to favour the BOTTOM of
+          the photo — object-top here would keep the empty ceiling and cut
+          the people off entirely, which is exactly backwards. This anchor
+          is percentage-based, so it recalculates correctly at every
+          viewport size, phone included — no separate mobile crop needed.
+          Swap in a wider panoramic shot here if one becomes available for
+          a tighter crop that needs less cropping to begin with. */}
+      <img
+        src={clubGroupPhoto}
+        alt="Rotaract Club of Salem Midtown members"
+        className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+      />
+
+      {/* Dark scrim over the photo so the white title/text stays readable
+          at every viewport width — strongest at the very top/bottom where
+          text sits, slightly lighter through the middle so the photo still
+          reads as a photo rather than a flat colour. */}
+      <div className="absolute inset-0 bg-gradient-to-b from-theme-dark/90 via-theme-dark/75 to-theme-dark/90 z-0" />
+
+      {/* Brand-colour glow, kept subtle over the scrim for continuity with
+          the rest of the site's palette. */}
+      <div className="absolute inset-0 bg-radial-[circle_at_20%_20%] from-brand-crimson/15 via-transparent to-transparent z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-radial-[circle_at_80%_80%] from-brand-gold/15 via-transparent to-transparent z-0 pointer-events-none" />
 
       <div className="w-full max-w-[1550px] mx-auto z-10 flex flex-col items-center flex-grow justify-center gap-2">
         {/* Subtitle */}
