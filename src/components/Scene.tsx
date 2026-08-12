@@ -119,14 +119,22 @@ export const Scene: React.FC<{
         );
       });
 
+      // Content like an accordion animates height over many frames (Framer
+      // Motion's `height: 'auto'` tween), which fires the ResizeObserver on
+      // nearly every frame. Calling ScrollTrigger.refresh() that often mid-
+      // scroll is what caused the pin to visibly stick/stutter — debounce
+      // so refresh only runs once the resize has settled.
+      let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
       const ro = new ResizeObserver(() => {
         setRunway(measure());
-        ScrollTrigger.refresh();
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => ScrollTrigger.refresh(), 200);
       });
       ro.observe(inner);
 
       return () => {
         cancelAnimationFrame(raf);
+        if (resizeTimeout) clearTimeout(resizeTimeout);
         ro.disconnect();
         tween?.scrollTrigger?.kill();
         tween?.kill();

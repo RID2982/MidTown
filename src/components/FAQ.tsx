@@ -18,14 +18,6 @@ const FAQS: FaqItem[] = [
     answer: 'Membership is open to college students, professionals, and entrepreneurs aged 18-30 in Salem. Fill out the query form on this page, and our Secretary will reach out to invite you to our next general body meeting.',
   },
   {
-    question: 'What regions are covered by Rotary District 2982?',
-    answer: 'District 2982 spans Salem, Namakkal, Dharmapuri, Krishnagiri, and surrounding locales in Tamil Nadu, India, uniting multiple community and institutional clubs under a single leadership council.',
-  },
-  {
-    question: 'How can our company or organization partner with your club?',
-    answer: 'We collaborate with corporate partners and NGOs for community projects (CSR). You can write to us via our support form selecting the "Sponsorship / Partnership" option.',
-  },
-  {
     question: 'Are there any fees or commitments involved in joining?',
     answer: 'There is a nominal annual induction fee to cover district registry and resources. Members are expected to actively participate in weekly or bi-weekly meetings and volunteer for key project execution.',
   },
@@ -40,10 +32,6 @@ const FAQS: FaqItem[] = [
   {
     question: "I'm not a college student — can I still join?",
     answer: 'Yes. Rotaract membership is open to young working professionals and entrepreneurs as well as students, generally between 18 and 30 years old. What matters most is a genuine interest in community service and fellowship.',
-  },
-  {
-    question: 'Does Salem Midtown take part in district or international events?',
-    answer: "Yes — our members regularly attend District 2982 conferences, leadership summits, and inter-club fellowship events, and Rotaract's global network also opens doors to international project collaborations and exchange programs.",
   },
 ];
 
