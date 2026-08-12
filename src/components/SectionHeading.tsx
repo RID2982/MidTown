@@ -30,7 +30,20 @@ export const SectionHeading: React.FC<{
   dark?: boolean;
   /** Wrapper overrides — mainly bottom margin, which varies by section */
   className?: string;
-}> = ({ number, label, titleTop, titleBottom, accent, description, titleRef, dark = false, className = '' }) => (
+  /** Description paragraph class overrides */
+  descriptionClassName?: string;
+}> = ({
+  number,
+  label,
+  titleTop,
+  titleBottom,
+  accent,
+  description,
+  titleRef,
+  dark = false,
+  className = '',
+  descriptionClassName = '',
+}) => (
   <div className={`flex flex-col md:flex-row md:items-end md:justify-between gap-3 relative ${className}`}>
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center gap-3">
@@ -60,7 +73,7 @@ export const SectionHeading: React.FC<{
       <p
         className={`max-w-xs text-xs md:text-sm font-sans leading-relaxed md:text-right ${
           dark ? 'text-white/60' : 'text-text-muted'
-        }`}
+        } ${descriptionClassName}`}
       >
         {description}
       </p>

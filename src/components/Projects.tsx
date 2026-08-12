@@ -16,14 +16,18 @@ const pad = (n: number) => String(n).padStart(2, '0');
  * boards recede UP-and-BACK along a diagonal, and a passed board exits
  * DOWN + back + blur rather than simply disappearing. */
 const DEPTH = 3; // how many boards stay visible behind the active one
-const UP = 74; // px each waiting board rises — this is what exposes its strip
+const UP = 56; // px each waiting board rises — compact deck rise to prevent header/description overlap
 const RIGHT = 26; // px lateral drift, so the stack reads as a diagonal
 const BACK = 96; // px of Z recession per step
+const STRIP_HEIGHT = 50; // px — must match the identity strip's h-[50px] below
 
 // Phones can't spare 74px per step without the stack running off the top,
-// so the same geometry is scaled down rather than switched off.
+// so the same geometry is scaled down — but `up` has a floor at
+// STRIP_HEIGHT: a waiting board's identity strip is exactly 50px tall.
+// We use 53px on mobile to tightly stack and avoid text overlaps while keeping strips readable.
 const narrow = () => window.innerWidth < 768;
-const geom = () => (narrow() ? { up: 40, right: 12, back: 60 } : { up: UP, right: RIGHT, back: BACK });
+const geom = () =>
+  narrow() ? { up: STRIP_HEIGHT + 3, right: 16, back: 60 } : { up: UP, right: RIGHT, back: BACK };
 
 export interface ProjectsHandle {
   render: (progress01: number) => void;
@@ -36,6 +40,17 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
   const counterRef = useRef<HTMLSpanElement>(null);
   const tintRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef(-1);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const handleTabClick = (i: number) => {
+    const st = ScrollTrigger.getAll().find(
+      (s) => s.trigger === sectionRef.current?.closest('.scene-hold')
+    );
+    if (st) {
+      const scrollPos = st.start + (i / (N - 1)) * (st.end - st.start);
+      window.scrollTo({ top: scrollPos, behavior: 'smooth' });
+    }
+  };
 
   // The scroll-overlap deck, explained plainly: Scene hands this a raw 0..1
   // scroll fraction across the WHOLE runway, regardless of how many boards
@@ -56,6 +71,7 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
   const place = React.useCallback((progress01: number) => {
     const { up, right, back } = geom();
     const p = gsap.utils.clamp(0, N - 1, progress01 * (N - 1));
+    const activeIndex = Math.round(gsap.utils.clamp(0, N - 1, p));
 
     boardRefs.current.forEach((b, i) => {
       if (!b) return;
@@ -69,40 +85,44 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
       }
       b.style.visibility = 'visible';
 
+      // Only the front board should ever be clickable.
+      b.style.pointerEvents = i === activeIndex ? 'auto' : 'none';
+
+      // Keep active card on top and layer passed/waiting cards continuously.
+      const k = Math.min(Math.abs(d), DEPTH);
+      b.style.zIndex = String(200 - Math.round(k * 10));
+
       if (d >= 0) {
         // Still to come: stacked up-and-back behind the active board.
-        const k = Math.min(d, DEPTH);
         b.style.transform =
           `translate3d(${(k * right).toFixed(1)}px, ${(-k * up).toFixed(1)}px, ${(-k * back).toFixed(1)}px)` +
           ` scale(${(1 - k * 0.028).toFixed(3)})`;
         b.style.opacity = String(Math.max(0, 1 - k * 0.16));
         b.style.filter = k > 1.2 ? `blur(${Math.min(3, (k - 1.2) * 1.2).toFixed(2)}px)` : '';
-        b.style.zIndex = String(200 - Math.round(k * 10));
       } else {
-        // Passed: travels down and back out of the stack, blurring as it goes.
+        // Passed: travels down and back out of the stack, blurring as it
+        // goes.
         const t = Math.min(1, -d / 1.1);
         b.style.transform =
           `translate3d(${(-t * 40).toFixed(1)}px, ${(t * 230).toFixed(1)}px, ${(-t * 320).toFixed(1)}px)` +
           ` scale(${(1 - t * 0.06).toFixed(3)})`;
         b.style.opacity = String(Math.max(0, 1 - t * 1.35));
         b.style.filter = t > 0.25 ? `blur(${((t - 0.25) * 5).toFixed(2)}px)` : '';
-        b.style.zIndex = '210';
       }
     });
 
-    const active = Math.round(gsap.utils.clamp(0, N - 1, p));
-    if (active === activeRef.current) return;
-    activeRef.current = active;
+    if (activeIndex === activeRef.current) return;
+    activeRef.current = activeIndex;
 
-    boardRefs.current.forEach((b, i) => b?.classList.toggle('is-active', i === active));
+    boardRefs.current.forEach((b, i) => b?.classList.toggle('is-active', i === activeIndex));
     navRefs.current.forEach((nv, i) => {
       if (!nv) return;
-      nv.classList.toggle('opacity-100', i === active);
-      nv.classList.toggle('opacity-40', i !== active);
+      nv.classList.toggle('opacity-100', i === activeIndex);
+      nv.classList.toggle('opacity-40', i !== activeIndex);
     });
-    if (counterRef.current) counterRef.current.textContent = `${pad(active + 1)} / ${pad(N)}`;
+    if (counterRef.current) counterRef.current.textContent = `${pad(activeIndex + 1)} / ${pad(N)}`;
     // Whole-section wash in the active board's colour, at low alpha.
-    if (tintRef.current) tintRef.current.style.background = `${FEATURED_PROJECTS[active].color}12`;
+    if (tintRef.current) tintRef.current.style.background = `${FEATURED_PROJECTS[activeIndex].color}12`;
   }, []);
 
   useImperativeHandle(ref, () => ({ render: place }), [place]);
@@ -128,6 +148,7 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
   return (
     <section
       id="projects"
+      ref={sectionRef}
       className="w-full h-full flex flex-col justify-center px-6 md:px-12 pt-20 pb-5 [@media(max-height:560px)]:pt-8 [@media(max-height:560px)]:pb-2 relative overflow-hidden"
     >
       <div ref={tintRef} className="absolute inset-0 pointer-events-none transition-colors duration-700" aria-hidden="true" />
@@ -139,8 +160,9 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
         titleBottom="built for"
         accent="impact"
         description="A few of our highlighted projects — blood drives, tree plantations, skill workshops — each driven end-to-end by one of our five avenues of service."
+        descriptionClassName="hidden md:block"
         titleRef={titleRef}
-        className="mb-4 shrink-0 z-60"
+        className="mb-6 md:mb-10 shrink-0 z-60"
       />
 
       {/* Stage — perspective lives on the wrapper, the tilt on the stage,
@@ -156,8 +178,8 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
           // landscape-phone viewport needs the floor lowered further
           // rather than relying on scroll-to-reveal, which this scrub-mode
           // Scene doesn't have.
-          className="relative w-full max-w-[1180px] h-[clamp(260px,calc(100vh-380px),520px)] [@media(max-height:560px)]:h-[clamp(130px,calc(100vh-200px),380px)]"
-          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(6deg)' }}
+          className="relative w-full max-w-[1180px] h-[clamp(260px,calc(100vh-410px),480px)] [@media(max-height:560px)]:h-[clamp(130px,calc(100vh-200px),380px)]"
+          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(6deg)', pointerEvents: 'none' }}
         >
           {FEATURED_PROJECTS.map((project, i) => (
             <article
@@ -252,10 +274,11 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
             <button
               key={project.title}
               type="button"
+              onClick={() => handleTabClick(i)}
               ref={(el) => {
                 navRefs.current[i] = el;
               }}
-              className={`flex items-center gap-1.5 text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-dark transition-opacity duration-300 ${
+              className={`flex items-center gap-1.5 text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-dark transition-opacity duration-300 cursor-pointer ${
                 i === 0 ? 'opacity-100' : 'opacity-40'
               }`}
             >

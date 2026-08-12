@@ -206,13 +206,34 @@ body {
 .scene-runway {
   pointer-events: none;
 }
+.mobile-scene-wrapper {
+  display: contents;
+}
 
 @media (max-width: 900px), (prefers-reduced-motion: reduce) {
+  .mobile-scene-wrapper {
+    display: block;
+    position: relative;
+  }
+
+  /* position: relative, not static — a scrub-mode section right before
+     this one (Members, id="team") keeps its sticky pinned frame even on
+     mobile (see .scene-hold-pinned below), since its animation still runs
+     here. z-index only has any effect on a POSITIONED element, so a
+     static section immediately after a still-sticky one had no way to
+     paint over it — the sticky section's tail end and this one's start
+     could both be on screen at once with the sticky one winning visually
+     regardless of which had the higher z-index, reading as the next
+     section's content bleeding into/overlapping the previous one instead
+     of properly rising to cover it. relative keeps normal document flow
+     (no pinning, content reflows exactly as before) while letting z-index
+     — and therefore the "later section covers earlier" rule the whole
+     stack relies on — actually apply here too. */
   .scene-hold {
-    position: static;
+    position: relative;
     height: auto;
     overflow: visible;
-    isolation: auto;
+    isolation: isolate;
   }
   .scene-runway {
     display: none;

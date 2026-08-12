@@ -37,6 +37,17 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const counterRef = useRef<HTMLSpanElement>(null);
   const dotRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const handleDotClick = (i: number) => {
+    const st = ScrollTrigger.getAll().find(
+      (s) => s.trigger === sectionRef.current?.closest('.scene-hold')
+    );
+    if (st) {
+      const scrollPos = st.start + (i / (N - 1)) * (st.end - st.start);
+      window.scrollTo({ top: scrollPos, behavior: 'smooth' });
+    }
+  };
 
   // Board-of-directors year picker. Only one term exists today
   // (BOARD_TERMS has one entry), but the roster/N below are already
@@ -113,7 +124,8 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
   return (
     <section
       id="team"
-      className="w-full h-full flex flex-col justify-center px-6 md:px-12 pt-20 pb-5 [@media(max-height:560px)]:pt-8 [@media(max-height:560px)]:pb-2 relative overflow-hidden"
+      ref={sectionRef}
+      className="w-full h-full flex flex-col justify-center px-6 md:px-12 pt-12 md:pt-20 pb-4 md:pb-5 [@media(max-height:560px)]:pt-8 [@media(max-height:560px)]:pb-2 relative overflow-hidden"
     >
       <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -127,14 +139,17 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
         titleBottom="behind the"
         accent="work"
         description="Our President, Secretary, and Treasurer — see the full board, all avenue directors included, on the club roster."
+        descriptionClassName="hidden md:block"
         titleRef={titleRef}
         className="mb-4 shrink-0 z-60"
       />
 
       {/* Board-year picker — swaps which term's roster the arc below
           shows. Single option today (only 2026-27 exists), but the
-          dropdown and the roster/N it drives are real, not decorative. */}
-      <div className="flex justify-center mb-4 shrink-0 relative z-60">
+          dropdown and the roster/N it drives are real, not decorative.
+          Resizing this row changes the section's vertical overhead — see
+          the height-budget comment on the stage div below if you do. */}
+      <div className="flex justify-center mb-2 md:mb-4 shrink-0 relative z-60">
         <div className="relative">
           <button
             type="button"
@@ -182,18 +197,30 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
           // Explicit clamp rather than h-full/max-h: a percentage height
           // inside a flex-1 parent doesn't resolve reliably (it collapsed
           // the cards to zero height). The subtracted value is this
-          // section's fixed vertical overhead — header + counter + button
-          // + padding — so the card takes the rest of the screen, never
-          // more than the 600px reference size and never so little that
-          // it's unusable. This section keeps Scene's "pinned" clipping
-          // behaviour at every width (see Scene.tsx's scene-hold-pinned —
-          // it's how the arc animation runs on phones too), so on a short
-          // landscape-phone viewport there's no scroll-to-reveal fallback
-          // for anything that doesn't fit; the [@media(max-height)] variant
+          // section's fixed vertical overhead — header + board-year picker
+          // + counter + button + padding — so the card takes the rest of
+          // the screen, never more than the 600px reference size and never
+          // so little that it's unusable.
+          //
+          // FRAGILE, READ BEFORE EDITING THIS SECTION'S CHROME: that
+          // overhead is a hand-counted number, not something the browser
+          // derives on its own. It previously went stale exactly once
+          // already — adding the board-year picker below without bumping
+          // it caused the stage to overclaim height and pushed "View All
+          // Members" (and everything after it) out of the clipped/pinned
+          // .scene-hold, invisible with no error. Add/remove/resize any
+          // sibling of the stage (SectionHeading, the picker, the counter
+          // row, the button) and this number needs to move with it.
+          //
+          // This section keeps Scene's "pinned" clipping behaviour at
+          // every width (see Scene.tsx's scene-hold-pinned — it's how the
+          // arc animation runs on phones too), so on a short landscape-
+          // phone viewport there's no scroll-to-reveal fallback for
+          // anything that doesn't fit; the [@media(max-height)] variant
           // drops the floor further so the stage actually shrinks to fit
           // instead of getting clipped.
-          className="relative w-[78vw] max-w-sm h-[clamp(300px,calc(100vh-300px),600px)] [@media(max-height:560px)]:h-[clamp(150px,calc(100vh-170px),400px)]"
-          style={{ transformStyle: 'preserve-3d' }}
+          className="relative w-[78vw] max-w-sm h-[clamp(260px,calc(100vh-360px),600px)] [@media(max-height:560px)]:h-[clamp(130px,calc(100vh-230px),400px)]"
+          style={{ transformStyle: 'preserve-3d', pointerEvents: 'none' }}
         >
           {roster.map((member, i) => (
             <div
@@ -202,7 +229,7 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
                 cardRefs.current[i] = el;
               }}
               className="absolute inset-0 w-full h-full"
-              style={{ zIndex: 50 - i }}
+              style={{ zIndex: 50 - i, pointerEvents: 'auto' }}
             >
               <MemberWorkCard member={member} />
             </div>
@@ -214,24 +241,31 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
           card stage above yields space to them rather than the other way
           round — the button must never be the thing that gets pushed off
           the bottom of the held screen. */}
-      <div className="flex items-center justify-center gap-5 mt-5 shrink-0 relative z-60">
+      <div className="flex items-center justify-center gap-5 mt-3 md:mt-5 shrink-0 relative z-60">
         <span ref={counterRef} className="font-heading font-extrabold text-xs text-theme-dark tabular-nums">
           {`01 / ${pad(N)}`}
         </span>
         <div className="flex items-center gap-2.5">
           {roster.map((member, i) => (
-            <span
+            <button
               key={member.name}
-              ref={(el) => {
-                dotRefs.current[i] = el;
-              }}
-              className={`w-1.5 h-1.5 rounded-full bg-brand-crimson transition-opacity duration-300 ${i === 0 ? 'opacity-100' : 'opacity-30'}`}
-            />
+              type="button"
+              onClick={() => handleDotClick(i)}
+              className="p-1 cursor-pointer focus:outline-none flex items-center justify-center"
+              aria-label={`Go to member ${i + 1}`}
+            >
+              <span
+                ref={(el) => {
+                  dotRefs.current[i] = el;
+                }}
+                className={`w-1.5 h-1.5 rounded-full bg-brand-crimson transition-opacity duration-300 ${i === 0 ? 'opacity-100' : 'opacity-30'}`}
+              />
+            </button>
           ))}
         </div>
       </div>
 
-      <div className="flex justify-center mt-4 shrink-0 relative z-60">
+      <div className="flex justify-center mt-3 md:mt-4 shrink-0 relative z-60">
         <Link
           to="/roster"
           className="px-8 py-3.5 rounded-full bg-gradient-to-r from-brand-crimson to-red-800 text-white font-heading font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-brand-crimson/10 hover:shadow-xl hover:shadow-brand-crimson/25 hover:-translate-y-0.5 transition-all duration-300"

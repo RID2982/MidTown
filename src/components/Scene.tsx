@@ -81,6 +81,7 @@ export const Scene: React.FC<{
             start: 'top top',
             end: () => `+=${extra}`,
             scrub: true,
+            toggleClass: { targets: hold, className: 'is-pinned' },
             invalidateOnRefresh: true,
             onUpdate: (self) => onScrub(self.progress),
           });
@@ -169,7 +170,7 @@ export const Scene: React.FC<{
   const pinned = onScrub ? ' scene-hold-pinned' : '';
 
   return (
-    <>
+    <div className="relative mobile-scene-wrapper">
       <div ref={holdRef} className={`scene-hold${pinned} ${bg}`} style={{ zIndex }}>
         <div ref={innerRef} className="scene-hold-inner">
           {children}
@@ -182,6 +183,6 @@ export const Scene: React.FC<{
           aria-hidden="true"
         />
       )}
-    </>
+    </div>
   );
 };

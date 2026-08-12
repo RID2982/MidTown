@@ -83,7 +83,7 @@ export const Header: React.FC = () => {
   return (
     <header className="fixed top-4 left-0 w-full z-100 px-4 md:px-6">
       <div
-        className={`w-full max-w-[1300px] mx-auto grid grid-cols-3 items-center rounded-full bg-theme-dark/90 backdrop-blur-md border border-white/10 shadow-lg shadow-black/20 px-6 transition-all duration-300 ${
+        className={`w-full max-w-[1300px] mx-auto flex md:grid md:grid-cols-3 justify-between items-center rounded-full bg-theme-dark/90 backdrop-blur-md border border-white/10 shadow-lg shadow-black/20 px-6 transition-all duration-300 ${
           isScrolled ? 'py-2' : 'py-3'
         }`}
       >
