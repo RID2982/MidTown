@@ -111,7 +111,10 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
   }, [roster]);
 
   return (
-    <section id="team" className="w-full h-full flex flex-col justify-center px-6 md:px-12 pt-20 pb-5 relative overflow-hidden">
+    <section
+      id="team"
+      className="w-full h-full flex flex-col justify-center px-6 md:px-12 pt-20 pb-5 [@media(max-height:560px)]:pt-8 [@media(max-height:560px)]:pb-2 relative overflow-hidden"
+    >
       <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* z-60 sits well above any card (cards top out at 50) so the header
@@ -176,18 +179,21 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
           that behaved nothing like the desktop section. */}
       <div className="flex flex-1 min-h-0 items-center justify-center relative" style={{ perspective: '1400px' }}>
         <div
-          className="relative w-[78vw] max-w-sm"
-          style={{
-            transformStyle: 'preserve-3d',
-            // Explicit clamp rather than h-full/max-h: a percentage height
-            // inside a flex-1 parent doesn't resolve reliably (it collapsed
-            // the cards to zero height). The subtracted value is this
-            // section's fixed vertical overhead — header + counter + button
-            // + padding — so the card takes the rest of the screen, never
-            // more than the 600px reference size and never so little that
-            // it's unusable.
-            height: 'clamp(300px, calc(100vh - 300px), 600px)',
-          }}
+          // Explicit clamp rather than h-full/max-h: a percentage height
+          // inside a flex-1 parent doesn't resolve reliably (it collapsed
+          // the cards to zero height). The subtracted value is this
+          // section's fixed vertical overhead — header + counter + button
+          // + padding — so the card takes the rest of the screen, never
+          // more than the 600px reference size and never so little that
+          // it's unusable. This section keeps Scene's "pinned" clipping
+          // behaviour at every width (see Scene.tsx's scene-hold-pinned —
+          // it's how the arc animation runs on phones too), so on a short
+          // landscape-phone viewport there's no scroll-to-reveal fallback
+          // for anything that doesn't fit; the [@media(max-height)] variant
+          // drops the floor further so the stage actually shrinks to fit
+          // instead of getting clipped.
+          className="relative w-[78vw] max-w-sm h-[clamp(300px,calc(100vh-300px),600px)] [@media(max-height:560px)]:h-[clamp(150px,calc(100vh-170px),400px)]"
+          style={{ transformStyle: 'preserve-3d' }}
         >
           {roster.map((member, i) => (
             <div

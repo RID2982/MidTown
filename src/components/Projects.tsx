@@ -128,7 +128,7 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
   return (
     <section
       id="projects"
-      className="w-full h-full flex flex-col justify-center px-6 md:px-12 pt-20 pb-5 relative overflow-hidden"
+      className="w-full h-full flex flex-col justify-center px-6 md:px-12 pt-20 pb-5 [@media(max-height:560px)]:pt-8 [@media(max-height:560px)]:pb-2 relative overflow-hidden"
     >
       <div ref={tintRef} className="absolute inset-0 pointer-events-none transition-colors duration-700" aria-hidden="true" />
 
@@ -150,12 +150,14 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
         style={{ perspective: '1900px', perspectiveOrigin: '50% 46%' }}
       >
         <div
-          className="relative w-full max-w-[1180px]"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: 'rotateX(6deg)',
-            height: 'clamp(260px, calc(100vh - 380px), 520px)',
-          }}
+          // Same short-viewport safety valve as MemberShowcase's card
+          // stage (see that component's comment) — this section also
+          // keeps Scene's pinned/clipped behaviour at every width, so a
+          // landscape-phone viewport needs the floor lowered further
+          // rather than relying on scroll-to-reveal, which this scrub-mode
+          // Scene doesn't have.
+          className="relative w-full max-w-[1180px] h-[clamp(260px,calc(100vh-380px),520px)] [@media(max-height:560px)]:h-[clamp(130px,calc(100vh-200px),380px)]"
+          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(6deg)' }}
         >
           {FEATURED_PROJECTS.map((project, i) => (
             <article

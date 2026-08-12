@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import logoMark from '../assets/2.svg';
@@ -20,8 +20,29 @@ const NAV_ITEMS = [
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileProjectsOpen, setIsMobileProjectsOpen] = useState(false);
+  const [isDesktopProjectsOpen, setIsDesktopProjectsOpen] = useState(false);
   const [activeId, setActiveId] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
+  const desktopProjectsRef = useRef<HTMLDivElement>(null);
+
+  // The desktop "Projects" flyout is normally group-hover only, which
+  // works for a mouse but is unreachable on a touch device at md+ width
+  // (a tablet in portrait, for instance — it's the same md breakpoint
+  // that switches from the mobile drawer to this desktop nav, and touch
+  // doesn't hover). The chevron below is a real tap target that toggles
+  // isDesktopProjectsOpen alongside the hover behaviour, so both work;
+  // this just closes it again on an outside tap, since it no longer
+  // closes itself the way a pure :hover flyout would.
+  useEffect(() => {
+    if (!isDesktopProjectsOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!desktopProjectsRef.current?.contains(e.target as Node)) {
+        setIsDesktopProjectsOpen(false);
+      }
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => document.removeEventListener('pointerdown', onPointerDown);
+  }, [isDesktopProjectsOpen]);
 
   // Scroll-spy: highlight whichever section is currently centered in the
   // viewport, rather than just reacting to clicks.
@@ -85,21 +106,44 @@ export const Header: React.FC = () => {
         <nav className="hidden md:flex items-center gap-5 justify-center">
           {NAV_ITEMS.map((item) =>
             item.id === 'projects' ? (
-              // Hover-revealed dropdown, avenues jump straight to their
-              // dedicated /projects/:slug page rather than the /projects
-              // hub — clicking the "Projects" label itself still scrolls
-              // to the on-page section like every other nav item.
-              <div key={item.id} className="relative group">
-                <Link to={`/#${item.id}`} className={`${desktopLinkClass(item.id)} flex-row! gap-1`}>
-                  <span className="h-5 flex items-center">{item.label}</span>
-                  <ChevronDown size={12} className="transition-transform duration-200 group-hover:rotate-180" />
-                </Link>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 invisible -translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200">
+              // Hover-revealed on a mouse, and ALSO tap-toggled via the
+              // chevron button for touch devices at this width (see
+              // isDesktopProjectsOpen above) — avenues jump straight to
+              // their dedicated /projects/:slug page rather than the
+              // /projects hub. Clicking the "Projects" label itself still
+              // scrolls to the on-page section like every other nav item;
+              // it's a separate element from the chevron now specifically
+              // so tapping the chevron doesn't also navigate away.
+              <div key={item.id} ref={desktopProjectsRef} className="relative group">
+                <div className={`${desktopLinkClass(item.id)} flex-row! gap-1`}>
+                  <Link to={`/#${item.id}`} className="h-5 flex items-center">
+                    {item.label}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setIsDesktopProjectsOpen((open) => !open)}
+                    aria-label="Toggle avenues list"
+                    className="h-5 flex items-center cursor-pointer"
+                  >
+                    <ChevronDown
+                      size={12}
+                      className={`transition-transform duration-200 group-hover:rotate-180 ${isDesktopProjectsOpen ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                </div>
+                <div
+                  className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 transition-all duration-200 ${
+                    isDesktopProjectsOpen
+                      ? 'opacity-100 visible translate-y-0'
+                      : 'opacity-0 invisible -translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0'
+                  }`}
+                >
                   <div className="w-56 rounded-2xl bg-theme-dark/95 backdrop-blur-md border border-white/10 shadow-lg p-2 flex flex-col gap-1">
                     {AVENUES.map((avenue) => (
                       <Link
                         key={avenue}
                         to={`/projects/${avenueToSlug(avenue)}`}
+                        onClick={() => setIsDesktopProjectsOpen(false)}
                         className="px-4 py-2.5 rounded-xl text-xs font-heading font-bold uppercase tracking-wider text-white/70 hover:text-white hover:bg-white/5 transition-colors"
                       >
                         {avenue}
@@ -134,9 +178,14 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer. It's a descendant of the `fixed` header, so it's
+          pinned to the viewport rather than part of the scrollable
+          document — with the "Projects" avenues expanded plus the CTA,
+          this can run past 400px tall, so on a short/landscape phone
+          viewport it needs its own scroll rather than letting content
+          render below the visible screen with no way to reach it. */}
       {isMobileMenuOpen && (
-        <div className="absolute top-[calc(100%+8px)] left-4 right-4 md:left-6 md:right-6 rounded-3xl bg-theme-dark/95 border border-white/10 backdrop-blur-2xl p-6 flex flex-col gap-3 md:hidden shadow-lg animate-fade-in">
+        <div className="absolute top-[calc(100%+8px)] left-4 right-4 md:left-6 md:right-6 max-h-[calc(100svh-6rem)] overflow-y-auto rounded-3xl bg-theme-dark/95 border border-white/10 backdrop-blur-2xl p-6 flex flex-col gap-3 md:hidden shadow-lg animate-fade-in">
           {NAV_ITEMS.map((item) =>
             item.id === 'projects' ? (
               // No hover on touch devices, so "Projects" expands its avenue
