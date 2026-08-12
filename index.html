@@ -4,7 +4,27 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
+    <script>
+      // On a hard load with a URL like /#about, the browser tries to
+      // natively jump to that element as soon as it exists in the DOM —
+      // but this is a client-rendered app, so #about doesn't exist until
+      // React mounts and every Scene (see Scene.tsx) has finished
+      // measuring its own scroll runway. Browsers retry the native jump
+      // as matching content streams in, so it can fire AGAIN partway
+      // through that measuring, landing the page stuck between two
+      // sections whose heights haven't fully settled yet. HomePage's own
+      // scroll-after-settle logic (useSettleThenHashScroll) already
+      // handles this correctly — the fix is just to stop the browser's
+      // native jump from fighting it. Stripping the hash here, before the
+      // browser gets a chance to act on it, removes any target for it to
+      // chase; the stashed value is picked up once our own logic is ready.
+      if (location.hash) {
+        window.__pendingHash = location.hash;
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    </script>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

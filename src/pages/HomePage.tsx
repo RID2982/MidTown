@@ -21,6 +21,16 @@ import { Footer } from '../components/Footer';
 // fixed header's height, which a native anchor scroll wouldn't either.
 const HEADER_OFFSET = 96;
 
+// Stashed by the inline script in index.html on a hard load with a hash
+// already in the URL (e.g. opening /#about directly) — see that script's
+// comment for why the browser's own native fragment jump can't be trusted
+// on this page and gets pre-empted before it fires.
+declare global {
+  interface Window {
+    __pendingHash?: string;
+  }
+}
+
 /**
  * Two things have to happen after the page's layout settles, and they have
  * to happen IN THIS ORDER — which is why they share one hook rather than
@@ -44,7 +54,14 @@ const HEADER_OFFSET = 96;
  * section counts.
  */
 function useSettleThenHashScroll() {
-  const { hash } = useLocation();
+  const { hash: routerHash } = useLocation();
+  // On the very first render after a hard load, react-router's own hash is
+  // whatever index.html's inline script left behind — which is nothing,
+  // since that script strips it before React (and thus the router) ever
+  // sees it. The stashed value fills that gap for this one case; every
+  // later hash change (clicking a nav link) already comes through
+  // react-router normally and doesn't need it.
+  const hash = routerHash || window.__pendingHash || '';
 
   useEffect(() => {
     let cancelled = false;
@@ -70,6 +87,10 @@ function useSettleThenHashScroll() {
       if (!hash) return;
       const el = document.getElementById(hash.slice(1));
       if (!el) return;
+
+      // Consumed — clear it so it can't leak into some later effect run
+      // that has a genuinely empty hash (e.g. clicking the logo back home).
+      window.__pendingHash = undefined;
 
       // Every measurement of a position:sticky section is relative to
       // wherever it's CURRENTLY stuck — getBoundingClientRect() and
