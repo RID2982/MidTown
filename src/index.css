@@ -23,12 +23,30 @@
 /* --- BASE STYLES --- */
 html {
   scroll-behavior: smooth;
+  /* Several sections (the Projects/Members card decks) position "waiting"
+     cards off-screen as part of their scroll-scrubbed choreography — by
+     design, not a bug — but that pushes document width past the viewport
+     on narrow phones. body's own overflow-x doesn't reliably propagate to
+     the viewport scroller in every case, so it's set explicitly here too:
+     this is the actual element the browser scrolls, and the one that has
+     to block it.
+     `clip`, not `hidden`: per the CSS Overflow spec, if overflow-x is a
+     scrolling value (hidden/auto/scroll) and overflow-y is left implicit,
+     the UA silently resolves overflow-y to auto too — which makes body/html
+     BOTH independently scrollable containers. That extra nested scroll
+     container is what broke position:sticky for the pinned Scene sections
+     (MemberShowcase's card stack going fully blank partway through its
+     pin range on mobile — the sticky element was computing its stuck
+     position against the wrong scrolling ancestor). `clip` still blocks
+     horizontal scroll but isn't a "scrolling value", so it doesn't trigger
+     that pairing rule and leaves overflow-y alone. */
+  overflow-x: clip;
 }
 
 body {
   background-color: #ffffff;
   color: #0f172a;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* --- CUSTOM SCROLLBAR --- */

@@ -268,6 +268,9 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
       <div className="flex justify-center mt-3 md:mt-4 shrink-0 relative z-60">
         <Link
           to="/roster"
+          // Leave a "#team" return address on this page before leaving it —
+          // see the matching comment on Projects.tsx's "View Project" link.
+          onClick={() => window.history.replaceState(null, '', '/#team')}
           className="px-8 py-3.5 rounded-full bg-gradient-to-r from-brand-crimson to-red-800 text-white font-heading font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-brand-crimson/10 hover:shadow-xl hover:shadow-brand-crimson/25 hover:-translate-y-0.5 transition-all duration-300"
         >
           View All Members

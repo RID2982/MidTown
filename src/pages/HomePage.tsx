@@ -88,8 +88,13 @@ function useSettleThenHashScroll() {
       const el = document.getElementById(hash.slice(1));
       if (!el) return;
 
-      // Consumed — clear it so it can't leak into some later effect run
-      // that has a genuinely empty hash (e.g. clicking the logo back home).
+      // Consumed — clear the stashed value so it can't leak into some
+      // later effect run that has a genuinely empty hash (e.g. clicking
+      // the logo back home). The hash stays in the URL itself, on purpose:
+      // Back from a child page (an avenue page, /roster) is supposed to
+      // return to the section you were on, not the hero — see the comment
+      // on the "View Project" / "View All Members" links, which are what
+      // actually guarantee that hash is there to return to.
       window.__pendingHash = undefined;
 
       // Every measurement of a position:sticky section is relative to
@@ -104,8 +109,30 @@ function useSettleThenHashScroll() {
 
       requestAnimationFrame(() => {
         if (cancelled) return;
-        const top = Math.max(0, el.getBoundingClientRect().top - HEADER_OFFSET);
-        window.scrollTo({ top, behavior: 'smooth' });
+
+        // Landing on a section this deep isn't just one measurement: with
+        // 6+ Scenes all mounting at once, each one's own ResizeObserver can
+        // still be settling and calling ScrollTrigger.refresh() on its own
+        // schedule for a bit after ours already ran. A refresh mid-flight
+        // silently aborts the browser's in-progress smooth scroll — no
+        // error, no jump, it just stops wherever it happened to be
+        // (observed: stalling around 100–150px into an 800+ vh page and
+        // never resuming). Checked every 120ms rather than every frame —
+        // often enough to catch a stall quickly, seldom enough that it
+        // doesn't cut the animation off before it's had a chance to build
+        // any speed.
+        let elapsed = 0;
+        const CHECK_MS = 120;
+        const MAX_MS = 6000;
+        const settle = () => {
+          if (cancelled) return;
+          const top = Math.max(0, el.getBoundingClientRect().top - HEADER_OFFSET);
+          if (Math.abs(window.scrollY - top) < 2 || elapsed >= MAX_MS) return;
+          window.scrollTo({ top, behavior: 'smooth' });
+          elapsed += CHECK_MS;
+          setTimeout(settle, CHECK_MS);
+        };
+        settle();
       });
     };
 

@@ -17,7 +17,17 @@ function ScrollToTop() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    if (hash) return;
+    // Checked twice on purpose: `hash` from useLocation() can still read ""
+    // on the very first render right after a POP (browser back/forward) —
+    // the actual URL already has the hash, react-router just hasn't caught
+    // up to it in this render yet. Trusting only the stale "" here fired an
+    // unwanted scrollTo(0, 0) that raced HomePage's own hash-restore scroll
+    // (the two fought over scroll position, and the hash-restore scroll
+    // usually lost, stranding the page a couple hundred px from the top
+    // instead of at the section it was supposed to land on). Reading the
+    // real, current window.location.hash is the one check that can't be
+    // stale, since it runs after commit rather than from render-time props.
+    if (hash || window.location.hash) return;
     window.scrollTo(0, 0);
   }, [pathname, hash]);
 

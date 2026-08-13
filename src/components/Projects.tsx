@@ -232,6 +232,12 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
 
                   <Link
                     to={`/projects/${avenueToSlug(project.avenue)}#${projectToSlug(project.title)}`}
+                    // Leave a "#projects" return address on this page before
+                    // leaving it, so Back lands back on this section — not
+                    // just when you arrived via the header's nav link (which
+                    // already sets this hash), but also if you scrolled here
+                    // by hand, which never touches the URL on its own.
+                    onClick={() => window.history.replaceState(null, '', '/#projects')}
                     className={`mt-auto self-start inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full font-heading font-extrabold text-[10px] md:text-xs uppercase tracking-widest transition-transform duration-300 hover:-translate-y-0.5 ${
                       project.fg === 'dark'
                         ? 'bg-slate-950 text-white'
