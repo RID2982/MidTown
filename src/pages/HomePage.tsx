@@ -110,23 +110,34 @@ function useSettleThenHashScroll() {
       requestAnimationFrame(() => {
         if (cancelled) return;
 
-        // Landing on a section this deep isn't just one measurement: with
-        // 6+ Scenes all mounting at once, each one's own ResizeObserver can
-        // still be settling and calling ScrollTrigger.refresh() on its own
-        // schedule for a bit after ours already ran. A refresh mid-flight
-        // silently aborts the browser's in-progress smooth scroll — no
-        // error, no jump, it just stops wherever it happened to be
-        // (observed: stalling around 100–150px into an 800+ vh page and
-        // never resuming). Checked every 120ms rather than every frame —
-        // often enough to catch a stall quickly, seldom enough that it
-        // doesn't cut the animation off before it's had a chance to build
-        // any speed.
+        // Measured exactly once, right here, with nothing stuck. This is
+        // the ONLY point in the whole flow where el.getBoundingClientRect()
+        // is trustworthy — the moment actual scrolling starts, the Scene
+        // ancestors between here and the target start sticking and
+        // unsticking again, and a sticky descendant's rect while any of
+        // its ancestors are stuck reads relative to the STUCK viewport
+        // position, not the element's real place in the document (this is
+        // what produced the earlier bug's symptom directly: re-measuring
+        // on every retry converged on nonsense numbers — a "target" that
+        // silently shrank as scrollY grew, chasing scrollY instead of the
+        // section, so it always finished a bit short of the section
+        // instead of leaving it a fixed goalpost to actually reach).
+        const top = Math.max(0, el.getBoundingClientRect().top - HEADER_OFFSET);
+
+        // With 6+ Scenes all mounting at once, each one's own ResizeObserver
+        // can still be settling and calling ScrollTrigger.refresh() on its
+        // own schedule for a bit after ours already ran. A refresh
+        // mid-flight silently aborts the browser's in-progress smooth
+        // scroll — no error, no jump, it just stops wherever it happened
+        // to be. Re-asserting the SAME fixed target periodically recovers
+        // from that without fighting the animation itself (each call only
+        // matters if the browser actually dropped it — otherwise scrollY
+        // is already at `top` and the check below is a no-op).
         let elapsed = 0;
         const CHECK_MS = 120;
-        const MAX_MS = 6000;
+        const MAX_MS = 3000;
         const settle = () => {
           if (cancelled) return;
-          const top = Math.max(0, el.getBoundingClientRect().top - HEADER_OFFSET);
           if (Math.abs(window.scrollY - top) < 2 || elapsed >= MAX_MS) return;
           window.scrollTo({ top, behavior: 'smooth' });
           elapsed += CHECK_MS;

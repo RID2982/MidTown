@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { MEMBERS } from '../data/members';
 import { CardVisual } from '../components/MemberCardVisual';
 import { Header } from '../components/Header';
@@ -26,6 +28,14 @@ export const RosterPage: React.FC = () => {
       {/* pt-28 clears the fixed Header (it's out of normal document flow) */}
       <section className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 pt-28 pb-16 relative z-10">
         <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
+
+        <Link
+          to="/#team"
+          className="relative inline-flex items-center gap-2 text-xs font-heading font-extrabold uppercase tracking-widest text-text-muted hover:text-brand-crimson transition-colors mb-10"
+        >
+          <ArrowLeft size={14} />
+          Back
+        </Link>
 
         <div className="flex flex-col items-center text-center mb-16 max-w-3xl mx-auto relative">
           <span className="text-brand-crimson text-xs uppercase font-heading font-extrabold tracking-widest mb-3">
