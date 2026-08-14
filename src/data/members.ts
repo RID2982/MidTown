@@ -1,43 +1,24 @@
-// Google Drive Direct Link Helper
-// Converts standard Google Drive sharing links into direct image URLs.
-// Share permission must be set to "Anyone with the link can view".
-export function getGoogleDriveDirectLink(shareLink: string | undefined): string | undefined {
-  if (!shareLink) return undefined;
-  if (!shareLink.includes('drive.google.com')) return shareLink;
-  
-  let fileId = '';
-  const fileDMatch = shareLink.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-  if (fileDMatch && fileDMatch[1]) {
-    fileId = fileDMatch[1];
-  } else {
-    const idParamMatch = shareLink.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-    if (idParamMatch && idParamMatch[1]) {
-      fileId = idParamMatch[1];
-    }
-  }
-  
-  return fileId ? `https://lh3.googleusercontent.com/d/${fileId}` : shareLink;
-}
-
-// Paste your Google Drive share links in the placeholders below.
-// Example: getGoogleDriveDirectLink('https://drive.google.com/file/d/1A2B3C4D5E.../view?usp=sharing')
-const vinodhanPhoto = getGoogleDriveDirectLink('');
-const atshayaPhoto = getGoogleDriveDirectLink('');
-const dhyaneshPhoto = getGoogleDriveDirectLink('');
-const girishPhoto = getGoogleDriveDirectLink('');
-const jeevithaPhoto = getGoogleDriveDirectLink('');
-const mukeshPhoto = getGoogleDriveDirectLink('');
-const nagaGayathriPhoto = getGoogleDriveDirectLink('');
-const sandhiyaPhoto = getGoogleDriveDirectLink('');
-const seshaPhoto = getGoogleDriveDirectLink('');
-const nandhiniPhoto = getGoogleDriveDirectLink('');
-const sriVisahaPhoto = getGoogleDriveDirectLink('');
-const sudharvkPhoto = getGoogleDriveDirectLink('');
-const prasannavengatPhoto = getGoogleDriveDirectLink('');
-const abdulameerPhoto = getGoogleDriveDirectLink('');
-const sasidharanPhoto = getGoogleDriveDirectLink('');
-const aiswaryaaPhoto = getGoogleDriveDirectLink('');
-const GokulPhoto = getGoogleDriveDirectLink('');
+// Real headshots, bundled with the app (src/assets/members/ — tracked in
+// git now that the repo is private, so there's no longer a reason to keep
+// them out of it via an external link). Vite fingerprints these on build
+// like any other imported asset.
+import vinodhanPhoto from '../assets/members/vinodhan.jpg';
+import atshayaPhoto from '../assets/members/atshaya.jpg';
+import dhyaneshPhoto from '../assets/members/dhyanesh.jpg';
+import girishPhoto from '../assets/members/girish.jpg';
+import jeevithaPhoto from '../assets/members/jeevitha.jpg';
+import mukeshPhoto from '../assets/members/mukesh.jpg';
+import nagaGayathriPhoto from '../assets/members/nagagayathri.jpg';
+import sandhiyaPhoto from '../assets/members/sandhiya.jpg';
+import seshaPhoto from '../assets/members/sesha.jpg';
+import nandhiniPhoto from '../assets/members/nandhini-photo.jpg';
+import sriVisahaPhoto from '../assets/members/srivisaha.jpg';
+import sudharvkPhoto from '../assets/members/sudharvk-photo.jpg';
+import prasannavengatPhoto from '../assets/members/prasannavengat.jpg';
+import abdulameerPhoto from '../assets/members/abdulameer.jpg';
+import sasidharanPhoto from '../assets/members/sasidharan.jpg';
+import aiswaryaaPhoto from '../assets/members/aiswaryaa.jpg';
+import GokulPhoto from '../assets/members/gokul.jpg';
 
 export interface Member {
   name: string;
