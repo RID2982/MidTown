@@ -81,7 +81,7 @@ export const MEMBERS: Member[] = [
     photoSlot: 'Secretary Headshot',
     photo: atshayaPhoto,
     zoomScale: 1.2,
-    yOffset: -14,
+    yOffset: 10,
     quote: 'Streamlining operations, communication, and district reporting for seamless execution.',
   },
     {
