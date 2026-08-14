@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { PROJECTS_DATA, AVENUES, avenueToSlug, slugToAvenue, projectToSlug } from '../data/projects';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { ProjectGallery } from '../components/ProjectGallery';
 
 // Placeholder visual per project until real event photos are available —
 // same gradient-tile approach used on the home page's featured list.
@@ -85,13 +86,12 @@ export const AvenuePage: React.FC = () => {
                 className={`flex flex-col ${reversed ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-8 md:gap-14 scroll-mt-24`}
               >
                 <div className="w-full md:w-1/2 shrink-0">
-                  <div
-                    className={`w-full aspect-[4/3] rounded-[2rem] bg-gradient-to-br ${GRADIENTS[index % GRADIENTS.length]} shadow-lg flex items-center justify-center p-8`}
-                  >
-                    <span className="text-white/80 font-heading font-extrabold text-sm uppercase tracking-widest text-center">
-                      {project.category}
-                    </span>
-                  </div>
+                  <ProjectGallery
+                    images={project.images}
+                    alt={project.title}
+                    category={project.category}
+                    gradientClass={GRADIENTS[index % GRADIENTS.length]}
+                  />
                 </div>
                 <div className="w-full md:w-1/2 flex flex-col gap-3">
                   <span className="text-brand-crimson text-xs font-heading font-extrabold uppercase tracking-widest">

@@ -1,3 +1,9 @@
+import karpomKarpippomPhoto from '../assets/Projects/july_Month/karpom-Karpippom/karpom-karpippom.jpg';
+import karpomKarpippomSpeaker1 from '../assets/Projects/july_Month/karpom-Karpippom/speaker-1.jpg';
+import karpomKarpippomSpeaker2 from '../assets/Projects/july_Month/karpom-Karpippom/speaker-2.jpg';
+import anboduPoster from '../assets/Projects/july_Month/Annapurana_day/anbodu-poster.jpg';
+import anboduPhoto2 from '../assets/Projects/july_Month/Annapurana_day/anbodu-2.jpg';
+
 // The 5 avenues match the real Avenue Director roster in data/members.ts —
 // not the 4 mentioned verbally when this was requested (Professional
 // Service was almost certainly just dropped in dictation, not excluded on
@@ -31,52 +37,53 @@ export interface Project {
   color: string;
   /** Which text colour that board needs. 'dark' = dark ink on a light board. */
   fg: 'light' | 'dark';
+  /**
+   * Real event photos, imported from src/assets/Projects/. Up to 3 — with
+   * 2 or more, the avenue detail page auto-swipes between them like a
+   * phone gallery (see ProjectGallery.tsx). Optional; absent or empty
+   * falls back to a solid gradient tile, the same way a member card falls
+   * back to a labelled placeholder frame while its photo is pending.
+   */
+  images?: string[];
+  /**
+   * CSS object-position per photo, same index/order as images (e.g. 'top',
+   * 'center', '50% 20%'). Optional, defaults to 'center' per photo — set
+   * only for a photo whose subject gets cropped awkwardly by the gallery's
+   * fixed 4:3 frame (see ProjectGallery.tsx).
+   */
+  imagePositions?: string[];
 }
 
+// Only real, confirmed events live here now — the earlier placeholder
+// projects (Blood Donation Camp, Sapling Campaign, Computer Literacy,
+// Polio Drive, Resume Workshop) were seed/mock data from before the club
+// had real project details, and were removed rather than kept as fake
+// history once real ones existed to replace them. Midtown Fellowship &
+// Sports Meet (Club Service) is untouched — it wasn't part of this cleanup.
 export const PROJECTS_DATA: Project[] = [
   {
-    title: 'Midtown Blood Donation Camp',
-    category: 'Community Service',
+    title: 'Anbodu (அன்போடு)',
+    category: 'Food Donation Drive',
     avenue: 'Community Service',
     date: 'July 2026',
-    description: 'Coordinated with Salem Government Hospital to collect 120+ units of blood for emergency reserves.',
+    description: '20 Rotaractors from Salem Midtown came together for Anbodu (அன்போடு — "with love"), handing out food and water directly to people in need across the city — a small, personal effort built on the idea that nourishing a life starts with sharing what you have.',
     status: 'Completed',
     featured: true,
-    color: '#1d4ed8',
+    color: '#b45309',
     fg: 'light',
+    images: [anboduPoster, anboduPhoto2],
   },
   {
-    title: 'Green Salem Sapling Campaign',
-    category: 'Environment',
-    avenue: 'Community Service',
-    date: 'August 2026',
-    description: 'Planted 500 native tree saplings along Salem bypass roads to foster urban forestation.',
-    status: 'Completed',
-    featured: true,
-    color: '#059669',
-    fg: 'light',
-  },
-  {
-    title: 'Government School Computer Literacy',
-    category: 'Professional Service',
+    title: '"கற்போம் கற்பிப்போம்"',
+    category: 'Public Speaking Workshop',
     avenue: 'Professional Service',
-    date: 'September 2026',
-    description: 'Conducted basic computing, spreadsheet, and safe internet seminars for 80+ high school children.',
+    date: 'July 2026',
+    description: 'Rtr. Sunil Vickas S led an engaging session on Effective Public Speaking and Time Management for 200+ students, transforming the audience from passive listeners into active participants. Through interactive discussions, practical insights, and real-world guidance, the session encouraged students to communicate with confidence and manage their time effectively—making it one of the club’s most impactful and engaging outreach sessions.',
     status: 'Completed',
     featured: true,
-    color: '#6d28d9',
+    color: '#0891b2',
     fg: 'light',
-  },
-  {
-    title: 'Polio Vaccination Support Drive',
-    category: 'Medical Aid',
-    avenue: 'Community Service',
-    date: 'October 2026',
-    description: 'Partnered with Salem Primary Health Center to administer polio vaccine drops at local transit hubs.',
-    status: 'Completed',
-    featured: false,
-    color: '#e11d48',
-    fg: 'light',
+    images: [karpomKarpippomPhoto, karpomKarpippomSpeaker1, karpomKarpippomSpeaker2],
   },
   {
     title: 'Midtown Fellowship & Sports Meet',
@@ -88,17 +95,6 @@ export const PROJECTS_DATA: Project[] = [
     featured: false,
     color: '#f59e0b',
     fg: 'dark',
-  },
-  {
-    title: 'Skill Development & Resume Workshop',
-    category: 'Professional Development',
-    avenue: 'Professional Service',
-    date: 'December 2026',
-    description: 'Organized career counselling, mock interviews, and resume reviews for local final-year graduates.',
-    status: 'In Progress',
-    featured: false,
-    color: '#0f172a',
-    fg: 'light',
   },
 ];
 
