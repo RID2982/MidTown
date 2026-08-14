@@ -25,3 +25,7 @@ dist-ssr
 
 # Vercel
 .vercel
+
+# Member Assets (Secure/Private)
+src/assets/members/
+

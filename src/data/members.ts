@@ -1,7 +1,43 @@
-// Headshots live in src/assets/members/, resized to ~1200px on the long
-// edge — camera originals are multi-megabyte and would dominate page
-// weight for a card that renders a few hundred pixels wide.
-import vinodhanPhoto from '../assets/members/vinodhan.jpg';
+// Google Drive Direct Link Helper
+// Converts standard Google Drive sharing links into direct image URLs.
+// Share permission must be set to "Anyone with the link can view".
+export function getGoogleDriveDirectLink(shareLink: string | undefined): string | undefined {
+  if (!shareLink) return undefined;
+  if (!shareLink.includes('drive.google.com')) return shareLink;
+  
+  let fileId = '';
+  const fileDMatch = shareLink.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (fileDMatch && fileDMatch[1]) {
+    fileId = fileDMatch[1];
+  } else {
+    const idParamMatch = shareLink.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (idParamMatch && idParamMatch[1]) {
+      fileId = idParamMatch[1];
+    }
+  }
+  
+  return fileId ? `https://lh3.googleusercontent.com/d/${fileId}` : shareLink;
+}
+
+// Paste your Google Drive share links in the placeholders below.
+// Example: getGoogleDriveDirectLink('https://drive.google.com/file/d/1A2B3C4D5E.../view?usp=sharing')
+const vinodhanPhoto = getGoogleDriveDirectLink('');
+const atshayaPhoto = getGoogleDriveDirectLink('');
+const dhyaneshPhoto = getGoogleDriveDirectLink('');
+const girishPhoto = getGoogleDriveDirectLink('');
+const jeevithaPhoto = getGoogleDriveDirectLink('');
+const mukeshPhoto = getGoogleDriveDirectLink('');
+const nagaGayathriPhoto = getGoogleDriveDirectLink('');
+const sandhiyaPhoto = getGoogleDriveDirectLink('');
+const seshaPhoto = getGoogleDriveDirectLink('');
+const nandhiniPhoto = getGoogleDriveDirectLink('');
+const sriVisahaPhoto = getGoogleDriveDirectLink('');
+const sudharvkPhoto = getGoogleDriveDirectLink('');
+const prasannavengatPhoto = getGoogleDriveDirectLink('');
+const abdulameerPhoto = getGoogleDriveDirectLink('');
+const sasidharanPhoto = getGoogleDriveDirectLink('');
+const aiswaryaaPhoto = getGoogleDriveDirectLink('');
+const GokulPhoto = getGoogleDriveDirectLink('');
 
 export interface Member {
   name: string;
@@ -21,6 +57,21 @@ export interface Member {
    * partly behind that panel.
    */
   photo?: string;
+  /**
+   * Custom horizontal translation offset as percentage of the card width (e.g. -5 for -5%).
+   * Defaults to 0 if not specified.
+   */
+  xOffset?: number;
+  /**
+   * Custom vertical translation offset as percentage of the card height (e.g. -10 for -10%).
+   * Defaults to 0 if not specified.
+   */
+  yOffset?: number;
+  /**
+   * Custom zoom scale factor for the headshot image (e.g. 1.1, 1.2).
+   * Defaults to 1 (no zoom) if not specified.
+   */
+  zoomScale?: number;
   quote: string;
 }
 
@@ -39,116 +90,164 @@ export const MEMBERS: Member[] = [
     role: 'President',
     photoSlot: 'President Headshot',
     photo: vinodhanPhoto,
+    zoomScale: 1.7,
+    yOffset: -16,
     quote: "Leading with empathy and vision to drive Midtown's milestones and community service.",
   },
   {
     name: 'Rtr. K. Atshaya',
     role: 'Secretary',
     photoSlot: 'Secretary Headshot',
+    photo: atshayaPhoto,
+    zoomScale: 1.2,
+    yOffset: -14,
     quote: 'Streamlining operations, communication, and district reporting for seamless execution.',
+  },
+    {
+    name: 'Rtr. A. Abdul Ameer',
+    role: 'Treasurer',
+    photoSlot: 'Treasurer Headshot',
+    photo: abdulameerPhoto,
+    zoomScale: 1,
+    quote: 'Managing club budget, financial transparency, and community service fund allocations.',
   },
   {
     name: 'Rtr. K. Prasannavengat',
     role: 'Vice President',
+    photo: prasannavengatPhoto,
+    zoomScale: 1.3,
+    xOffset: -5,
+    yOffset: 15,
     photoSlot: 'VP Headshot',
     quote: 'Supporting project execution and coordinating avenues of service across Salem.',
   },
-  {
-    name: 'Rtr. A. Abdul Ameer',
-    role: 'Treasurer',
-    photoSlot: 'Treasurer Headshot',
-    quote: 'Managing club budget, financial transparency, and community service fund allocations.',
-  },
+
   {
     name: 'Rtr. S. Seshathri',
     role: 'Sergeant at Arms',
     photoSlot: 'Sergeant at Arms Headshot',
+    photo: seshaPhoto,
+    zoomScale: 1.15,
+    xOffset: 6,
+    yOffset: 6,
     quote: 'Upholding meeting discipline and keeping every club gathering running smoothly.',
   },
   {
     name: 'Rtr. Naga Gayathiri',
     role: 'Avenue Director, Club Service',
     photoSlot: 'Director Headshot',
+    photo: nagaGayathriPhoto,
+    zoomScale: 1.0,
+    yOffset: -2,
     quote: 'Fostering internal fellowship, member onboarding, and inter-district collaborations.',
   },
   {
     name: 'Rtr. R. Jeevitha',
     role: 'Avenue Director, Community Service',
     photoSlot: 'Director Headshot',
+    photo: jeevithaPhoto,
+    zoomScale: 1.6,
+    xOffset: 6,
     quote: 'Driving blood camps, sapling drives, and direct medical aid to public schools.',
   },
   {
     name: 'Rtr. K. Nandhini',
     role: 'Avenue Director, Professional Service',
     photoSlot: 'Director Headshot',
+    photo: nandhiniPhoto,
     quote: 'Coordinating computer literacy campaigns and career placement guides for youth.',
   },
   {
     name: 'Rtr. D. Sudharshun',
     role: 'Avenue Director, International Service',
     photoSlot: 'Director Headshot',
+    photo: sudharvkPhoto,
+    zoomScale: 1.05,
+    yOffset: -15,
     quote: 'Connecting Midtown Rotaractors with global youth networks and cross-border projects.',
+  },
+    {
+    name: 'Rtr. R. Sri Visaha',
+    role: 'Learning Facilitator',
+    photoSlot: 'Project Chair Headshot',
+    photo: sriVisahaPhoto,
+    quote: 'Designing workshops and training sessions that build skills across the membership.',
   },
   {
     name: 'Rtr. T. Sandhiya',
     role: 'Avenue Director, Public Image',
     photoSlot: 'Director Headshot',
+    photo: sandhiyaPhoto,
     quote: "Shaping the club's voice across social media, press, and public storytelling.",
   },
   {
     name: 'Rtr. B. Mukesh',
     role: 'Sport Chair',
     photoSlot: 'Project Chair Headshot',
+    photo: mukeshPhoto,
+    zoomScale: 1.6,
+    yOffset: 25,
     quote: 'Organizing fellowship tournaments and sports meets that keep the club active and united.',
   },
-  {
-    name: 'Rtr. R. Sri Visaha',
-    role: 'Learning Facilitator',
-    photoSlot: 'Project Chair Headshot',
-    quote: 'Designing workshops and training sessions that build skills across the membership.',
-  },
+
   {
     name: 'Rtr. V. R. Dhyaneshwar',
     role: 'Membership Chair',
     photoSlot: 'Project Chair Headshot',
+    photo: dhyaneshPhoto,
+    zoomScale: 1.35,
+    xOffset: -8,
+    yOffset: 15,
     quote: 'Leading recruitment drives and welcoming new Rotaractors into the Midtown family.',
   },
   {
     name: 'Rtr. R. M. Girish Gowtham',
     role: 'District Priority Projects',
     photoSlot: 'Project Chair Headshot',
+    photo: girishPhoto,
+    zoomScale: 2.1,
+    xOffset: -5,
+    yOffset: -20,
     quote: "Aligning Midtown's initiatives with District 2982's flagship priority projects.",
   },
-  // Reserved slots for 5 more members, names/photos pending.
   {
-    name: 'Rtr. Member 1',
-    role: 'Proud Rotaract Member',
+    name: 'Rtr. Aiswaryaa Mohanraj',
+    role: 'Legal Awareness & Advocacy Chair',
     photoSlot: 'Member Headshot',
-    quote: 'Profile details coming soon.',
+    photo : aiswaryaaPhoto,
+    zoomScale:1,
+    yOffset: -10,
+    quote: 'Organising awareness campaigns on law, rights and safety.',
   },
   {
-    name: 'Rtr. Member 2',
+    name: 'Rtr. Sasidharan',
     role: 'Proud Rotaract Member',
     photoSlot: 'Member Headshot',
-    quote: 'Profile details coming soon.',
+    photo: sasidharanPhoto,
+    zoomScale: 1.4,
+    quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
   {
-    name: 'Rtr. Member 3',
+    name: 'Rtr. M. Gokulakrishnan',
     role: 'Proud Rotaract Member',
     photoSlot: 'Member Headshot',
-    quote: 'Profile details coming soon.',
+    photo : GokulPhoto,
+    zoomScale : 1.4,
+    xOffset: -10,
+    yOffset: 20,
+    quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
   {
     name: 'Rtr. Member 4',
     role: 'Proud Rotaract Member',
     photoSlot: 'Member Headshot',
-    quote: 'Profile details coming soon.',
+    quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
   {
     name: 'Rtr. Member 5',
     role: 'Proud Rotaract Member',
     photoSlot: 'Member Headshot',
-    quote: 'Profile details coming soon.',
+    quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
 ];
 

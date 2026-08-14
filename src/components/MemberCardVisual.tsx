@@ -46,7 +46,11 @@ export const CardVisual: React.FC<{ member: Member }> = ({ member }) => {
           <img
             src={member.photo}
             alt={`${member.name}, ${member.role}`}
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              objectPosition: 'center',
+              transform: `translate(${member.xOffset || 0}%, ${member.yOffset || 0}%) scale(${member.zoomScale || 1})`,
+            }}
             loading="lazy"
           />
         ) : (

@@ -19,14 +19,14 @@ const cardVariants = {
 
 export const RosterPage: React.FC = () => {
   return (
-    <div className="bg-bg-primary text-text-primary min-h-screen relative font-sans selection:bg-brand-crimson selection:text-text-primary">
+    <div className="flex flex-col bg-bg-primary text-text-primary min-h-screen relative font-sans selection:bg-brand-crimson selection:text-text-primary">
       {/* The real site Header, not a bespoke lookalike — its nav Links all
           point to "/#section" and HomePage's useHashScroll handles getting
           there and scrolling correctly from any page, including this one. */}
       <Header />
 
       {/* pt-28 clears the fixed Header (it's out of normal document flow) */}
-      <section className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 pt-28 pb-16 relative z-10">
+      <section className="flex-grow w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 pt-28 pb-16 relative z-10">
         <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
 
         <Link

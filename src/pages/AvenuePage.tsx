@@ -48,10 +48,10 @@ export const AvenuePage: React.FC = () => {
   const nextAvenue = AVENUES[(currentIndex + 1) % AVENUES.length];
 
   return (
-    <div className="bg-bg-primary text-text-primary min-h-screen relative font-sans selection:bg-brand-crimson selection:text-text-primary">
+    <div className="flex flex-col bg-bg-primary text-text-primary min-h-screen relative font-sans selection:bg-brand-crimson selection:text-text-primary">
       <Header />
 
-      <section className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 pt-28 pb-16 relative z-10">
+      <section className="flex-grow w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 pt-28 pb-16 relative z-10">
         <Link
           to="/#projects"
           className="inline-flex items-center gap-2 text-xs font-heading font-extrabold uppercase tracking-widest text-text-muted hover:text-brand-crimson transition-colors mb-10"
