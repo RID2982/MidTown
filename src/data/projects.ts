@@ -21,8 +21,8 @@ import teachOneInspireOne3 from '../assets/Projects/july_Month/Teachone inspireo
 
 // Maitri 10.0 Imports
 import maitri1 from '../assets/Projects/july_Month/Maitri 10.0/IMG-20260722-WA0031.jpg';
-import maitri2 from '../assets/Projects/july_Month/Maitri 10.0/Screenshot (79).png';
-import maitri3 from '../assets/Projects/july_Month/Maitri 10.0/Screenshot 2026-07-31 204155.png';
+import maitri2 from '../assets/Projects/july_Month/Maitri 10.0/Screenshot 2026-07-31 212229.png';
+import maitri3 from '../assets/Projects/july_Month/Maitri 10.0/Screenshot 2026-07-31 204155.jpeg';
 
 // Catalyst Imports
 import catalyst1 from '../assets/Projects/August_month/catalyst/catalyst.jpg';
@@ -145,7 +145,7 @@ export const PROJECTS_DATA: Project[] = [
     featured: true,
     color: '#4338ca',
     fg: 'light',
-    images: [humansOfRotaractBanner, humansOfRotaractLiveSession, humansOfRotaractCertificate, humansOfRotaractBadge],
+    images: [humansOfRotaractBanner, humansOfRotaractCertificate, humansOfRotaractLiveSession, humansOfRotaractBadge],
   },
   {
     title: 'Teach One, Inspire One',
