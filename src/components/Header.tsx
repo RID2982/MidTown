@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import logoMark from '../assets/2.svg';
 import { AVENUES, avenueToSlug } from '../data/projects';
+import { JOIN_FORM_URL } from './Support';
 // "Support" isn't in this list — it had its own nav pill AND the "Get
 // Support" CTA button right next to it, both going to the same section.
 // The CTA alone covers it; NAV_ITEMS also doubles as the scroll-spy list
@@ -162,12 +163,23 @@ export const Header: React.FC = () => {
 
         {/* Right Col: CTA Button & Mobile Trigger */}
         <div className="flex justify-end items-center gap-4">
-          <Link
-            to="/#support"
-            className="hidden sm:inline-flex px-6 py-2.5 rounded-full font-heading font-extrabold text-[11px] uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-800 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
-          >
-            Get Support
-          </Link>
+          {JOIN_FORM_URL ? (
+            <a
+              href={JOIN_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex px-6 py-2.5 rounded-full font-heading font-extrabold text-[11px] uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-800 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+            >
+              Join Us
+            </a>
+          ) : (
+            <Link
+              to="/#support"
+              className="hidden sm:inline-flex px-6 py-2.5 rounded-full font-heading font-extrabold text-[11px] uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-800 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+            >
+              Join Us
+            </Link>
+          )}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="flex md:hidden items-center justify-center w-10 h-10 rounded-full border border-white/10 text-white hover:text-brand-crimson transition-colors cursor-pointer"
@@ -242,13 +254,25 @@ export const Header: React.FC = () => {
               </Link>
             )
           )}
-          <Link
-            to="/#support"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="w-full text-center py-3.5 mt-2 rounded-xl font-heading font-extrabold text-xs uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-700 text-white shadow-md transition-all duration-200"
-          >
-            Get Support
-          </Link>
+          {JOIN_FORM_URL ? (
+            <a
+              href={JOIN_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-full text-center py-3.5 mt-2 rounded-xl font-heading font-extrabold text-xs uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-700 text-white shadow-md transition-all duration-200"
+            >
+              Join Us
+            </a>
+          ) : (
+            <Link
+              to="/#support"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-full text-center py-3.5 mt-2 rounded-xl font-heading font-extrabold text-xs uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-700 text-white shadow-md transition-all duration-200"
+            >
+              Join Us
+            </Link>
+          )}
         </div>
       )}
     </header>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import clubGroupPhoto from '../assets/club-group-photo.jpg';
+import { JOIN_FORM_URL } from './Support';
 
 gsap.registerPlugin(SplitText);
 
@@ -105,6 +106,23 @@ export const Hero: React.FC = () => {
           >
             Explore Our Club
           </a>
+          {JOIN_FORM_URL ? (
+            <a
+              href={JOIN_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-3.5 rounded-full font-heading font-extrabold text-xs uppercase tracking-wider bg-white hover:bg-slate-100 text-slate-900 shadow-md hover:-translate-y-0.5 transition-all duration-300"
+            >
+              Join Us
+            </a>
+          ) : (
+            <a
+              href="#support"
+              className="px-8 py-3.5 rounded-full font-heading font-extrabold text-xs uppercase tracking-wider bg-white hover:bg-slate-100 text-slate-900 shadow-md hover:-translate-y-0.5 transition-all duration-300"
+            >
+              Join Us
+            </a>
+          )}
           <a
             href="#projects"
             className="px-8 py-3.5 rounded-full font-heading font-extrabold text-xs uppercase tracking-wider border border-white/20 hover:border-white/40 text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"

@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 // Set once the club's Google Form is ready — a free, cost-effective way to
 // collect membership applications without needing a backend. Same
 // null-placeholder pattern as Footer.tsx's CLUB_EMAIL/INSTAGRAM_URL.
-const JOIN_FORM_URL: string | null = 'https://forms.gle/rXNbFt3oL6bqXWwv9';
+export const JOIN_FORM_URL: string | null = 'https://forms.gle/rXNbFt3oL6bqXWwv9';
 
 export const Support: React.FC = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
