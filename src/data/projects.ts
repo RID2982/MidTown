@@ -1,15 +1,14 @@
 import karpomKarpippomPhoto from '../assets/Projects/july_Month/karpom-Karpippom/karpom-karpippom.jpg';
 import karpomKarpippomSpeaker1 from '../assets/Projects/july_Month/karpom-Karpippom/speaker-1.jpg';
 import karpomKarpippomSpeaker2 from '../assets/Projects/july_Month/karpom-Karpippom/speaker-2.jpg';
+
 import anboduPoster from '../assets/Projects/july_Month/Annapurana_day/anbodu-poster.jpg';
-// anbodu-1.jpg (the two-people-with-water-bottles photo) is missing from
-// disk — removed externally after being added, and the compressed copy
-// wasn't in git yet either. Re-add the import + the images entry below
-// once the photo is resupplied.
 import anboduPhoto2 from '../assets/Projects/july_Month/Annapurana_day/anbodu-2.jpg';
+
 import humansOfRotaractBanner from '../assets/Projects/july_Month/Humans of Rotaract/banner.jpg';
 import humansOfRotaractLiveSession from '../assets/Projects/july_Month/Humans of Rotaract/live-session.jpg';
 import humansOfRotaractCertificate from '../assets/Projects/july_Month/Humans of Rotaract/certificate.jpg';
+import humansOfRotaractBadge from '../assets/Projects/july_Month/Humans of Rotaract/image.png';
 
 // Waste Management Imports
 import wasteManagement1 from '../assets/Projects/july_Month/waste Management/2.png';
@@ -146,7 +145,7 @@ export const PROJECTS_DATA: Project[] = [
     featured: true,
     color: '#4338ca',
     fg: 'light',
-    images: [humansOfRotaractBanner, humansOfRotaractLiveSession, humansOfRotaractCertificate],
+    images: [humansOfRotaractBanner, humansOfRotaractLiveSession, humansOfRotaractCertificate, humansOfRotaractBadge],
   },
   {
     title: 'Teach One, Inspire One',
