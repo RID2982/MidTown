@@ -219,14 +219,14 @@ export const MEMBERS: Member[] = [
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
   {
-    name: 'Rtr. Member 4',
-    role: 'Proud Rotaract Member',
+    name: 'Proud Rotaract Member',
+    role: 'Club Member',
     photoSlot: 'Member Headshot',
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
   {
-    name: 'Rtr. Member 5',
-    role: 'Proud Rotaract Member',
+    name: 'Proud Rotaract Member',
+    role: 'Club member',
     photoSlot: 'Member Headshot',
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },

@@ -2,7 +2,28 @@ import karpomKarpippomPhoto from '../assets/Projects/july_Month/karpom-Karpippom
 import karpomKarpippomSpeaker1 from '../assets/Projects/july_Month/karpom-Karpippom/speaker-1.jpg';
 import karpomKarpippomSpeaker2 from '../assets/Projects/july_Month/karpom-Karpippom/speaker-2.jpg';
 import anboduPoster from '../assets/Projects/july_Month/Annapurana_day/anbodu-poster.jpg';
+// anbodu-1.jpg (the two-people-with-water-bottles photo) is missing from
+// disk — removed externally after being added, and the compressed copy
+// wasn't in git yet either. Re-add the import + the images entry below
+// once the photo is resupplied.
 import anboduPhoto2 from '../assets/Projects/july_Month/Annapurana_day/anbodu-2.jpg';
+import humansOfRotaractBanner from '../assets/Projects/july_Month/Humans of Rotaract/banner.jpg';
+import humansOfRotaractLiveSession from '../assets/Projects/july_Month/Humans of Rotaract/live-session.jpg';
+import humansOfRotaractCertificate from '../assets/Projects/july_Month/Humans of Rotaract/certificate.jpg';
+
+// Waste Management Imports
+import wasteManagement1 from '../assets/Projects/july_Month/waste Management/2.png';
+import wasteManagement2 from '../assets/Projects/july_Month/waste Management/Screenshot 2026-07-02 182459.png';
+
+// Teach One Inspire One Imports
+import teachOneInspireOne1 from '../assets/Projects/july_Month/Teachone inspireone/3.png';
+import teachOneInspireOne2 from '../assets/Projects/july_Month/Teachone inspireone/5.png';
+import teachOneInspireOne3 from '../assets/Projects/july_Month/Teachone inspireone/WhatsApp Image 2026-08-03 at 9.48.23 PM.jpeg';
+
+// Maitri 10.0 Imports
+import maitri1 from '../assets/Projects/july_Month/Maitri 10.0/IMG-20260722-WA0031.jpg';
+import maitri2 from '../assets/Projects/july_Month/Maitri 10.0/Screenshot (79).png';
+import maitri3 from '../assets/Projects/july_Month/Maitri 10.0/Screenshot 2026-07-31 204155.png';
 
 // The 5 avenues match the real Avenue Director roster in data/members.ts —
 // not the 4 mentioned verbally when this was requested (Professional
@@ -86,18 +107,59 @@ export const PROJECTS_DATA: Project[] = [
     images: [karpomKarpippomPhoto, karpomKarpippomSpeaker1, karpomKarpippomSpeaker2],
   },
   {
-    title: 'Midtown Fellowship & Sports Meet',
-    category: 'Club Service',
-    avenue: 'Club Service',
-    date: 'November 2026',
-    description: 'Fostered inter-club relations and internal fellowship through friendly volleyball and cricket tournaments.',
-    status: 'In Progress',
+    title: 'Waste Management Initiative',
+    category: 'Eco-Sustainability Campaign',
+    avenue: 'International Service',
+    date: 'July 2026',
+    description: 'Dedicated to fostering global ecological practices, this initiative brought together members to implement modern waste segregation, recycling awareness, and eco-friendly waste management solutions to protect our community and environment.',
+    status: 'Completed',
     featured: false,
-    color: '#f59e0b',
-    fg: 'dark',
+    color: '#047857',
+    fg: 'light',
+    images: [wasteManagement1, wasteManagement2],
   },
+  {
+    title: 'Humans of Rotaract — Every Badge Has a Story',
+    category: 'Inter-Club Collaboration',
+    avenue: 'International Service',
+    date: 'July 2026',
+    description: 'Salem Midtown joined "Humans of Rotaract — Every Badge Has a Story," a flagship International Service initiative hosted by the Rotaract Club of St. Ann’s College for Women (RID 3150), alongside clubs from Bangalore, Presidency University, Arka Jain University, and Biratnagar, Nepal. Over a live storytelling session, members traded stories instead of statistics — strengthening inter-district and international friendships one badge at a time. "Connecting through stories, not just service."',
+    status: 'Completed',
+    featured: true,
+    color: '#4338ca',
+    fg: 'light',
+    images: [humansOfRotaractBanner, humansOfRotaractLiveSession, humansOfRotaractCertificate],
+  },
+  {
+    title: 'Teach One, Inspire One',
+    category: 'Educational Mentorship',
+    avenue: 'International Service',
+    date: 'July 2026',
+    description: 'An educational and vocational mentorship drive aimed at empowering underprivileged youth. Through hands-on skill development workshops, personality training, and career guidance sessions, the project inspired students to pursue higher learning and self-reliance.',
+    status: 'Completed',
+    featured: false,
+    color: '#7c3aed',
+    fg: 'light',
+    images: [teachOneInspireOne1, teachOneInspireOne2, teachOneInspireOne3],
+  },
+  {
+    title: 'Maitri 10.0',
+    category: 'International Cultural Exchange',
+    avenue: 'International Service',
+    date: 'July 2026',
+    description: 'Celebrating bilateral relations and cross-border fellowship, Maitri 10.0 connected Rotaractors from different districts and countries for a rich cultural exchange. Members shared local customs, service histories, and collaborated on prospective joint international projects.',
+    status: 'Completed',
+    featured: false,
+    color: '#db2777',
+    fg: 'light',
+    images: [maitri1, maitri2, maitri3],
+  }
 ];
 
 // The home page shows only these — the full list per avenue lives on each
 // /projects/:slug page, reachable from the header's Projects dropdown.
-export const FEATURED_PROJECTS = PROJECTS_DATA.filter((p) => p.featured);
+export const FEATURED_PROJECTS = [
+  PROJECTS_DATA.find((p) => p.title === '"கற்போம் கற்பிப்போம்"'),
+  PROJECTS_DATA.find((p) => p.title === 'Humans of Rotaract — Every Badge Has a Story'),
+  PROJECTS_DATA.find((p) => p.title === 'Anbodu (அன்போடு)'),
+].filter((p): p is Project => !!p);

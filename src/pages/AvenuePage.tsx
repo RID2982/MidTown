@@ -88,6 +88,7 @@ export const AvenuePage: React.FC = () => {
                 <div className="w-full md:w-1/2 shrink-0">
                   <ProjectGallery
                     images={project.images}
+                    imagePositions={project.imagePositions}
                     alt={project.title}
                     category={project.category}
                     gradientClass={GRADIENTS[index % GRADIENTS.length]}
