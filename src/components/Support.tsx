@@ -23,10 +23,43 @@ export const Support: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Support Ticket Submitted:', formData);
-    setFormSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/rotaractclubofsalemmidtown05@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          Name: formData.name,
+          Email: formData.email,
+          Category: formData.category,
+          Message: formData.message,
+          _subject: `[Rotaract Website] Support ticket from ${formData.name} (${formData.category})`
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success === "true" || data.success === true) {
+          setFormSubmitted(true);
+        } else {
+          setSubmitError(data.message || "Failed to submit support ticket. Please try again.");
+        }
+      } else {
+        setSubmitError("Failed to connect to the email service. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error submitting support form:", error);
+      setSubmitError("An unexpected error occurred. Please check your internet connection and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -163,7 +196,8 @@ export const Support: React.FC = () => {
                   onChange={handleInputChange}
                   placeholder="Enter your name"
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white placeholder-white/30"
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white placeholder-white/30 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
 
@@ -179,7 +213,8 @@ export const Support: React.FC = () => {
                   onChange={handleInputChange}
                   placeholder="name@example.com"
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white placeholder-white/30"
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white placeholder-white/30 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
 
@@ -193,7 +228,8 @@ export const Support: React.FC = () => {
                     name="category"
                     value={formData.category}
                     onChange={handleInputChange}
-                    className="w-full appearance-none px-4 py-3 pr-10 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white cursor-pointer"
+                    disabled={isSubmitting}
+                    className="w-full appearance-none px-4 py-3 pr-10 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="General Inquiry" className="bg-theme-dark">General Inquiry</option>
                     <option value="Sponsorship / Partnership" className="bg-theme-dark">Sponsorship & Partnership</option>
@@ -218,15 +254,23 @@ export const Support: React.FC = () => {
                   placeholder="Describe your question or request"
                   required
                   rows={4}
-                  className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white placeholder-white/30 resize-none"
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-brand-crimson/50 focus:bg-white/[0.08] outline-none transition-all text-sm font-sans text-white placeholder-white/30 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
 
+              {submitError && (
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-sans leading-relaxed">
+                  {submitError}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="w-full py-4 rounded-xl font-heading font-extrabold text-xs uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-800 text-white shadow-lg shadow-brand-crimson/25 hover:shadow-xl hover:shadow-brand-crimson/40 border border-white/5 cursor-pointer text-center mt-2"
+                disabled={isSubmitting}
+                className="w-full py-4 rounded-xl font-heading font-extrabold text-xs uppercase tracking-wider bg-gradient-to-r from-brand-crimson to-red-800 text-white shadow-lg shadow-brand-crimson/25 hover:shadow-xl hover:shadow-brand-crimson/40 border border-white/5 cursor-pointer text-center mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Create Support Ticket
+                {isSubmitting ? 'Sending Ticket...' : 'Create Support Ticket'}
               </button>
             </form>
           )}
