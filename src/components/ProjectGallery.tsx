@@ -25,7 +25,12 @@ export const ProjectGallery: React.FC<{
   alt: string;
   category: string;
   gradientClass: string;
-}> = ({ images, imagePositions, alt, category, gradientClass }) => {
+  alignments?: {
+    xOffset?: number;
+    yOffset?: number;
+    zoomScale?: number;
+  }[];
+}> = ({ images, imagePositions, alt, category, gradientClass, alignments }) => {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const count = images?.length ?? 0;
@@ -52,15 +57,27 @@ export const ProjectGallery: React.FC<{
   }
 
   if (count === 1) {
+    const alignment = alignments?.[0];
+    const x = alignment?.xOffset ?? 0;
+    const y = alignment?.yOffset ?? 0;
+    const zoom = alignment?.zoomScale ?? 1;
     return (
       <img
         src={images[0]}
         alt={alt}
-        style={{ objectPosition: imagePositions?.[0] ?? 'center' }}
+        style={{
+          objectPosition: imagePositions?.[0] ?? 'center',
+          transform: `translate(${x}%, ${y}%) scale(${zoom})`,
+        }}
         className="w-full aspect-[4/3] rounded-[2rem] shadow-lg object-cover"
       />
     );
   }
+
+  const alignment = alignments?.[active];
+  const activeX = alignment?.xOffset ?? 0;
+  const activeY = alignment?.yOffset ?? 0;
+  const activeZoom = alignment?.zoomScale ?? 1;
 
   return (
     <div
@@ -73,7 +90,10 @@ export const ProjectGallery: React.FC<{
           key={active}
           src={images[active]}
           alt={alt}
-          style={{ objectPosition: imagePositions?.[active] ?? 'center' }}
+          style={{
+            objectPosition: imagePositions?.[active] ?? 'center',
+            transform: `translate(${activeX}%, ${activeY}%) scale(${activeZoom})`,
+          }}
           className="absolute inset-0 w-full h-full object-cover"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

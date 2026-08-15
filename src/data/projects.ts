@@ -25,6 +25,19 @@ import maitri1 from '../assets/Projects/july_Month/Maitri 10.0/IMG-20260722-WA00
 import maitri2 from '../assets/Projects/july_Month/Maitri 10.0/Screenshot (79).png';
 import maitri3 from '../assets/Projects/july_Month/Maitri 10.0/Screenshot 2026-07-31 204155.png';
 
+// Catalyst Imports
+import catalyst1 from '../assets/Projects/August_month/catalyst/catalyst.jpg';
+import catalyst2 from '../assets/Projects/August_month/catalyst/catalyst 2.jpg';
+import catalystDream from '../assets/Projects/August_month/catalyst/Dream T Deserve..jpg';
+
+// Letter Exchange Imports
+import letterExchange1 from '../assets/Projects/August_month/Letter Exchang/Letter_Heads_20260804_181654_0000_page-0001.jpg';
+import letterExchange2 from '../assets/Projects/August_month/Letter Exchang/Salemmidtwon_page-0001.jpg';
+
+// Cloves Project Imports
+import cloves1 from '../assets/Projects/August_month/cloves/Untitled design (1).png';
+import cloves2 from '../assets/Projects/August_month/cloves/image.png';
+
 // The 5 avenues match the real Avenue Director roster in data/members.ts —
 // not the 4 mentioned verbally when this was requested (Professional
 // Service was almost certainly just dropped in dictation, not excluded on
@@ -73,6 +86,11 @@ export interface Project {
    * fixed 4:3 frame (see ProjectGallery.tsx).
    */
   imagePositions?: string[];
+  alignments?: {
+    xOffset?: number;
+    yOffset?: number;
+    zoomScale?: number;
+  }[];
 }
 
 // Only real, confirmed events live here now — the earlier placeholder
@@ -153,6 +171,46 @@ export const PROJECTS_DATA: Project[] = [
     color: '#db2777',
     fg: 'light',
     images: [maitri1, maitri2, maitri3],
+  },
+  {
+    title: 'Catalyst',
+    category: 'District Officers Training Seminar',
+    avenue: 'Club Service',
+    date: 'August 2026',
+    description: 'Hosted by the Rotaract Club of Salem Midtown, Catalyst served as the District Officers Training Seminar (including PETS, SETS, and COTS). The training event brought together Presidents-elect, Secretaries-elect, and Club Officers from across District 2982 to equip them with leadership skills, operational guidelines, and strategic planning tools for the upcoming Rotaract year under the theme "Dream To Deserve".',
+    status: 'Completed',
+    featured: true,
+    color: '#be123c',
+    fg: 'light',
+    images: [catalyst1, catalyst2, catalystDream],
+  },
+  {
+    title: 'International Letterhead Exchange',
+    category: 'Club Twinning & Partnership',
+    avenue: 'International Service',
+    date: 'August 2026',
+    description: 'To strengthen global ties and build international fellowship, the Rotaract Club of Salem Midtown formalised a partnership with the Rotaract Club of Kandy Metropolitan (RID 3220, Sri Lanka). The clubs exchanged official letterheads, symbolizing a mutual commitment to collaborate on international service projects, share cultural insights, and support each other’s club development throughout the 2026-27 tenure.',
+    status: 'Completed',
+    featured: false,
+    color: '#2563eb',
+    alignments: [
+      { xOffset: 5, yOffset: 0, zoomScale: 1 },
+      { xOffset: 0, yOffset: 0, zoomScale: 1 }
+    ],
+    fg: 'light',
+    images: [letterExchange1, letterExchange2],
+  },
+  {
+    title: 'CLOVES Syndrome Awareness',
+    category: 'Healthcare Advocacy',
+    avenue: 'International Service',
+    date: 'August 2026',
+    description: 'In a collaborative effort with the Rotaract Club of Nagpur West Illumin8 (RID 3030), the Rotaract Club of Salem Midtown participated in a joint digital campaign to mark CLOVES Syndrome Awareness Day. The project focused on educating the community about this extremely rare congenital disorder, promoting early identification, and advocating for support and inclusivity for affected individuals and their families.',
+    status: 'Completed',
+    featured: false,
+    color: '#0d9488',
+    fg: 'light',
+    images: [cloves1, cloves2],
   }
 ];
 
@@ -162,4 +220,6 @@ export const FEATURED_PROJECTS = [
   PROJECTS_DATA.find((p) => p.title === '"கற்போம் கற்பிப்போம்"'),
   PROJECTS_DATA.find((p) => p.title === 'Humans of Rotaract — Every Badge Has a Story'),
   PROJECTS_DATA.find((p) => p.title === 'Anbodu (அன்போடு)'),
+  PROJECTS_DATA.find((p) => p.title === 'Catalyst'),
+  PROJECTS_DATA.find((p) => p.title === 'International Letterhead Exchange'),
 ].filter((p): p is Project => !!p);

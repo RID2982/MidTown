@@ -92,6 +92,7 @@ export const AvenuePage: React.FC = () => {
                     alt={project.title}
                     category={project.category}
                     gradientClass={GRADIENTS[index % GRADIENTS.length]}
+                    alignments={project.alignments}
                   />
                 </div>
                 <div className="w-full md:w-1/2 flex flex-col gap-3">
