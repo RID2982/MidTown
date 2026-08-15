@@ -138,7 +138,7 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
         titleTop="The people,"
         titleBottom="behind the"
         accent="work"
-        description="Our President, Secretary, and Treasurer — see the full board, all avenue directors included, on the club roster."
+        description="Our Club Admin, President, Secretary, and Treasurer — see the full board, all avenue directors included, on the club roster."
         descriptionClassName="hidden md:block"
         titleRef={titleRef}
         className="mb-4 shrink-0 z-60"

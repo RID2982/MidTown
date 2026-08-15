@@ -19,6 +19,7 @@ import abdulameerPhoto from '../assets/members/abdulameer.jpg';
 import sasidharanPhoto from '../assets/members/sasidharan.jpg';
 import aiswaryaaPhoto from '../assets/members/aiswaryaa.jpg';
 import GokulPhoto from '../assets/members/gokul.jpg';
+import agasraPhoto from '../assets/members/agasra.png';
 
 export interface Member {
   name: string;
@@ -67,6 +68,15 @@ export interface Member {
 // (confirmed unused), and were removed rather than kept as dead data.
 export const MEMBERS: Member[] = [
   {
+    name: 'Rtr. IPP Agasra',
+    role: 'Club Admin',
+    photoSlot: 'Club Admin Headshot',
+    photo: agasraPhoto,
+    zoomScale: 1.25,
+    yOffset: 0,
+    quote: 'Overseeing club administration, directory database, and ensuring smooth operation of all avenues of service.',
+  },
+  {
     name: 'Rtr. V. A. Vinodhan',
     role: 'President',
     photoSlot: 'President Headshot',
@@ -84,7 +94,7 @@ export const MEMBERS: Member[] = [
     yOffset: 10,
     quote: 'Streamlining operations, communication, and district reporting for seamless execution.',
   },
-    {
+  {
     name: 'Rtr. A. Abdul Ameer',
     role: 'Treasurer',
     photoSlot: 'Treasurer Headshot',
@@ -238,7 +248,7 @@ export const MEMBERS: Member[] = [
 // MEMBERS and shown on the full roster ("View All Members" on the home
 // page links to /roster). Filtered by role name rather than sliced by
 // position, so this stays correct even if MEMBERS is reordered.
-const SHOWCASE_ROLES = ['President', 'Secretary', 'Treasurer'];
+const SHOWCASE_ROLES = ['Club Admin', 'President', 'Secretary', 'Treasurer'];
 export const SHOWCASE_MEMBERS = MEMBERS.filter((m) => SHOWCASE_ROLES.includes(m.role));
 
 // Board rosters by Rotary year, for the "Board of Directors" year dropdown

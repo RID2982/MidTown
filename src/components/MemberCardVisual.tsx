@@ -5,9 +5,7 @@ import type { Member } from '../data/members';
 // lucide-react in this project ships no brand/logo icons (Instagram,
 // Facebook, etc. are all absent), so the glyph is a small inline SVG instead,
 // sized and styled to match the surrounding lucide icons (stroke-based,
-// currentColor, same 14/16px scale). Kept here (not in the card below, which
-// no longer shows per-member contact links) because Footer.tsx still uses it
-// for the club's own Instagram link.
+// currentColor, same 14/16px scale).
 export const InstagramIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   <svg
     width={size}
