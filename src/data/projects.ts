@@ -33,6 +33,12 @@ import catalystDream from '../assets/Projects/August_month/catalyst/catalyst-dre
 import letterExchange1 from '../assets/Projects/August_month/Letter Exchang/letter-1.jpg';
 import letterExchange2 from '../assets/Projects/August_month/Letter Exchang/letter-2.jpg';
 
+// Yazh Joint Bulletin Imports — captured directly from the published
+// flipbook (heyzine.com/flip-book/a794abbdf3.html): the cover, and the
+// spread showing Salem Midtown's own club bio + Waste Management writeup.
+import yazhCover from '../assets/Projects/july_Month/Yazh Bulletin/yazh-cover.jpg';
+import yazhSalemMidtownPage from '../assets/Projects/july_Month/Yazh Bulletin/yazh-salemmidtown-page.jpg';
+
 // Cloves Project Imports
 import cloves1 from '../assets/Projects/August_month/cloves/cloves-certificate.jpg';
 // image.png is a very tall portrait (~0.7:1) that object-cover crops hard
@@ -103,6 +109,15 @@ export interface Project {
      */
     fit?: 'cover' | 'contain';
   }[];
+  /**
+   * Optional call-to-action linking off-site — e.g. a joint bulletin
+   * published as a flipbook. Rendered as a button on the avenue detail
+   * page, opening in a new tab.
+   */
+  externalLink?: {
+    label: string;
+    url: string;
+  };
 }
 
 // Only real, confirmed events live here now — the earlier placeholder
@@ -135,6 +150,54 @@ export const PROJECTS_DATA: Project[] = [
     color: '#0891b2',
     fg: 'light',
     images: [karpomKarpippomPhoto, karpomKarpippomSpeaker1, karpomKarpippomSpeaker2],
+  },
+  {
+    title: 'யாழ் — Joint Bulletin',
+    category: 'Joint Bulletin',
+    avenue: 'International Service',
+    date: 'July 2026',
+    description: 'In collaboration with the Rotaract Club of Coimbatore Institute of Technology (RID 3206), the Rotaract Club of Salem Midtown co-presented "யாழ்" — a July 2026 joint bulletin celebrating the shared efforts, moments, and achievements of both clubs.',
+    status: 'Completed',
+    featured: true,
+    color: '#7e22ce',
+    fg: 'light',
+    // yazh-cover.jpg is a tall poster (~0.7:1) whose top carries real
+    // content that matters — both clubs' names and logos, "Jointly
+    // Presents" — well above the "யாழ்" title. A translate/zoom pan can
+    // only pan within whatever object-cover already decided to crop, and
+    // that header sits entirely outside the default crop window, so no
+    // amount of panning can bring it back (see the same reasoning already
+    // documented on the Letterhead Exchange entry below). 'contain' shows
+    // the whole poster instead, letterboxed on a white mat.
+    alignments: [
+      { fit: 'contain' },
+      {},
+    ],
+    externalLink: {
+      label: 'Read the Bulletin',
+      url: 'https://heyzine.com/flip-book/a794abbdf3.html',
+    },
+    images: [yazhCover, yazhSalemMidtownPage],
+  },
+  {
+    title: 'International Letterhead Exchange',
+    category: 'Club Twinning & Partnership',
+    avenue: 'International Service',
+    date: 'August 2026',
+    description: 'To strengthen global ties and build international fellowship, the Rotaract Club of Salem Midtown formalised a partnership with the Rotaract Club of Kandy Metropolitan (RID 3220, Sri Lanka). The clubs exchanged official letterheads, symbolizing a mutual commitment to collaborate on international service projects, share cultural insights, and support each other’s club development throughout the 2026-27 tenure.',
+    status: 'Completed',
+    featured: false,
+    color: '#2563eb',
+    // Tall letter documents forced into the gallery's 4:3 landscape frame —
+    // cropping (the default) would cut off the addressee header and the
+    // signatory/contact footer, both real content. 'contain' shows the
+    // whole letter instead, letterboxed on a white mat.
+    alignments: [
+      { fit: 'contain' },
+      { fit: 'contain' },
+    ],
+    fg: 'light',
+    images: [letterExchange1, letterExchange2],
   },
   {
     title: 'Waste Management Initiative',
@@ -197,26 +260,6 @@ export const PROJECTS_DATA: Project[] = [
     images: [catalyst1, catalyst2, catalystDream],
   },
   {
-    title: 'International Letterhead Exchange',
-    category: 'Club Twinning & Partnership',
-    avenue: 'International Service',
-    date: 'August 2026',
-    description: 'To strengthen global ties and build international fellowship, the Rotaract Club of Salem Midtown formalised a partnership with the Rotaract Club of Kandy Metropolitan (RID 3220, Sri Lanka). The clubs exchanged official letterheads, symbolizing a mutual commitment to collaborate on international service projects, share cultural insights, and support each other’s club development throughout the 2026-27 tenure.',
-    status: 'Completed',
-    featured: false,
-    color: '#2563eb',
-    // Tall letter documents forced into the gallery's 4:3 landscape frame —
-    // cropping (the default) would cut off the addressee header and the
-    // signatory/contact footer, both real content. 'contain' shows the
-    // whole letter instead, letterboxed on a white mat.
-    alignments: [
-      { fit: 'contain' },
-      { fit: 'contain' },
-    ],
-    fg: 'light',
-    images: [letterExchange1, letterExchange2],
-  },
-  {
     title: 'CLOVES Syndrome Awareness',
     category: 'Healthcare Advocacy',
     avenue: 'International Service',
@@ -238,4 +281,5 @@ export const FEATURED_PROJECTS = [
   PROJECTS_DATA.find((p) => p.title === 'Anbodu (அன்போடு)'),
   PROJECTS_DATA.find((p) => p.title === 'Catalyst'),
   PROJECTS_DATA.find((p) => p.title === 'International Letterhead Exchange'),
+  PROJECTS_DATA.find((p) => p.title === 'யாழ் — Joint Bulletin'),
 ].filter((p): p is Project => !!p);

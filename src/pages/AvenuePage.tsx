@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Navigate, useParams, useLocation } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PROJECTS_DATA, AVENUES, avenueToSlug, slugToAvenue, projectToSlug } from '../data/projects';
 import { Header } from '../components/Header';
@@ -111,6 +111,18 @@ export const AvenuePage: React.FC = () => {
                       {project.status}
                     </span>
                   </div>
+
+                  {project.externalLink && (
+                    <a
+                      href={project.externalLink.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-flex items-center gap-1.5 self-start px-5 py-2.5 rounded-full bg-brand-crimson text-white font-heading font-extrabold text-[10px] md:text-xs uppercase tracking-widest transition-transform duration-300 hover:-translate-y-0.5"
+                    >
+                      <span>{project.externalLink.label}</span>
+                      <ArrowUpRight size={13} />
+                    </a>
+                  )}
                 </div>
               </div>
             );
