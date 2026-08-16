@@ -224,7 +224,7 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
         >
           {roster.map((member, i) => (
             <div
-              key={member.name}
+              key={`${member.name}-${i}`}
               ref={(el) => {
                 cardRefs.current[i] = el;
               }}
@@ -248,7 +248,7 @@ export const MemberShowcase = forwardRef<MemberShowcaseHandle>((_props, ref) => 
         <div className="flex items-center gap-2.5">
           {roster.map((member, i) => (
             <button
-              key={member.name}
+              key={`${member.name}-${i}`}
               type="button"
               onClick={() => handleDotClick(i)}
               className="p-1 cursor-pointer focus:outline-none flex items-center justify-center"

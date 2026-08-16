@@ -8,33 +8,33 @@ import anboduPhoto2 from '../assets/Projects/july_Month/Annapurana_day/anbodu-2.
 import humansOfRotaractBanner from '../assets/Projects/july_Month/Humans of Rotaract/banner.jpg';
 import humansOfRotaractLiveSession from '../assets/Projects/july_Month/Humans of Rotaract/live-session.jpg';
 import humansOfRotaractCertificate from '../assets/Projects/july_Month/Humans of Rotaract/certificate.jpg';
-import humansOfRotaractBadge from '../assets/Projects/july_Month/Humans of Rotaract/image.png';
+import humansOfRotaractBadge from '../assets/Projects/july_Month/Humans of Rotaract/badge.jpg';
 
 // Waste Management Imports
-import wasteManagement1 from '../assets/Projects/july_Month/waste Management/2.png';
-import wasteManagement2 from '../assets/Projects/july_Month/waste Management/Screenshot 2026-07-02 182459.png';
+import wasteManagement1 from '../assets/Projects/july_Month/waste Management/waste-1.jpg';
+import wasteManagement2 from '../assets/Projects/july_Month/waste Management/waste-2.jpg';
 
 // Teach One Inspire One Imports
-import teachOneInspireOne1 from '../assets/Projects/july_Month/Teachone inspireone/3.png';
-import teachOneInspireOne2 from '../assets/Projects/july_Month/Teachone inspireone/5.png';
+import teachOneInspireOne1 from '../assets/Projects/july_Month/Teachone inspireone/teach-1.jpg';
+import teachOneInspireOne2 from '../assets/Projects/july_Month/Teachone inspireone/teach-2.jpg';
 import teachOneInspireOne3 from '../assets/Projects/july_Month/Teachone inspireone/WhatsApp Image 2026-08-03 at 9.48.23 PM.jpeg';
 
 // Maitri 10.0 Imports
 import maitri1 from '../assets/Projects/july_Month/Maitri 10.0/IMG-20260722-WA0031.jpg';
-import maitri2 from '../assets/Projects/july_Month/Maitri 10.0/Screenshot 2026-07-31 212229.png';
+import maitri2 from '../assets/Projects/july_Month/Maitri 10.0/maitri-2.jpg';
 import maitri3 from '../assets/Projects/july_Month/Maitri 10.0/Screenshot 2026-07-31 204155.jpeg';
 
 // Catalyst Imports
-import catalyst1 from '../assets/Projects/August_month/catalyst/catalyst.jpg';
-import catalyst2 from '../assets/Projects/August_month/catalyst/catalyst 2.jpg';
-import catalystDream from '../assets/Projects/August_month/catalyst/Dream T Deserve..jpg';
+import catalyst1 from '../assets/Projects/August_month/catalyst/catalyst-1.jpg';
+import catalyst2 from '../assets/Projects/August_month/catalyst/catalyst-2.jpg';
+import catalystDream from '../assets/Projects/August_month/catalyst/catalyst-dream.jpg';
 
 // Letter Exchange Imports
-import letterExchange1 from '../assets/Projects/August_month/Letter Exchang/Letter_Heads_20260804_181654_0000_page-0001.jpg';
-import letterExchange2 from '../assets/Projects/August_month/Letter Exchang/Salemmidtwon_page-0001.jpg';
+import letterExchange1 from '../assets/Projects/August_month/Letter Exchang/letter-1.jpg';
+import letterExchange2 from '../assets/Projects/August_month/Letter Exchang/letter-2.jpg';
 
 // Cloves Project Imports
-import cloves1 from '../assets/Projects/August_month/cloves/Untitled design (1).png';
+import cloves1 from '../assets/Projects/August_month/cloves/cloves-certificate.jpg';
 // image.png is a very tall portrait (~0.7:1) that object-cover crops hard
 // inside this gallery's 4:3 frame — transform-based yOffset/zoomScale
 // fixes couldn't reliably clear the "CLOVES" wordmark at the top without
@@ -95,6 +95,13 @@ export interface Project {
     xOffset?: number;
     yOffset?: number;
     zoomScale?: number;
+    /**
+     * 'cover' (default) fills the 4:3 frame, cropping whatever doesn't fit.
+     * 'contain' shows the whole image letterboxed instead — for text-dense
+     * documents (letters, certificates) where cropping would cut off real
+     * content rather than just empty margin.
+     */
+    fit?: 'cover' | 'contain';
   }[];
 }
 
@@ -176,14 +183,6 @@ export const PROJECTS_DATA: Project[] = [
     color: '#db2777',
     fg: 'light',
     images: [maitri1, maitri2, maitri3],
-    // maitri1 is a square (1:1) poster forced into this 4:3 wide frame —
-    // object-cover crops top/bottom evenly by default, cutting the
-    // "MAITRI 10.0" title off the top. Shift down to bring it into view.
-    alignments: [
-      { yOffset: 18 },
-      {},
-      {},
-    ],
   },
   {
     title: 'Catalyst',
@@ -206,9 +205,13 @@ export const PROJECTS_DATA: Project[] = [
     status: 'Completed',
     featured: false,
     color: '#2563eb',
+    // Tall letter documents forced into the gallery's 4:3 landscape frame —
+    // cropping (the default) would cut off the addressee header and the
+    // signatory/contact footer, both real content. 'contain' shows the
+    // whole letter instead, letterboxed on a white mat.
     alignments: [
-      { xOffset: 5, yOffset: 0, zoomScale: 1 },
-      { xOffset: 0, yOffset: 0, zoomScale: 1 }
+      { fit: 'contain' },
+      { fit: 'contain' },
     ],
     fg: 'light',
     images: [letterExchange1, letterExchange2],

@@ -52,7 +52,10 @@ export const RosterPage: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center relative">
           {MEMBERS.map((member, index) => (
             <motion.div
-              key={member.name}
+              // Index appended: two placeholder members currently share the
+              // literal name "Proud Rotaract Member" (real names pending),
+              // which collided as React keys without it.
+              key={`${member.name}-${index}`}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: '-50px' }}

@@ -10,11 +10,21 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const ROTARACT_PRAYER = [
   [
-    'Oh! God! Our Almighty Father & Ruler of the Universe,',
-    'We thank thee for the inspiration you have given us for the',
-    'Rotaract movement based upon Fellowship through Service.' ,
-    'We humbly beg you to continue thy grace to enable us to do',
-    'Our Service to ourselves and to our neighbors and to honor and glory of thy holy name.',
+    'O God!',
+    'Our Almighty Father',
+    'and Ruler of the Universe.',
+    'We thank Thee',
+    'for the inspiration You have given us',
+    'for the Rotaract Movement',
+    'based upon service to mankind.',
+    'We humbly beg You',
+    'to continue Thy grace',
+    'to enable us',
+    'to do our service,',
+    'to ourselves',
+    'and to our neighbours',
+    'and to the honour',
+    'and glory of Thy Holy Name.',
   ],
 ];
 

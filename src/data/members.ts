@@ -19,7 +19,7 @@ import abdulameerPhoto from '../assets/members/abdulameer.jpg';
 import sasidharanPhoto from '../assets/members/sasidharan.jpg';
 import aiswaryaaPhoto from '../assets/members/aiswaryaa.jpg';
 import GokulPhoto from '../assets/members/gokul.jpg';
-import agasraPhoto from '../assets/members/agasra.png';
+import agasraPhoto from '../assets/members/agasra.jpg';
 
 export interface Member {
   name: string;

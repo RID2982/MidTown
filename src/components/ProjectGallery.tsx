@@ -29,6 +29,13 @@ export const ProjectGallery: React.FC<{
     xOffset?: number;
     yOffset?: number;
     zoomScale?: number;
+    /**
+     * 'cover' (default) fills the 4:3 frame, cropping whatever doesn't fit.
+     * 'contain' shows the whole image letterboxed instead — for text-dense
+     * documents (letters, certificates) where cropping would cut off real
+     * content (a header, a signature block) rather than just empty margin.
+     */
+    fit?: 'cover' | 'contain';
   }[];
 }> = ({ images, imagePositions, alt, category, gradientClass, alignments }) => {
   const [active, setActive] = useState(0);
@@ -61,16 +68,19 @@ export const ProjectGallery: React.FC<{
     const x = alignment?.xOffset ?? 0;
     const y = alignment?.yOffset ?? 0;
     const zoom = alignment?.zoomScale ?? 1;
+    const fit = alignment?.fit ?? 'cover';
     return (
-      <img
-        src={images[0]}
-        alt={alt}
-        style={{
-          objectPosition: imagePositions?.[0] ?? 'center',
-          transform: `translate(${x}%, ${y}%) scale(${zoom})`,
-        }}
-        className="w-full aspect-[4/3] rounded-[2rem] shadow-lg object-cover"
-      />
+      <div className="w-full aspect-[4/3] rounded-[2rem] shadow-lg overflow-hidden bg-white">
+        <img
+          src={images[0]}
+          alt={alt}
+          style={{
+            objectPosition: imagePositions?.[0] ?? 'center',
+            transform: `translate(${x}%, ${y}%) scale(${zoom})`,
+          }}
+          className={`w-full h-full ${fit === 'contain' ? 'object-contain p-4' : 'object-cover'}`}
+        />
+      </div>
     );
   }
 
@@ -78,10 +88,11 @@ export const ProjectGallery: React.FC<{
   const activeX = alignment?.xOffset ?? 0;
   const activeY = alignment?.yOffset ?? 0;
   const activeZoom = alignment?.zoomScale ?? 1;
+  const activeFit = alignment?.fit ?? 'cover';
 
   return (
     <div
-      className="relative w-full aspect-[4/3] rounded-[2rem] shadow-lg overflow-hidden"
+      className="relative w-full aspect-[4/3] rounded-[2rem] shadow-lg overflow-hidden bg-white"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -94,7 +105,7 @@ export const ProjectGallery: React.FC<{
             objectPosition: imagePositions?.[active] ?? 'center',
             transform: `translate(${activeX}%, ${activeY}%) scale(${activeZoom})`,
           }}
-          className="absolute inset-0 w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full ${activeFit === 'contain' ? 'object-contain p-4' : 'object-cover'}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
