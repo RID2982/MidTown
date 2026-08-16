@@ -15,6 +15,8 @@ export const JOIN_FORM_URL: string | null = 'https://forms.gle/rXNbFt3oL6bqXWwv9
 export const Support: React.FC = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', category: 'General Inquiry', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 

@@ -1,14 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Globe } from 'lucide-react';
-import { InstagramIcon } from './MemberCardVisual';
+import { InstagramIcon, LinkedinIcon } from './MemberCardVisual';
 
 const CLUB_EMAIL: string | null = 'rotaractclubofsalemmidtown05@gmail.com';
 const INSTAGRAM_URL: string | null = 'https://www.instagram.com/rac_salemmidtown_/';
+const LINKEDIN_URL: string | null = 'https://www.linkedin.com/company/racsalemmidtown/about/';
 const WEBSITE_URL: string | null = null;
 
 const FOOTER_LINKS = [
   { key: 'instagram', label: 'Instagram', icon: InstagramIcon, href: INSTAGRAM_URL },
+  { key: 'linkedin', label: 'LinkedIn', icon: LinkedinIcon, href: LINKEDIN_URL },
   { key: 'website', label: 'Website', icon: Globe, href: WEBSITE_URL },
   { key: 'email', label: 'Email', icon: Mail, href: CLUB_EMAIL ? `mailto:${CLUB_EMAIL}` : null },
 ];

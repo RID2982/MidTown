@@ -35,7 +35,13 @@ import letterExchange2 from '../assets/Projects/August_month/Letter Exchang/Sale
 
 // Cloves Project Imports
 import cloves1 from '../assets/Projects/August_month/cloves/Untitled design (1).png';
-import cloves2 from '../assets/Projects/August_month/cloves/image.png';
+// image.png is a very tall portrait (~0.7:1) that object-cover crops hard
+// inside this gallery's 4:3 frame — transform-based yOffset/zoomScale
+// fixes couldn't reliably clear the "CLOVES" wordmark at the top without
+// overshooting into blank space at the bottom, so it's pre-cropped to an
+// exact 4:3 region (top 53% of the original, which is exactly a 4:3 slice
+// at this image's width) instead of fought with CSS at render time.
+import cloves2 from '../assets/Projects/August_month/cloves/cloves-syndrome-cropped.jpg';
 
 // The 5 avenues match the real Avenue Director roster in data/members.ts —
 // not the 4 mentioned verbally when this was requested (Professional
@@ -218,13 +224,6 @@ export const PROJECTS_DATA: Project[] = [
     color: '#0d9488',
     fg: 'light',
     images: [cloves1, cloves2],
-    // cloves2 is a very tall portrait (~0.7:1) inside a 4:3 wide frame —
-    // object-cover crops it hard, and by default that cut the "CLOVES"
-    // wordmark off entirely, leaving only "Syndrome Awareness Day" visible.
-    alignments: [
-      {},
-      { yOffset: 30 },
-    ],
   }
 ];
 
