@@ -164,6 +164,26 @@ body {
 }
 
 
+/* --- ANNOUNCEMENT MARQUEE ---
+   Continuous horizontal ticker. Content is duplicated (two identical
+   copies rendered by Announcement.tsx) and this only ever translates the
+   first 50% of that doubled width, so the loop seam lands exactly where
+   the second copy already reads identically to the first — no visible
+   jump. */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-scroll 25s linear infinite;
+  width: max-content;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
 /* --- NAV PILL "SELECTING" ANIMATION --- */
 /* A fill grows from the bottom edge on hover/focus, like a spotlight
    switching on — same interaction the reference header uses. isolate +

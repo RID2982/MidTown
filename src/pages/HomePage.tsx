@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Header } from '../components/Header';
 import { Hero } from '../components/Hero';
+import { Announcement, isAnnouncementLive } from '../components/Announcement';
 import { District } from '../components/District';
 import { Scene } from '../components/Scene';
 import { RotaractValues } from '../components/RotaractValues';
@@ -157,6 +158,12 @@ function useSettleThenHashScroll() {
 
 export const HomePage: React.FC = () => {
   useSettleThenHashScroll();
+  // Computed once per page load, not re-checked live — the announcement is
+  // date-gated (see Announcement.tsx), and a page that's already open
+  // doesn't need to vanish out from under someone mid-visit the instant the
+  // clock ticks past the cutoff. A fresh load after that date just won't
+  // render it.
+  const showAnnouncement = isAnnouncementLive();
   const memberShowcaseRef = useRef<MemberShowcaseHandle>(null);
   const scrubMemberShowcase = useCallback((p: number) => memberShowcaseRef.current?.render(p), []);
   const projectsRef = useRef<ProjectsHandle>(null);
@@ -184,6 +191,11 @@ export const HomePage: React.FC = () => {
         <Scene zIndex={10} bg="bg-theme-dark">
           <Hero />
         </Scene>
+        {showAnnouncement && (
+          <Scene zIndex={15} bg="bg-white">
+            <Announcement />
+          </Scene>
+        )}
         <Scene zIndex={20} bg="bg-white">
           <District />
         </Scene>

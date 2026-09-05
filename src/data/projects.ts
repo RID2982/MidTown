@@ -1,3 +1,5 @@
+import { isAnnouncementLive, CURRENT_ANNOUNCEMENT } from '../components/Announcement';
+
 import karpomKarpippomPhoto from '../assets/Projects/july_Month/karpom-Karpippom/karpom-karpippom.jpg';
 import karpomKarpippomSpeaker1 from '../assets/Projects/july_Month/karpom-Karpippom/speaker-1.jpg';
 import karpomKarpippomSpeaker2 from '../assets/Projects/july_Month/karpom-Karpippom/speaker-2.jpg';
@@ -270,7 +272,25 @@ export const PROJECTS_DATA: Project[] = [
     color: '#0d9488',
     fg: 'light',
     images: [cloves1, cloves2],
-  }
+  },
+  // Auto-appears once the homepage announcement banner stops showing it
+  // (see CURRENT_ANNOUNCEMENT in Announcement.tsx, the single source of
+  // truth for both) — the same club event, handed off from "upcoming" to
+  // "past" purely by date rather than a manual edit. Swapping in the next
+  // event there (see that file's top comment) updates this automatically
+  // too — nothing here needs to change.
+  ...(isAnnouncementLive() ? [] : [{
+    title: CURRENT_ANNOUNCEMENT.pastProject.title,
+    category: CURRENT_ANNOUNCEMENT.pastProject.category,
+    avenue: CURRENT_ANNOUNCEMENT.pastProject.avenue as Avenue,
+    date: CURRENT_ANNOUNCEMENT.endDate.toLocaleString('en-US', { month: 'long', year: 'numeric' }),
+    description: CURRENT_ANNOUNCEMENT.pastProject.description,
+    status: 'Completed' as const,
+    featured: false,
+    color: '#0f172a',
+    fg: 'light' as const,
+    ...(CURRENT_ANNOUNCEMENT.poster ? { images: [CURRENT_ANNOUNCEMENT.poster] } : {}),
+  }]),
 ];
 
 // The home page shows only these — the full list per avenue lives on each
