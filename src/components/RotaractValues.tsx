@@ -36,62 +36,21 @@ const FOUR_WAY_TEST = [
 ];
 
 // Tailwind's compiler only picks up class names it can see literally in
-// source — a template literal like `bg-${tint}/10` never resolves to real
+// source — a template literal like `from-${tint}` never resolves to real
 // CSS. So each tint is its own set of fully-spelled-out class strings,
 // looked up by key, rather than assembled at runtime.
 const TINTS = {
   crimson: {
-    wash: 'bg-brand-crimson/[0.07]',
-    ring1: 'border-brand-crimson/10',
-    ring2: 'border-brand-crimson/15',
-    core: 'bg-brand-crimson/10',
-    highlight: 'bg-brand-crimson/20',
-    badge: 'bg-brand-crimson',
+    badge: 'bg-gradient-to-br from-brand-crimson to-red-800',
+    glow: 'bg-brand-crimson/20',
+    chip: 'bg-brand-crimson/10 text-brand-crimson',
   },
   navy: {
-    wash: 'bg-brand-navy/[0.07]',
-    ring1: 'border-brand-navy/10',
-    ring2: 'border-brand-navy/15',
-    core: 'bg-brand-navy/10',
-    highlight: 'bg-brand-navy/20',
-    badge: 'bg-brand-navy',
+    badge: 'bg-gradient-to-br from-brand-navy to-theme-dark',
+    glow: 'bg-brand-navy/20',
+    chip: 'bg-brand-navy/10 text-brand-navy',
   },
 } as const;
-
-/**
- * The panel standing in for a real illustration. No illustration asset
- * exists for this section (and copying one from another club's site isn't
- * something to do — see the conversation this came from), so this is a
- * built-from-scratch decorative graphic: concentric rings plus a soft
- * radial highlight behind the icon fake a bit of depth/dimensionality
- * without needing an actual 3D render or an external image. Sized to fill
- * its column rather than sit as a small badge, so it reads as a real
- * illustration slot, not an icon with empty space around it.
- */
-const IllustrationPanel: React.FC<{
-  icon: React.ReactNode;
-  tint: keyof typeof TINTS;
-}> = ({ icon, tint }) => {
-  const t = TINTS[tint];
-  return (
-    <div
-      className={`relative w-full aspect-square md:aspect-auto md:h-full min-h-[220px] rounded-[2rem] overflow-hidden ${t.wash} flex items-center justify-center shrink-0`}
-    >
-      {/* Concentric rings, largest to smallest, each a bit more opaque —
-          the closest thing to "depth" achievable with flat shapes. */}
-      <div className={`absolute w-[85%] aspect-square rounded-full border ${t.ring1}`} />
-      <div className={`absolute w-[62%] aspect-square rounded-full border ${t.ring2}`} />
-      <div className={`absolute w-[40%] aspect-square rounded-full ${t.core}`} />
-      {/* Off-center highlight blob, so the panel doesn't read as perfectly
-          flat/symmetrical. */}
-      <div className={`absolute top-[15%] left-[20%] w-24 h-24 rounded-full ${t.highlight} blur-2xl`} />
-
-      <div className={`relative w-20 h-20 md:w-24 md:h-24 rounded-3xl ${t.badge} text-white flex items-center justify-center shadow-[0_20px_45px_-15px_rgba(0,0,0,0.35)]`}>
-        {icon}
-      </div>
-    </div>
-  );
-};
 
 export const RotaractValues: React.FC = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -134,9 +93,15 @@ export const RotaractValues: React.FC = () => {
   }, []);
 
   return (
-    <section id="values" className="w-full max-w-[1550px] mx-auto px-6 md:px-12 py-24 relative z-10 bg-white">
-      <div className="absolute top-10 right-10 w-96 h-96 bg-brand-crimson/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 left-10 w-72 h-72 bg-brand-gold/5 rounded-full blur-3xl pointer-events-none" />
+    <section id="values" className="w-full max-w-[1550px] mx-auto px-6 md:px-12 py-24 relative z-10 bg-white overflow-hidden">
+      {/* A plain white section can't show a glass effect — glass only reads
+          as glass with something colourful blurring through it. This soft
+          gradient wash plus three glow blobs behind the cards is that
+          backdrop, kept subtle enough not to fight the copy. */}
+      <div className="absolute inset-0 bg-gradient-to-br from-bg-secondary/70 via-white to-theme-blue/20 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[30rem] h-[30rem] bg-brand-crimson/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[26rem] h-[26rem] bg-brand-gold/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-brand-navy/10 rounded-full blur-[100px] pointer-events-none" />
 
       <SectionHeading
         number="03"
@@ -146,74 +111,77 @@ export const RotaractValues: React.FC = () => {
         accent="compass"
         description="A prayer for why we serve, and a test for how we serve — the two texts every Rotaractor carries."
         titleRef={titleRef}
-        className="mb-16"
+        className="mb-16 relative z-10"
       />
 
-      {/* Prayer first, Four-Way Test after — each its own full-width panel
-          rather than a side-by-side grid, so they read as two separate
-          things to sit with in turn, not one glanceable comparison. Both
-          use the same illustration-left / content-right layout (the
-          Prayer's illustration specifically pinned to the left, per the
-          request this came from). */}
-      <div ref={cardsRef} className="flex flex-col gap-8">
-        <div className="relative overflow-hidden rounded-2xl border border-black/5 bg-bg-secondary p-6 md:p-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-stretch">
+      {/* Two glass panels side by side rather than stacked full-width bars —
+          reads as a matched pair of creeds instead of one long scroll, and
+          keeps the Prayer's shorter lines from stranding a wall of empty
+          space beside them the way a wide single-column bar did. */}
+      <div ref={cardsRef} className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        <div className="glass-card group relative overflow-hidden p-8 md:p-10 flex flex-col gap-6 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_30px_60px_-20px_rgba(225,29,72,0.25)]">
           {/* Club's own Rotaract emblem, watermarked into the corner — the
               same asset already used in the District section, at low
               opacity so it reads as a background texture rather than
-              competing with the illustration/text. */}
+              competing with the text. */}
           <img
             src={clubLogo}
             alt=""
             aria-hidden="true"
-            className="absolute -bottom-10 -right-10 w-56 h-56 md:w-72 md:h-72 object-contain opacity-[0.06] pointer-events-none select-none"
+            className="absolute -bottom-8 -right-8 w-48 h-48 object-contain opacity-[0.05] pointer-events-none select-none"
           />
+          <div className={`absolute -top-10 -left-10 w-40 h-40 rounded-full blur-3xl ${TINTS.crimson.glow} pointer-events-none transition-opacity duration-500 opacity-60 group-hover:opacity-100`} />
 
-          <div className="relative z-10 md:col-span-5 md:order-1">
-            <IllustrationPanel icon={<HeartHandshake size={40} strokeWidth={1.75} />} tint="crimson" />
-          </div>
-          <div className="relative z-10 md:col-span-7 md:order-2 flex flex-col gap-6 justify-center">
+          <div className="relative z-10 flex items-center gap-4">
+            <div className={`w-14 h-14 rounded-2xl ${TINTS.crimson.badge} text-white flex items-center justify-center shadow-[0_16px_32px_-12px_rgba(225,29,72,0.55)] shrink-0`}>
+              <HeartHandshake size={26} strokeWidth={1.75} />
+            </div>
             <h3 className="font-heading font-extrabold text-xl md:text-2xl text-theme-dark">
               The Rotaract Prayer
             </h3>
-            <div className="flex flex-col gap-4">
-              {ROTARACT_PRAYER.map((stanza, i) => (
-                <p key={i} className="text-xs md:text-sm text-text-muted font-sans leading-relaxed italic">
-                  {stanza.map((line, j) => (
-                    <React.Fragment key={j}>
-                      {line}
-                      {j < stanza.length - 1 && <br />}
-                    </React.Fragment>
-                  ))}
-                </p>
-              ))}
-            </div>
+          </div>
+
+          <div className="relative z-10 flex flex-col gap-4">
+            {ROTARACT_PRAYER.map((stanza, i) => (
+              <p key={i} className="text-xs md:text-sm text-text-muted font-sans leading-relaxed italic">
+                {stanza.map((line, j) => (
+                  <React.Fragment key={j}>
+                    {line}
+                    {j < stanza.length - 1 && <br />}
+                  </React.Fragment>
+                ))}
+              </p>
+            ))}
           </div>
         </div>
 
-        <div className="rounded-2xl border border-black/5 bg-theme-blue/20 p-6 md:p-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-stretch">
-          <div className="md:col-span-5 md:order-1">
-            <IllustrationPanel icon={<Scale size={40} strokeWidth={1.75} />} tint="navy" />
-          </div>
-          <div className="md:col-span-7 md:order-2 flex flex-col gap-6 justify-center">
+        <div className="glass-card group relative overflow-hidden p-8 md:p-10 flex flex-col gap-6 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_30px_60px_-20px_rgba(30,41,59,0.3)]">
+          <div className={`absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl ${TINTS.navy.glow} pointer-events-none transition-opacity duration-500 opacity-60 group-hover:opacity-100`} />
+
+          <div className="relative z-10 flex items-center gap-4">
+            <div className={`w-14 h-14 rounded-2xl ${TINTS.navy.badge} text-white flex items-center justify-center shadow-[0_16px_32px_-12px_rgba(30,41,59,0.55)] shrink-0`}>
+              <Scale size={26} strokeWidth={1.75} />
+            </div>
             <h3 className="font-heading font-extrabold text-xl md:text-2xl text-theme-dark">
               The Four-Way Test
             </h3>
-            <p className="text-xs md:text-sm text-text-muted font-sans leading-relaxed">
-              Of the things we think, say, or do:
-            </p>
-            <ol className="flex flex-col gap-4">
-              {FOUR_WAY_TEST.map((line, i) => (
-                <li key={line} className="flex items-start gap-4">
-                  <span className="shrink-0 w-8 h-8 rounded-full bg-brand-crimson/10 text-brand-crimson font-heading font-extrabold text-xs flex items-center justify-center">
-                    {i + 1}
-                  </span>
-                  <span className="text-sm md:text-base text-theme-dark font-heading font-bold leading-snug pt-1">
-                    {line}
-                  </span>
-                </li>
-              ))}
-            </ol>
           </div>
+
+          <p className="relative z-10 text-xs md:text-sm text-text-muted font-sans leading-relaxed">
+            Of the things we think, say, or do:
+          </p>
+          <ol className="relative z-10 flex flex-col gap-4">
+            {FOUR_WAY_TEST.map((line, i) => (
+              <li key={line} className="flex items-start gap-4">
+                <span className={`shrink-0 w-8 h-8 rounded-full font-heading font-extrabold text-xs flex items-center justify-center ${TINTS.navy.chip}`}>
+                  {i + 1}
+                </span>
+                <span className="text-sm md:text-base text-theme-dark font-heading font-bold leading-snug pt-1">
+                  {line}
+                </span>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </section>
