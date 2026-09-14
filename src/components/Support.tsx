@@ -188,10 +188,11 @@ export const Support: React.FC = () => {
 
               {/* Name */}
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
+                <label htmlFor="support-name" className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
                   Name
                 </label>
                 <input
+                  id="support-name"
                   type="text"
                   name="name"
                   value={formData.name}
@@ -205,10 +206,11 @@ export const Support: React.FC = () => {
 
               {/* Email */}
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
+                <label htmlFor="support-email" className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
                   Email Address
                 </label>
                 <input
+                  id="support-email"
                   type="email"
                   name="email"
                   value={formData.email}
@@ -222,11 +224,12 @@ export const Support: React.FC = () => {
 
               {/* Category */}
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
+                <label htmlFor="support-category" className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
                   Query Category
                 </label>
                 <div className="relative">
                   <select
+                    id="support-category"
                     name="category"
                     value={formData.category}
                     onChange={handleInputChange}
@@ -246,10 +249,11 @@ export const Support: React.FC = () => {
 
               {/* Message */}
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
+                <label htmlFor="support-message" className="text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-blue/70">
                   Message
                 </label>
                 <textarea
+                  id="support-message"
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}

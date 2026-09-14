@@ -284,6 +284,7 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
               ref={(el) => {
                 navRefs.current[i] = el;
               }}
+              aria-label={`Jump to project ${i + 1}: ${project.title}`}
               className={`flex items-center gap-1.5 text-[10px] font-heading font-extrabold uppercase tracking-widest text-theme-dark transition-opacity duration-300 cursor-pointer ${
                 i === 0 ? 'opacity-100' : 'opacity-40'
               }`}
