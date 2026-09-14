@@ -20,6 +20,7 @@ import sasidharanPhoto from '../assets/members/sasidharan.jpg';
 import aiswaryaaPhoto from '../assets/members/aiswaryaa.jpg';
 import GokulPhoto from '../assets/members/gokul.jpg';
 import agasraPhoto from '../assets/members/agasra.jpg';
+import TharanidharanPhoto from '../assets/members/Tharanidharan.png';
 
 export interface Member {
   name: string;
@@ -204,7 +205,7 @@ export const MEMBERS: Member[] = [
   {
     name: 'Rtr. Aiswaryaa Mohanraj',
     role: 'Legal Awareness & Advocacy Chair',
-    photoSlot: 'Member Headshot',
+    photoSlot: 'Legal Awareness & Advocacy Chair',
     photo : aiswaryaaPhoto,
     zoomScale:1,
     yOffset: -10,
@@ -229,9 +230,13 @@ export const MEMBERS: Member[] = [
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
   {
-    name: 'Proud Rotaract Member',
-    role: 'Club Member',
-    photoSlot: 'Member Headshot',
+    name: 'Rtr. P. Tharanidharan',
+    role: 'Proud Rotaract Member',
+    photoSlot: 'Proud Rotaract Member',
+     photo : TharanidharanPhoto,
+    zoomScale : 1.4,
+    xOffset: -10,
+    yOffset: 20,
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
   {
