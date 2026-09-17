@@ -3,6 +3,7 @@
 // them out of it via an external link). Vite fingerprints these on build
 // like any other imported asset.
 import vinodhanPhoto from '../assets/members/vinodhan.jpg';
+import vaishnaviPhoto from '../assets/members/vaishnavi.jpg';
 import atshayaPhoto from '../assets/members/atshaya.jpg';
 import dhyaneshPhoto from '../assets/members/dhyanesh.jpg';
 import girishPhoto from '../assets/members/girish.jpg';
@@ -21,6 +22,7 @@ import aiswaryaaPhoto from '../assets/members/aiswaryaa.jpg';
 import GokulPhoto from '../assets/members/gokul.jpg';
 import agasraPhoto from '../assets/members/agasra.jpg';
 import TharanidharanPhoto from '../assets/members/Tharanidharan.png';
+
 
 export interface Member {
   name: string;
@@ -239,9 +241,10 @@ export const MEMBERS: Member[] = [
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
   {
-    name: 'Proud Rotaract Member',
-    role: 'Club member',
+    name: 'Rtr. Vaishnavi Kumaresan',
+    role: 'Club Website Management',
     photoSlot: 'Member Headshot',
+    photo: vaishnaviPhoto,
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
 ];
