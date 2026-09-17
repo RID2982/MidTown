@@ -24,6 +24,7 @@ import agasraPhoto from '../assets/members/agasra.jpg';
 import TharanidharanPhoto from '../assets/members/Tharanidharan.png';
 
 
+
 export interface Member {
   name: string;
   role: string;
@@ -243,7 +244,10 @@ export const MEMBERS: Member[] = [
   {
     name: 'Rtr. Vaishnavi Kumaresan',
     role: 'Club Website Management',
+    name: 'Rtr. Vaishnavi Kumaresan',
+    role: 'Club Website Management',
     photoSlot: 'Member Headshot',
+    photo: vaishnaviPhoto,
     photo: vaishnaviPhoto,
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
