@@ -1,29 +1,3 @@
-// Real headshots, bundled with the app (src/assets/members/ — tracked in
-// git now that the repo is private, so there's no longer a reason to keep
-// them out of it via an external link). Vite fingerprints these on build
-// like any other imported asset.
-import vinodhanPhoto from '../assets/members/vinodhan.jpg';
-import vaishnaviPhoto from '../assets/members/Vaishnavi.jpeg';
-import atshayaPhoto from '../assets/members/atshaya.jpg';
-import dhyaneshPhoto from '../assets/members/dhyanesh.jpg';
-import girishPhoto from '../assets/members/girish.jpg';
-import jeevithaPhoto from '../assets/members/jeevitha.jpg';
-import mukeshPhoto from '../assets/members/mukesh.jpg';
-import nagaGayathriPhoto from '../assets/members/nagagayathri.jpg';
-import sandhiyaPhoto from '../assets/members/sandhiya.jpg';
-import seshaPhoto from '../assets/members/sesha.jpg';
-import nandhiniPhoto from '../assets/members/nandhini-photo.jpg';
-import sriVisahaPhoto from '../assets/members/srivisaha.jpg';
-import sudharvkPhoto from '../assets/members/sudharvk-photo.jpg';
-import prasannavengatPhoto from '../assets/members/prasannavengat.jpg';
-import abdulameerPhoto from '../assets/members/abdulameer.jpg';
-import sasidharanPhoto from '../assets/members/sasidharan.jpg';
-import aiswaryaaPhoto from '../assets/members/aiswaryaa.jpg';
-import GokulPhoto from '../assets/members/gokul.jpg';
-import agasraPhoto from '../assets/members/agasra.jpg';
-import TharanidharanPhoto from '../assets/members/Tharanidharan.png';
-
-
 
 export interface Member {
   name: string;
@@ -31,16 +5,10 @@ export interface Member {
   /** Label shown in the placeholder frame while `photo` is absent. */
   photoSlot: string;
   /**
-   * Real headshot, imported from src/assets/members/. Set it per-person as
+   * Real headshot URL hosted on Google Drive CDN. Set it per-person as
    * photos come in — the card renders the photo when present and falls
    * back to the labelled placeholder frame when it isn't, so the roster
    * can be filled in one member at a time without any UI change.
-   *
-   * Crop to HEAD AND TORSO in portrait (~3:4) before adding, and keep it
-   * around 600-900px wide. Both cards use object-cover/object-top, and the
-   * roster card hides its lower half under a frosted info panel — so a
-   * full-body or landscape shot leaves the subject small, low, and
-   * partly behind that panel.
    */
   photo?: string;
   /**
@@ -61,21 +29,13 @@ export interface Member {
   quote: string;
 }
 
-// Real 2026-27 office bearer roster, from the club's installation ceremony
-// invite. Photos are still pending — real headshots will replace the
-// placeholder photo slots once provided. The 5 additional members mentioned
-// separately are not yet included; their names/photos haven't been sent.
-//
-// Cards intentionally show only photo + name + role + quote — no contact
-// links or stats. Member.email/instagram and the per-member term/projects/
-// since stats existed here before but were never rendered on any card
-// (confirmed unused), and were removed rather than kept as dead data.
+// Real 2026-27 office bearer roster, from the club's installation ceremony invite.
 export const MEMBERS: Member[] = [
   {
     name: 'Rtr. IPP Agasra',
     role: 'Club Admin',
     photoSlot: 'Club Admin Headshot',
-    photo: agasraPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1A7wLx6SAUhzXpfwbzNkGEDd4TMV_KEgS',
     zoomScale: 1.25,
     yOffset: 0,
     quote: 'Overseeing club administration, directory database, and ensuring smooth operation of all avenues of service.',
@@ -84,7 +44,7 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. V. A. Vinodhan',
     role: 'President',
     photoSlot: 'President Headshot',
-    photo: vinodhanPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1LW38k-hBXouxADUvaTKiE2bfDF8Dqkj0',
     zoomScale: 1.7,
     yOffset: -16,
     quote: "Leading with empathy and vision to drive Midtown's milestones and community service.",
@@ -93,7 +53,7 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. K. Atshaya',
     role: 'Secretary',
     photoSlot: 'Secretary Headshot',
-    photo: atshayaPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1SEmLY8WK8iOi5o-nI8ExNZKVV5C5R2l5',
     zoomScale: 1.2,
     yOffset: 10,
     quote: 'Streamlining operations, communication, and district reporting for seamless execution.',
@@ -102,14 +62,14 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. A. Abdul Ameer',
     role: 'Treasurer',
     photoSlot: 'Treasurer Headshot',
-    photo: abdulameerPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1bMRoy4uAJ6Ap9hfv6yXEBguGXowxIahJ',
     zoomScale: 1,
     quote: 'Managing club budget, financial transparency, and community service fund allocations.',
   },
   {
     name: 'Rtr. K. Prasannavengat',
     role: 'Vice President',
-    photo: prasannavengatPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1dmFq-i-F5NTKggW6kRUe1G2P10eDRqTS',
     zoomScale: 1.3,
     xOffset: -5,
     yOffset: 15,
@@ -121,7 +81,7 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. S. Seshathri',
     role: 'Sergeant at Arms',
     photoSlot: 'Sergeant at Arms Headshot',
-    photo: seshaPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1bYBhFCB4eKInx_kpx5GoDkvqceYe6lve',
     zoomScale: 1.15,
     xOffset: 6,
     yOffset: 6,
@@ -131,7 +91,7 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. Naga Gayathiri',
     role: 'Avenue Director, Club Service',
     photoSlot: 'Director Headshot',
-    photo: nagaGayathriPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1Vm9GsWmJME7cU-RdEjcIpvsiDjl-6ME-',
     zoomScale: 1.0,
     yOffset: -2,
     quote: 'Fostering internal fellowship, member onboarding, and inter-district collaborations.',
@@ -140,7 +100,7 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. R. Jeevitha',
     role: 'Avenue Director, Community Service',
     photoSlot: 'Director Headshot',
-    photo: jeevithaPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1jgYnmMFP3aVtyBmN4568rZr3T18EYVIN',
     zoomScale: 1.6,
     xOffset: 6,
     quote: 'Driving blood camps, sapling drives, and direct medical aid to public schools.',
@@ -149,14 +109,14 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. K. Nandhini',
     role: 'Avenue Director, Professional Service',
     photoSlot: 'Director Headshot',
-    photo: nandhiniPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/196NKeyKpqz7CcqoySkRKBs4_Ua0SfI_c',
     quote: 'Coordinating computer literacy campaigns and career placement guides for youth.',
   },
   {
     name: 'Rtr. D. Sudharshun',
     role: 'Avenue Director, International Service',
     photoSlot: 'Director Headshot',
-    photo: sudharvkPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1F_gw9uho4T5Np16iDgFxfb1hZlQFlMEx',
     zoomScale: 1.05,
     yOffset: -15,
     quote: 'Connecting Midtown Rotaractors with global youth networks and cross-border projects.',
@@ -165,28 +125,28 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. R. Sri Visaha',
     role: 'Learning Facilitator',
     photoSlot: 'Project Chair Headshot',
-    photo: sriVisahaPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1W_G2biONKaDGCLpNZqAL8feqblVw2CwZ',
     quote: 'Designing workshops and training sessions that build skills across the membership.',
   },
   {
     name: 'Rtr. T. Sandhiya',
     role: 'Avenue Director, Public Image',
     photoSlot: 'Director Headshot',
-    photo: sandhiyaPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1GzV5SUt-dBYTwWc_w-B8QfXWXXkeKcg4',
     quote: "Shaping the club's voice across social media, press, and public storytelling.",
   },
   {
     name: 'Rtr. Vaishnavi Kumaresan',
     role: 'Club Website Management',
     photoSlot: 'Member Headshot',
-    photo: vaishnaviPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1GGpSTQAeIsBrxZa8ZUB1JHHnnGd65a4b',
     quote: 'Keeping the digital doors open and the website running smoothly.',
   },
   {
     name: 'Rtr. B. Mukesh',
     role: 'Sport Chair',
     photoSlot: 'Project Chair Headshot',
-    photo: mukeshPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1jpYpnrwFqJFunTrORqcjlS9LO3l_u94L',
     zoomScale: 1.6,
     yOffset: 25,
     quote: 'Organizing fellowship tournaments and sports meets that keep the club active and united.',
@@ -196,7 +156,7 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. V. R. Dhyaneshwar',
     role: 'Membership Chair',
     photoSlot: 'Project Chair Headshot',
-    photo: dhyaneshPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1fQhfZYTNIfhX5w0V84jEELIP_7sHV1_B',
     zoomScale: 1.35,
     xOffset: -8,
     yOffset: 15,
@@ -206,7 +166,7 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. R. M. Girish Gowtham',
     role: 'District Priority Projects',
     photoSlot: 'Project Chair Headshot',
-    photo: girishPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1PP_BiPRY7s_LCn1ssvJQgqhIGdWv_7i5',
     zoomScale: 2.1,
     xOffset: -5,
     yOffset: -20,
@@ -216,8 +176,8 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. Aiswaryaa Mohanraj',
     role: 'Legal Awareness & Advocacy Chair',
     photoSlot: 'Legal Awareness & Advocacy Chair',
-    photo : aiswaryaaPhoto,
-    zoomScale:1,
+    photo: 'https://lh3.googleusercontent.com/d/1LXCAQ8twavKKxexWZvUhHyaWhdK_Cu_7',
+    zoomScale: 1,
     yOffset: -10,
     quote: 'Organising awareness campaigns on law, rights and safety.',
   },
@@ -225,7 +185,7 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. Sasidharan',
     role: 'Proud Rotaract Member',
     photoSlot: 'Member Headshot',
-    photo: sasidharanPhoto,
+    photo: 'https://lh3.googleusercontent.com/d/1sIXfS84DZktEfpzLvsdQcmhAetgIfo6g',
     zoomScale: 1.4,
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
@@ -233,8 +193,8 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. M. Gokulakrishnan',
     role: 'Proud Rotaract Member',
     photoSlot: 'Member Headshot',
-    photo : GokulPhoto,
-    zoomScale : 1.4,
+    photo: 'https://lh3.googleusercontent.com/d/1zJc9LaF_vObdbVOqHnoTUpUwwumY7nCj',
+    zoomScale: 1.4,
     xOffset: -9,
     yOffset: 20,
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
@@ -243,8 +203,8 @@ export const MEMBERS: Member[] = [
     name: 'Rtr. P. Tharanidharan',
     role: 'Proud Rotaract Member',
     photoSlot: 'Proud Rotaract Member',
-     photo : TharanidharanPhoto,
-    zoomScale : 1.4,
+    photo: 'https://lh3.googleusercontent.com/d/1Hlv0liGw7rMyfvk5r8Qdyz5K1s1LylEi',
+    zoomScale: 1.4,
     xOffset: -5,
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
