@@ -19,7 +19,6 @@ const DEPTH = 3; // how many boards stay visible behind the active one
 const UP = 56; // px each waiting board rises — compact deck rise to prevent header/description overlap
 const RIGHT = 26; // px lateral drift, so the stack reads as a diagonal
 const BACK = 96; // px of Z recession per step
-const STRIP_HEIGHT = 50; // px — must match the identity strip's h-[50px] below
 
 // Phones can't spare 74px per step without the stack running off the top,
 // so the same geometry is scaled down — but `up` has a floor at
@@ -27,7 +26,7 @@ const STRIP_HEIGHT = 50; // px — must match the identity strip's h-[50px] belo
 // We use 53px on mobile to tightly stack and avoid text overlaps while keeping strips readable.
 const narrow = () => window.innerWidth < 768;
 const geom = () =>
-  narrow() ? { up: STRIP_HEIGHT + 3, right: 16, back: 60 } : { up: UP, right: RIGHT, back: BACK };
+  narrow() ? { up: 36, right: 12, back: 40 } : { up: UP, right: RIGHT, back: BACK };
 
 export interface ProjectsHandle {
   render: (progress01: number) => void;
@@ -52,22 +51,6 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
     }
   };
 
-  // The scroll-overlap deck, explained plainly: Scene hands this a raw 0..1
-  // scroll fraction across the WHOLE runway, regardless of how many boards
-  // there are — so it's rescaled here into `p`, a fractional board index
-  // (e.g. p=1.5 means "halfway between board 1 and board 2"), by
-  // multiplying by (N - 1). Skipping that rescale was a real bug: with it
-  // missing, `p` topped out at 1 no matter how many boards existed, so
-  // anything beyond board index 1 could never become active — the deck
-  // would visibly hand off to the next page section after only ~2 boards,
-  // regardless of N. For every board `i`, `d = i - p` is simply "how many
-  // boards away from the front is this one, and in which direction" — d=0
-  // is the board currently front-and-center, d>0 are boards still waiting
-  // their turn (stacked up-and-back behind it), and d<0 are boards that
-  // have already had their turn (sliding away down and out). Scrolling
-  // just changes `p`, which changes every board's `d`, which is why the
-  // whole deck appears to advance smoothly — nothing here is a timed
-  // animation, every frame is a pure function of scroll position.
   const place = React.useCallback((progress01: number) => {
     const { up, right, back } = geom();
     const p = gsap.utils.clamp(0, N - 1, progress01 * (N - 1));
@@ -77,31 +60,23 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
       if (!b) return;
       const d = i - p;
 
-      // Cull anything far behind or already gone past — keeps the DOM cheap
-      // and stops stale boards ghosting at the edges.
       if (d > DEPTH + 0.6 || d < -1.1) {
         b.style.visibility = 'hidden';
         return;
       }
       b.style.visibility = 'visible';
-
-      // Only the front board should ever be clickable.
       b.style.pointerEvents = i === activeIndex ? 'auto' : 'none';
 
-      // Keep active card on top and layer passed/waiting cards continuously.
       const k = Math.min(Math.abs(d), DEPTH);
       b.style.zIndex = String(200 - Math.round(k * 10));
 
       if (d >= 0) {
-        // Still to come: stacked up-and-back behind the active board.
         b.style.transform =
           `translate3d(${(k * right).toFixed(1)}px, ${(-k * up).toFixed(1)}px, ${(-k * back).toFixed(1)}px)` +
           ` scale(${(1 - k * 0.028).toFixed(3)})`;
         b.style.opacity = String(Math.max(0, 1 - k * 0.16));
         b.style.filter = k > 1.2 ? `blur(${Math.min(3, (k - 1.2) * 1.2).toFixed(2)}px)` : '';
       } else {
-        // Passed: travels down and back out of the stack, blurring as it
-        // goes.
         const t = Math.min(1, -d / 1.1);
         b.style.transform =
           `translate3d(${(-t * 40).toFixed(1)}px, ${(t * 230).toFixed(1)}px, ${(-t * 320).toFixed(1)}px)` +
@@ -121,14 +96,13 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
       nv.classList.toggle('opacity-40', i !== activeIndex);
     });
     if (counterRef.current) counterRef.current.textContent = `${pad(activeIndex + 1)} / ${pad(N)}`;
-    // Whole-section wash in the active board's colour, at low alpha.
     if (tintRef.current) tintRef.current.style.background = `${FEATURED_PROJECTS[activeIndex].color}12`;
   }, []);
 
   useImperativeHandle(ref, () => ({ render: place }), [place]);
 
   React.useEffect(() => {
-    place(0); // resting layout before the first scrub
+    place(0);
 
     const ctx = gsap.context(() => {
       if (titleRef.current) {
@@ -149,7 +123,7 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
     <section
       id="projects"
       ref={sectionRef}
-      className="w-full h-full flex flex-col justify-center px-6 md:px-12 pt-20 pb-5 [@media(max-height:560px)]:pt-8 [@media(max-height:560px)]:pb-2 relative overflow-hidden"
+      className="w-full h-full flex flex-col justify-center px-6 md:px-12 pt-28 pb-5 [@media(max-height:560px)]:pt-8 [@media(max-height:560px)]:pb-2 relative overflow-hidden"
     >
       <div ref={tintRef} className="absolute inset-0 pointer-events-none transition-colors duration-700" aria-hidden="true" />
 
@@ -162,7 +136,7 @@ export const Projects = forwardRef<ProjectsHandle>((_props, ref) => {
         description="A few of our highlighted projects — blood drives, tree plantations, skill workshops — each driven end-to-end by one of our five avenues of service."
         descriptionClassName="hidden md:block"
         titleRef={titleRef}
-        className="mb-6 md:mb-10 shrink-0 z-60"
+        className="mb-8 md:mb-10 shrink-0 z-60"
       />
 
       {/* Stage — perspective lives on the wrapper, the tilt on the stage,

@@ -82,9 +82,9 @@ export const Header: React.FC = () => {
     }`;
 
   return (
-    <header className="fixed top-4 left-0 w-full z-100 px-4 md:px-6">
+    <header className="fixed top-4 left-0 w-full z-100 px-4 lg:px-6">
       <div
-        className={`w-full max-w-[1300px] mx-auto flex md:grid md:grid-cols-3 justify-between items-center rounded-full bg-theme-dark/90 backdrop-blur-md border border-white/10 shadow-lg shadow-black/20 px-6 transition-all duration-300 ${
+        className={`w-full max-w-[1300px] mx-auto flex lg:grid lg:grid-cols-3 justify-between items-center rounded-full bg-theme-dark/90 backdrop-blur-md border border-white/10 shadow-lg shadow-black/20 px-6 transition-all duration-300 ${
           isScrolled ? 'py-2' : 'py-3'
         }`}
       >
@@ -97,24 +97,10 @@ export const Header: React.FC = () => {
           />
         </Link>
 
-        {/* Center Col: Desktop Navigation Menu. shrink-0 on each link plus a
-            tighter gap keeps every label (notably "Club Members" and
-            "RID 2982") fully on-screen at desktop widths instead of being
-            silently compressed and clipped by the link's own overflow-hidden
-            (needed for the pink select-fill effect). Selection is shown by
-            the pink background fill alone (.nav-pill::before) — no text
-            motion. */}
-        <nav className="hidden md:flex items-center gap-5 justify-center">
+        {/* Center Col: Desktop Navigation Menu */}
+        <nav className="hidden lg:flex items-center gap-5 justify-center">
           {NAV_ITEMS.map((item) =>
             item.id === 'projects' ? (
-              // Hover-revealed on a mouse, and ALSO tap-toggled via the
-              // chevron button for touch devices at this width (see
-              // isDesktopProjectsOpen above) — avenues jump straight to
-              // their dedicated /projects/:slug page rather than the
-              // /projects hub. Clicking the "Projects" label itself still
-              // scrolls to the on-page section like every other nav item;
-              // it's a separate element from the chevron now specifically
-              // so tapping the chevron doesn't also navigate away.
               <div key={item.id} ref={desktopProjectsRef} className="relative group">
                 <div className={`${desktopLinkClass(item.id)} flex-row! gap-1`}>
                   <Link to={`/#${item.id}`} className="h-5 flex items-center">
@@ -182,7 +168,7 @@ export const Header: React.FC = () => {
           )}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="flex md:hidden items-center justify-center w-10 h-10 rounded-full border border-white/10 text-white hover:text-brand-crimson transition-colors cursor-pointer"
+            className="flex lg:hidden items-center justify-center w-10 h-10 rounded-full border border-white/10 text-white hover:text-brand-crimson transition-colors cursor-pointer"
             aria-label="Toggle Menu"
           >
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -190,19 +176,11 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer. It's a descendant of the `fixed` header, so it's
-          pinned to the viewport rather than part of the scrollable
-          document — with the "Projects" avenues expanded plus the CTA,
-          this can run past 400px tall, so on a short/landscape phone
-          viewport it needs its own scroll rather than letting content
-          render below the visible screen with no way to reach it. */}
+      {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="absolute top-[calc(100%+8px)] left-4 right-4 md:left-6 md:right-6 max-h-[calc(100svh-6rem)] overflow-y-auto rounded-3xl bg-theme-dark/95 border border-white/10 backdrop-blur-2xl p-6 flex flex-col gap-3 md:hidden shadow-lg animate-fade-in">
+        <div className="absolute top-[calc(100%+8px)] left-4 right-4 lg:left-6 lg:right-6 max-h-[calc(100svh-6rem)] overflow-y-auto rounded-3xl bg-theme-dark/95 border border-white/10 backdrop-blur-2xl p-6 flex flex-col gap-3 lg:hidden shadow-lg animate-fade-in">
           {NAV_ITEMS.map((item) =>
             item.id === 'projects' ? (
-              // No hover on touch devices, so "Projects" expands its avenue
-              // list in place via a separate chevron button — the label
-              // itself still navigates to the on-page section.
               <div key={item.id} className="border-b border-white/5">
                 <div className="flex items-center justify-between py-3">
                   <Link

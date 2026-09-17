@@ -46,19 +46,13 @@ export const LinkedinIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
 // verified name, tagline and a stat strip mirroring the reference design.
 // Used by both the home page leadership duo and the full roster page.
 export const CardVisual: React.FC<{ member: Member }> = ({ member }) => {
+  const [imgError, setImgError] = React.useState(false);
+
   return (
     <article className="w-full h-full rounded-[2.5rem] bg-slate-900 relative overflow-hidden group shadow-[0_24px_60px_-18px_rgba(0,0,0,0.75)]">
       {/* Photo / illustration slot */}
       <div className="absolute inset-0 bg-gradient-to-b from-brand-navy via-slate-800 to-slate-950 flex flex-col items-center justify-center p-6 text-center select-none pb-48 transition-transform duration-500 group-hover:scale-105">
-        {member.photo ? (
-          // Photos are cropped to head-and-torso before being added (see
-          // the note on Member.photo), so object-top reliably keeps the
-          // face in the strip above this card's frosted info panel.
-          // object-center for everyone — a per-person position override
-          // doesn't scale past the one photo it was tuned against. Photos
-          // are cropped to a centred head-and-torso portrait before being
-          // added (see the note on Member.photo), which is what actually
-          // makes a single rule work for the whole roster.
+        {member.photo && !imgError ? (
           <img
             src={member.photo}
             alt={`${member.name}, ${member.role}`}
@@ -68,6 +62,7 @@ export const CardVisual: React.FC<{ member: Member }> = ({ member }) => {
               transform: `translate(${member.xOffset || 0}%, ${member.yOffset || 0}%) scale(${member.zoomScale || 1})`,
             }}
             loading="lazy"
+            onError={() => setImgError(true)}
           />
         ) : (
           <>
@@ -79,7 +74,6 @@ export const CardVisual: React.FC<{ member: Member }> = ({ member }) => {
             </div>
           </>
         )}
-
       </div>
 
       {/* Vignette — darkens the card's edges inward so the subject is
