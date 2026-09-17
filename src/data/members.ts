@@ -176,6 +176,13 @@ export const MEMBERS: Member[] = [
     quote: "Shaping the club's voice across social media, press, and public storytelling.",
   },
   {
+    name: 'Rtr. Vaishnavi Kumaresan',
+    role: 'Club Website Management',
+    photoSlot: 'Member Headshot',
+    photo: vaishnaviPhoto,
+    quote: 'Keeping the digital doors open and the website running smoothly.',
+  },
+  {
     name: 'Rtr. B. Mukesh',
     role: 'Sport Chair',
     photoSlot: 'Project Chair Headshot',
@@ -241,16 +248,7 @@ export const MEMBERS: Member[] = [
     xOffset: -5,
     quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
   },
-  {
-    name: 'Rtr. Vaishnavi Kumaresan',
-    role: 'Club Website Management',
-    name: 'Rtr. Vaishnavi Kumaresan',
-    role: 'Club Website Management',
-    photoSlot: 'Member Headshot',
-    photo: vaishnaviPhoto,
-    photo: vaishnaviPhoto,
-    quote: 'Proud to serve, connect and create a positive impact through Rotaract.',
-  },
+
 ];
 
 // Home-page arc showcase: just the top 3 office bearers — President,
