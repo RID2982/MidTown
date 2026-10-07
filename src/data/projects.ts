@@ -48,16 +48,25 @@ import cloves2 from '../assets/Projects/August_month/cloves/cloves-syndrome-crop
 // September Month Project Imports
 import chessPoster from '../assets/Projects/september_month/Chess/chess-poster.jpg';
 import chessLive from '../assets/Projects/september_month/Chess/chess-live.jpg';
+import chessWinner from '../assets/Projects/september_month/Chess/chess-winner.jpg';
 
 import sustainable1 from '../assets/Projects/september_month/Sustainable development/sustainable-1.jpg';
 import sustainable2 from '../assets/Projects/september_month/Sustainable development/sustainable-2.jpg';
 import sustainable3 from '../assets/Projects/september_month/Sustainable development/sustainable-3.jpg';
+import sustainablePresident from '../assets/Projects/september_month/Sustainable development/sustainable-president.jpg';
+import sustainableRally from '../assets/Projects/september_month/Sustainable development/sustainable-rally.jpg';
 
-import teachersDayEvent from '../assets/Projects/september_month/Teacher\'s day/teachers-day-event.jpg';
 import teachersDayChatgpt from '../assets/Projects/september_month/Teacher\'s day/teachers-day-chatgpt.jpg';
+import teachersDayEvent from '../assets/Projects/september_month/Teacher\'s day/teachers-day-event.jpg';
+import teachersDay1 from '../assets/Projects/september_month/Teacher\'s day/teachers-day-1.jpg';
+import teachersDay2 from '../assets/Projects/september_month/Teacher\'s day/teachers-day-2.jpg';
 
 import worldTourismPoster from '../assets/Projects/september_month/Toursim/world-tourism-poster.jpg';
+import worldTourismLens1 from '../assets/Projects/september_month/Toursim/lens-photo-1.jpg';
+import worldTourismLens2 from '../assets/Projects/september_month/Toursim/lens-photo-2.jpg';
 
+import youthHumanPoster from '../assets/Projects/september_month/Youth and huma/youth-human-poster.jpg';
+import youthHumanSlide1 from '../assets/Projects/september_month/Youth and huma/youth-human-slide1.jpg';
 import youth1 from '../assets/Projects/september_month/Youth and huma/youth-1.jpg';
 import youth2 from '../assets/Projects/september_month/Youth and huma/youth-2.jpg';
 import youth3 from '../assets/Projects/september_month/Youth and huma/youth-3.jpg';
@@ -297,8 +306,8 @@ export const PROJECTS_DATA: Project[] = [
     color: '#ea580c',
     fg: 'light',
     aspectRatio: 'aspect-[3/4]',
-    alignments: [{ fit: 'contain' }, { fit: 'contain' }],
-    images: [chessPoster, chessLive],
+    alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
+    images: [chessPoster, chessLive, chessWinner],
   },
   {
     title: 'Sustainable Sipping Day – Walkathon Rally',
@@ -311,8 +320,8 @@ export const PROJECTS_DATA: Project[] = [
     color: '#16a34a',
     fg: 'light',
     aspectRatio: 'aspect-[3/4]',
-    alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
-    images: [sustainable1, sustainable2, sustainable3],
+    alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
+    images: [sustainable1, sustainable2, sustainable3, sustainablePresident, sustainableRally],
   },
   {
     title: "Teacher's Day Celebration",
@@ -325,8 +334,8 @@ export const PROJECTS_DATA: Project[] = [
     color: '#ca8a04',
     fg: 'light',
     aspectRatio: 'aspect-[3/4]',
-    alignments: [{ fit: 'contain' }, { fit: 'contain' }],
-    images: [teachersDayEvent, teachersDayChatgpt],
+    alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
+    images: [teachersDayChatgpt, teachersDayEvent, teachersDay1, teachersDay2],
   },
   {
     title: 'World Tourism Day — My District Through My Lens',
@@ -339,8 +348,8 @@ export const PROJECTS_DATA: Project[] = [
     color: '#0284c7',
     fg: 'light',
     aspectRatio: 'aspect-[3/4]',
-    alignments: [{ fit: 'contain' }],
-    images: [worldTourismPoster],
+    alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
+    images: [worldTourismPoster, worldTourismLens1, worldTourismLens2],
   },
   {
     title: 'Youth Leadership & Human Duties Day',
@@ -353,8 +362,8 @@ export const PROJECTS_DATA: Project[] = [
     color: '#9333ea',
     fg: 'light',
     aspectRatio: 'aspect-[3/4]',
-    alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
-    images: [youth1, youth2, youth3],
+    alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
+    images: [youthHumanPoster, youthHumanSlide1, youth1, youth2, youth3],
   },
   {
     title: 'Oru Nodi Nidhanam (ஒரு நொடி நிதானம்)',
