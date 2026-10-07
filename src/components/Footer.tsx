@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Globe } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { InstagramIcon, LinkedinIcon } from './MemberCardVisual';
 
 const CLUB_EMAIL: string | null = 'rotaractclubofsalemmidtown05@gmail.com';

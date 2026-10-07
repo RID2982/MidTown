@@ -1,4 +1,4 @@
-import { isAnnouncementLive, CURRENT_ANNOUNCEMENT } from '../components/Announcement';
+import { isAnnouncementLive } from '../components/Announcement';
 
 import karpomKarpippomPhoto from '../assets/Projects/july_Month/karpom-Karpippom/karpom-karpippom.jpg';
 import karpomKarpippomSpeaker1 from '../assets/Projects/july_Month/karpom-Karpippom/speaker-1.jpg';
@@ -43,21 +43,31 @@ import yazhSalemMidtownPage from '../assets/Projects/july_Month/Yazh Bulletin/ya
 
 // Cloves Project Imports
 import cloves1 from '../assets/Projects/August_month/cloves/cloves-certificate.jpg';
-// image.png is a very tall portrait (~0.7:1) that object-cover crops hard
-// inside this gallery's 4:3 frame — transform-based yOffset/zoomScale
-// fixes couldn't reliably clear the "CLOVES" wordmark at the top without
-// overshooting into blank space at the bottom, so it's pre-cropped to an
-// exact 4:3 region (top 53% of the original, which is exactly a 4:3 slice
-// at this image's width) instead of fought with CSS at render time.
 import cloves2 from '../assets/Projects/August_month/cloves/cloves-syndrome-cropped.jpg';
 
-// The 5 avenues match the real Avenue Director roster in data/members.ts —
-// not the 4 mentioned verbally when this was requested (Professional
-// Service was almost certainly just dropped in dictation, not excluded on
-// purpose), so project categorization stays consistent with the board.
-export type Avenue = 'Club Service' | 'Community Service' | 'Professional Service' | 'International Service' | 'Public Image';
+// September Month Project Imports
+import chessPoster from '../assets/Projects/september_month/Chess/chess-poster.jpg';
+import chessLive from '../assets/Projects/september_month/Chess/chess-live.jpg';
 
-export const AVENUES: Avenue[] = ['Club Service', 'Community Service', 'Professional Service', 'International Service', 'Public Image'];
+import sustainable1 from '../assets/Projects/september_month/Sustainable development/sustainable-1.jpg';
+import sustainable2 from '../assets/Projects/september_month/Sustainable development/sustainable-2.jpg';
+import sustainable3 from '../assets/Projects/september_month/Sustainable development/sustainable-3.jpg';
+
+import teachersDayEvent from '../assets/Projects/september_month/Teacher\'s day/teachers-day-event.jpg';
+import teachersDayChatgpt from '../assets/Projects/september_month/Teacher\'s day/teachers-day-chatgpt.jpg';
+
+import worldTourismPoster from '../assets/Projects/september_month/Toursim/world-tourism-poster.jpg';
+
+import youth1 from '../assets/Projects/september_month/Youth and huma/youth-1.jpg';
+import youth2 from '../assets/Projects/september_month/Youth and huma/youth-2.jpg';
+import youth3 from '../assets/Projects/september_month/Youth and huma/youth-3.jpg';
+
+import oruNodiNidhanamPoster from '../assets/Projects/september_month/oru noodi nithanam/oru-nodi-nidhanam-awareness.jpg';
+
+// The 5 avenues of service
+export type Avenue = 'Club Service' | 'Community Service' | 'Professional Service' | 'International Service' | 'Sports';
+
+export const AVENUES: Avenue[] = ['Club Service', 'Community Service', 'Professional Service', 'International Service', 'Sports'];
 
 // URL-friendly slug for each avenue's dedicated /projects/:slug page.
 export const avenueToSlug = (avenue: Avenue): string => avenue.toLowerCase().replace(/ /g, '-');
@@ -111,6 +121,8 @@ export interface Project {
      */
     fit?: 'cover' | 'contain';
   }[];
+  /** Custom aspect ratio per project gallery frame (e.g. 'aspect-[3/4]', 'aspect-[4/3]') */
+  aspectRatio?: string;
   /**
    * Optional call-to-action linking off-site — e.g. a joint bulletin
    * published as a flipbook. Rendered as a button on the avenue detail
@@ -273,29 +285,101 @@ export const PROJECTS_DATA: Project[] = [
     fg: 'light',
     images: [cloves1, cloves2],
   },
-  // Auto-appears once the homepage announcement banner stops showing it
-  // (see CURRENT_ANNOUNCEMENT in Announcement.tsx, the single source of
-  // truth for both) — the same club event, handed off from "upcoming" to
-  // "past" purely by date rather than a manual edit. Swapping in the next
-  // event there (see that file's top comment) updates this automatically
-  // too — nothing here needs to change.
-  ...(isAnnouncementLive() ? [] : [{
-    title: CURRENT_ANNOUNCEMENT.pastProject.title,
-    category: CURRENT_ANNOUNCEMENT.pastProject.category,
-    avenue: CURRENT_ANNOUNCEMENT.pastProject.avenue as Avenue,
-    date: CURRENT_ANNOUNCEMENT.endDate.toLocaleString('en-US', { month: 'long', year: 'numeric' }),
-    description: CURRENT_ANNOUNCEMENT.pastProject.description,
-    status: 'Completed' as const,
+  // September 2026 Projects
+  {
+    title: '🏆 சதுரங்க வேட்டை — E-Chess Competition',
+    category: 'E-Sports Competition',
+    avenue: 'Sports',
+    date: 'September 2026',
+    description: 'Rotaract Club of Salem Midtown organized "சதுரங்க வேட்டை" — a district-wide online E-Chess Competition bringing together strategic thinkers and chess enthusiasts across the region to compete in tactical mind sports.',
+    status: 'Completed',
+    featured: true,
+    color: '#ea580c',
+    fg: 'light',
+    aspectRatio: 'aspect-[3/4]',
+    alignments: [{ fit: 'contain' }, { fit: 'contain' }],
+    images: [chessPoster, chessLive],
+  },
+  {
+    title: 'Sustainable Sipping Day – Walkathon Rally',
+    category: 'Eco-Awareness Rally',
+    avenue: 'Community Service',
+    date: 'September 2026',
+    description: 'Jointly organized by JCI Salem Elite and Rotaract Club of Salem MidTown, the Sustainable Sipping Day Walkathon Rally mobilized members and local youth to advocate for eco-friendly habits, sustainable living, and environmental preservation.',
+    status: 'Completed',
+    featured: true,
+    color: '#16a34a',
+    fg: 'light',
+    aspectRatio: 'aspect-[3/4]',
+    alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
+    images: [sustainable1, sustainable2, sustainable3],
+  },
+  {
+    title: "Teacher's Day Celebration",
+    category: 'Educators Honor & Recognition',
+    avenue: 'Community Service',
+    date: 'September 2026',
+    description: "A heartfelt celebration hosted by Rotaract Club of Salem Midtown on Teacher's Day to honor dedicated educators, express gratitude for their wisdom and guidance, and celebrate their transformative impact on youth.",
+    status: 'Completed',
     featured: false,
-    color: '#0f172a',
-    fg: 'light' as const,
-    ...(CURRENT_ANNOUNCEMENT.poster ? { images: [CURRENT_ANNOUNCEMENT.poster] } : {}),
-  }]),
+    color: '#ca8a04',
+    fg: 'light',
+    aspectRatio: 'aspect-[3/4]',
+    alignments: [{ fit: 'contain' }, { fit: 'contain' }],
+    images: [teachersDayEvent, teachersDayChatgpt],
+  },
+  {
+    title: 'World Tourism Day — My District Through My Lens',
+    category: 'International Cultural & Photography Drive',
+    avenue: 'International Service',
+    date: 'September 2026',
+    description: 'Celebrating World Tourism Day under International Service, "My District Through My Lens" invited youth and Rotaractors to capture and showcase the rich heritage, landmarks, natural beauty, and cultural identity of their home districts through photography.',
+    status: 'Completed',
+    featured: true,
+    color: '#0284c7',
+    fg: 'light',
+    aspectRatio: 'aspect-[3/4]',
+    alignments: [{ fit: 'contain' }],
+    images: [worldTourismPoster],
+  },
+  {
+    title: 'Youth Leadership & Human Duties Day',
+    category: 'Online Awareness Drive',
+    avenue: 'Community Service',
+    date: 'September 2026',
+    description: 'An online awareness campaign hosted on Youth Leadership & Human Duties Day, emphasizing ethical responsibility, civic engagement, and inspiring young leaders to actively uphold human duties in their communities.',
+    status: 'Completed',
+    featured: false,
+    color: '#9333ea',
+    fg: 'light',
+    aspectRatio: 'aspect-[3/4]',
+    alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
+    images: [youth1, youth2, youth3],
+  },
+  {
+    title: 'Oru Nodi Nidhanam (ஒரு நொடி நிதானம்)',
+    category: 'Road Safety Awareness Drive',
+    avenue: 'Community Service',
+    date: 'September 2026',
+    description: 'Rotaract Club of Salem Midtown organized "Oru Nodi Nidhanam" (A Moment of Patience), a civic safety initiative promoting road safety, patient driving, and mindful decision-making to reduce traffic accidents.',
+    status: 'Completed',
+    featured: false,
+    color: '#dc2626',
+    fg: 'light',
+    aspectRatio: 'aspect-[3/4]',
+    alignments: [{ fit: 'contain' }],
+    images: [oruNodiNidhanamPoster],
+  },
+  // Auto-appears once the homepage announcement banner stops showing it
+  ...(isAnnouncementLive() ? [] : []),
 ];
 
 // The home page shows only these — the full list per avenue lives on each
 // /projects/:slug page, reachable from the header's Projects dropdown.
 export const FEATURED_PROJECTS = [
+  PROJECTS_DATA.find((p) => p.title === '🏆 சதுரங்க வேட்டை — E-Chess Competition'),
+  PROJECTS_DATA.find((p) => p.title === 'Sustainable Sipping Day – Walkathon Rally'),
+  PROJECTS_DATA.find((p) => p.title === 'World Tourism Day — My District Through My Lens'),
   PROJECTS_DATA.find((p) => p.title === '"கற்போம் கற்பிப்போம்"'),
   PROJECTS_DATA.find((p) => p.title === 'Humans of Rotaract — Every Badge Has a Story'),
   PROJECTS_DATA.find((p) => p.title === 'Anbodu (அன்போடு)'),

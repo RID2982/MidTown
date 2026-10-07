@@ -1,0 +1,6 @@
+# Allow all web crawlers and search engine bots
+User-agent: *
+Allow: /
+
+# Sitemap Location
+Sitemap: https://rotaractsalemmidtown.org/sitemap.xml

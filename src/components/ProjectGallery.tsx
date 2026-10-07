@@ -25,6 +25,7 @@ export const ProjectGallery: React.FC<{
   alt: string;
   category: string;
   gradientClass: string;
+  aspectRatio?: string;
   alignments?: {
     xOffset?: number;
     yOffset?: number;
@@ -37,7 +38,7 @@ export const ProjectGallery: React.FC<{
      */
     fit?: 'cover' | 'contain';
   }[];
-}> = ({ images, imagePositions, alt, category, gradientClass, alignments }) => {
+}> = ({ images, imagePositions, alt, category, gradientClass, aspectRatio = 'aspect-[4/3]', alignments }) => {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const count = images?.length ?? 0;
@@ -54,7 +55,7 @@ export const ProjectGallery: React.FC<{
   if (!images || count === 0) {
     return (
       <div
-        className={`w-full aspect-[4/3] rounded-[2rem] bg-gradient-to-br ${gradientClass} shadow-lg flex items-center justify-center p-8`}
+        className={`w-full ${aspectRatio} max-h-[520px] rounded-[2rem] bg-gradient-to-br ${gradientClass} shadow-lg flex items-center justify-center p-8`}
       >
         <span className="text-white/80 font-heading font-extrabold text-sm uppercase tracking-widest text-center">
           {category}
@@ -70,7 +71,7 @@ export const ProjectGallery: React.FC<{
     const zoom = alignment?.zoomScale ?? 1;
     const fit = alignment?.fit ?? 'cover';
     return (
-      <div className="w-full aspect-[4/3] rounded-[2rem] shadow-lg overflow-hidden bg-white">
+      <div className={`w-full ${aspectRatio} max-h-[520px] rounded-[2rem] shadow-lg overflow-hidden bg-white mx-auto`}>
         <img
           src={images[0]}
           alt={alt}
@@ -78,7 +79,7 @@ export const ProjectGallery: React.FC<{
             objectPosition: imagePositions?.[0] ?? 'center',
             transform: `translate(${x}%, ${y}%) scale(${zoom})`,
           }}
-          className={`w-full h-full ${fit === 'contain' ? 'object-contain p-4' : 'object-cover'}`}
+          className={`w-full h-full ${fit === 'contain' ? 'object-contain p-2' : 'object-cover'}`}
         />
       </div>
     );
@@ -92,7 +93,7 @@ export const ProjectGallery: React.FC<{
 
   return (
     <div
-      className="relative w-full aspect-[4/3] rounded-[2rem] shadow-lg overflow-hidden bg-white"
+      className={`relative w-full ${aspectRatio} max-h-[520px] rounded-[2rem] shadow-lg overflow-hidden bg-white mx-auto`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >

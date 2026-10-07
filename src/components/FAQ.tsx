@@ -27,7 +27,7 @@ const FAQS: FaqItem[] = [
   },
   {
     question: "What are the 'avenues of service' I keep hearing about?",
-    answer: 'Rotaract organizes all its work into five avenues — Club Service, Community Service, Professional Service, International Service, and Public Image. Every project we run falls under one of these, and most members gravitate toward the avenue that matches their interests.',
+    answer: 'Rotaract organizes all its work into five avenues — Club Service, Community Service, Professional Service, International Service, and Sports. Every project we run falls under one of these, and most members gravitate toward the avenue that matches their interests.',
   },
   {
     question: "I'm not a college student — can I still join?",

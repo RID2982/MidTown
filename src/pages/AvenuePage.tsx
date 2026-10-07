@@ -93,6 +93,7 @@ export const AvenuePage: React.FC = () => {
                     category={project.category}
                     gradientClass={GRADIENTS[index % GRADIENTS.length]}
                     alignments={project.alignments}
+                    aspectRatio={project.aspectRatio}
                   />
                 </div>
                 <div className="w-full md:w-1/2 flex flex-col gap-3">

@@ -6,34 +6,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <script>
-      // On a hard load with a URL like /#about, the browser tries to
-      // natively jump to that element as soon as it exists in the DOM —
-      // but this is a client-rendered app, so #about doesn't exist until
-      // React mounts and every Scene (see Scene.tsx) has finished
-      // measuring its own scroll runway. Browsers retry the native jump
-      // as matching content streams in, so it can fire AGAIN partway
-      // through that measuring, landing the page stuck between two
-      // sections whose heights haven't fully settled yet. HomePage's own
-      // scroll-after-settle logic (useSettleThenHashScroll) already
-      // handles this correctly — the fix is just to stop the browser's
-      // native jump from fighting it. Stripping the hash here, before the
-      // browser gets a chance to act on it, removes any target for it to
-      // chase; the stashed value is picked up once our own logic is ready.
       if (location.hash) {
         window.__pendingHash = location.hash;
         history.replaceState(null, '', location.pathname + location.search);
       }
     </script>
 
+    <!-- Primary Search Engine Optimization (SEO) Meta Tags -->
+    <title>Rotaract Club of Salem Midtown — District 2982 | RID 2982</title>
+    <meta name="title" content="Rotaract Club of Salem Midtown — District 2982 | Road Track Salem" />
+    <meta name="description" content="Official website of Rotaract Club of Salem Midtown (RID 2982). Leading youth organization in Salem dedicated to Community Service, Professional Growth, International Fellowship, and Sports. Guided by Dream to Deserve." />
+    <meta name="keywords" content="Rotaract Salem, Rotaract Club of Salem Midtown, Road Track Salem, Roadtrack Salem, Rotaract District 2982, Rotaract RID 2982, Rotaract Club Salem, Salem Rotaract Club, Best Rotaract Club in Salem, Rotary Club of Salem Midtown, Youth Club Salem, Community Service Salem, E-Chess Competition Salem, Sustainable Sipping Day Salem, Oru Nodi Nidhanam Salem" />
+    <meta name="author" content="Rotaract Club of Salem Midtown" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://rotaractsalemmidtown.org/" />
+
+    <!-- Location & Geo Meta Tags for Salem Region Ranking -->
+    <meta name="geo.region" content="IN-TN" />
+    <meta name="geo.placename" content="Salem" />
+    <meta name="geo.position" content="11.6643;78.1460" />
+    <meta name="ICBM" content="11.6643, 78.1460" />
+
+    <!-- Open Graph / Facebook / WhatsApp Preview Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://rotaractsalemmidtown.org/" />
+    <meta property="og:title" content="Rotaract Club of Salem Midtown — District 2982 | Road Track Salem" />
+    <meta property="og:description" content="Official landing page of the Rotaract Club of Salem Midtown (RID 2982). Empowering youth through impactful community service projects, professional workshops, and international fellowship." />
+    <meta property="og:image" content="https://rotaractsalemmidtown.org/favicon.png" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:site_name" content="Rotaract Salem Midtown" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://rotaractsalemmidtown.org/" />
+    <meta name="twitter:title" content="Rotaract Club of Salem Midtown — District 2982" />
+    <meta name="twitter:description" content="Official landing page of the Rotaract Club of Salem Midtown (RID 2982). Empowering youth in Salem through community service and fellowship." />
+    <meta name="twitter:image" content="https://rotaractsalemmidtown.org/favicon.png" />
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
 
-    <!-- SEO Meta Tags -->
-    <title>Rotaract Club of Salem Midtown — District 2982</title>
-    <meta name="description" content="Official landing page of the Rotaract Club of Salem Midtown, operating under Rotary International District 2982. Guided by the motto Dream to Deserve." />
-    <meta name="author" content="Rotaract Salem Midtown" />
+    <!-- Schema.org JSON-LD Structured Data for Rank #1 Google Rich Snippets -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "NGO",
+            "@id": "https://rotaractsalemmidtown.org/#organization",
+            "name": "Rotaract Club of Salem Midtown",
+            "alternateName": [
+              "RAC Salem Midtown",
+              "Rotaract Salem",
+              "Road Track Salem",
+              "Roadtrack Salem",
+              "Rotaract District 2982"
+            ],
+            "url": "https://rotaractsalemmidtown.org",
+            "logo": "https://rotaractsalemmidtown.org/favicon.png",
+            "description": "Official Rotaract Club operating under Rotary International District 2982 in Salem, Tamil Nadu, India.",
+            "motto": "Dream to Deserve",
+            "foundingDate": "2024-11-05",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Salem",
+              "addressRegion": "Tamil Nadu",
+              "addressCountry": "India"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 11.6643,
+              "longitude": 78.1460
+            },
+            "sameAs": [
+              "https://www.instagram.com/rac_salemmidtown_/",
+              "https://www.linkedin.com/company/racsalemmidtown/about/"
+            ],
+            "parentOrganization": {
+              "@type": "NGO",
+              "name": "Rotary Club of Salem Midtown",
+              "url": "https://rotary.org"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://rotaractsalemmidtown.org/#website",
+            "url": "https://rotaractsalemmidtown.org",
+            "name": "Rotaract Club of Salem Midtown",
+            "description": "Official website for Rotaract Club of Salem Midtown (RID 2982). Explore projects, avenue leadership, member directory, and join us.",
+            "publisher": {
+              "@id": "https://rotaractsalemmidtown.org/#organization"
+            },
+            "inLanguage": "en-IN"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -41,4 +111,3 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

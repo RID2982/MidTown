@@ -48,7 +48,7 @@ const CURRENT_ANNOUNCEMENT = {
   pastProject: {
     title: 'சதுரங்க வேட்டை — Chess Event',
     category: 'Chess Tournament',
-    avenue: 'Club Service',
+    avenue: 'Sports',
     description:
       'Rotaract Club of Salem Midtown hosted சதுரங்க வேட்டை, a chess tournament open to all — an online League Stage followed by Quarter-Final, Semi-Final and Final rounds, bringing members and the wider community together over the board.',
   },
