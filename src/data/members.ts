@@ -88,7 +88,7 @@ export const MEMBERS: Member[] = [
     quote: 'Upholding meeting discipline and keeping every club gathering running smoothly.',
   },
   {
-    name: 'Rtr. Naga Gayathiri',
+    name: 'Rtr. Naga Gayathri P',
     role: 'Avenue Director, Club Service',
     photoSlot: 'Director Headshot',
     photo: 'https://lh3.googleusercontent.com/d/1Vm9GsWmJME7cU-RdEjcIpvsiDjl-6ME-',
