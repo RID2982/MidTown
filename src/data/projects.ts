@@ -56,22 +56,20 @@ import sustainable3 from '../assets/Projects/september_month/Sustainable develop
 import sustainablePresident from '../assets/Projects/september_month/Sustainable development/sustainable-president.jpg';
 import sustainableRally from '../assets/Projects/september_month/Sustainable development/sustainable-rally.jpg';
 
-import teachersDayChatgpt from '../assets/Projects/september_month/Teacher\'s day/teachers-day-chatgpt.jpg';
-import teachersDayEvent from '../assets/Projects/september_month/Teacher\'s day/teachers-day-event.jpg';
-import teachersDay1 from '../assets/Projects/september_month/Teacher\'s day/teachers-day-1.jpg';
-import teachersDay2 from '../assets/Projects/september_month/Teacher\'s day/teachers-day-2.jpg';
+import teachersDay2 from '../assets/Projects/september_month/Teacher\'s day/teachers-day-chatgpt.jpg';
+import teachersDay1 from '../assets/Projects/september_month/Teacher\'s day/teachers-day-event.jpg'; 
 
 import worldTourismPoster from '../assets/Projects/september_month/Toursim/world-tourism-poster.jpg';
 import worldTourismLens1 from '../assets/Projects/september_month/Toursim/lens-photo-1.jpg';
 import worldTourismLens2 from '../assets/Projects/september_month/Toursim/lens-photo-2.jpg';
 
-import youthHumanPoster from '../assets/Projects/september_month/Youth and huma/youth-human-poster.jpg';
-import youthHumanSlide1 from '../assets/Projects/september_month/Youth and huma/youth-human-slide1.jpg';
 import youth1 from '../assets/Projects/september_month/Youth and huma/youth-1.jpg';
 import youth2 from '../assets/Projects/september_month/Youth and huma/youth-2.jpg';
 import youth3 from '../assets/Projects/september_month/Youth and huma/youth-3.jpg';
 
 import oruNodiNidhanamPoster from '../assets/Projects/september_month/oru noodi nithanam/oru-nodi-nidhanam-awareness.jpg';
+import oruNodiNidhanamPoster2 from '../assets/Projects/september_month/oru noodi nithanam/1.png';
+import oruNodiNidhanamPoster3 from '../assets/Projects/september_month/oru noodi nithanam/2.png';
 
 // August & September 2026 Missing Projects Imports
 import sync1 from '../assets/Projects/August_month/Synchronisation/sync-1.jpg';
@@ -83,7 +81,6 @@ import vanga2 from '../assets/Projects/August_month/Vanga Pazhagalam/vanga-2.jpg
 import vanga3 from '../assets/Projects/August_month/Vanga Pazhagalam/vanga-3.jpg';
 import vanga4 from '../assets/Projects/August_month/Vanga Pazhagalam/vanga-4.jpg';
 import vanga5 from '../assets/Projects/August_month/Vanga Pazhagalam/vanga-5.jpg';
-import vanga6 from '../assets/Projects/August_month/Vanga Pazhagalam/vanga-6.jpg';
 
 import vfx1 from '../assets/Projects/August_month/Career on VFX/vfx-1.jpg';
 
@@ -353,7 +350,7 @@ export const PROJECTS_DATA: Project[] = [
     fg: 'light',
     aspectRatio: 'aspect-[3/4]',
     alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
-    images: [teachersDayChatgpt, teachersDayEvent, teachersDay1, teachersDay2],
+    images: [teachersDay1, teachersDay2],
   },
   {
     title: 'World Tourism Day — My District Through My Lens',
@@ -381,7 +378,7 @@ export const PROJECTS_DATA: Project[] = [
     fg: 'light',
     aspectRatio: 'aspect-[3/4]',
     alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
-    images: [youthHumanPoster, youthHumanSlide1, youth1, youth2, youth3],
+    images: [youth1, youth2, youth3],
   },
   {
     title: 'Oru Nodi Nidhanam (ஒரு நொடி நிதானம்)',
@@ -394,8 +391,8 @@ export const PROJECTS_DATA: Project[] = [
     color: '#dc2626',
     fg: 'light',
     aspectRatio: 'aspect-[3/4]',
-    alignments: [{ fit: 'contain' }],
-    images: [oruNodiNidhanamPoster],
+    alignments: [{ fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }, { fit: 'contain' }],
+    images: [oruNodiNidhanamPoster, oruNodiNidhanamPoster2, oruNodiNidhanamPoster3, ],
   },
   {
     title: 'Synchronization with the Universe',
@@ -419,7 +416,7 @@ export const PROJECTS_DATA: Project[] = [
     featured: true,
     color: '#d97706',
     fg: 'light',
-    images: [vanga1, vanga2, vanga3, vanga4, vanga5, vanga6],
+    images: [vanga1, vanga2, vanga3, vanga4, vanga5],
   },
   {
     title: 'Career on VFX',
@@ -470,7 +467,6 @@ export const FEATURED_PROJECTS = [
   PROJECTS_DATA.find((p) => p.title === 'World Tourism Day — My District Through My Lens'),
   PROJECTS_DATA.find((p) => p.title === '"கற்போம் கற்பிப்போம்"'),
   PROJECTS_DATA.find((p) => p.title === 'Humans of Rotaract — Every Badge Has a Story'),
-  PROJECTS_DATA.find((p) => p.title === 'Anbodu (அன்போடு)'),
   PROJECTS_DATA.find((p) => p.title === 'Catalyst'),
   PROJECTS_DATA.find((p) => p.title === 'International Letterhead Exchange'),
   PROJECTS_DATA.find((p) => p.title === 'யாழ் — Joint Bulletin'),
