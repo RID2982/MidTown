@@ -73,6 +73,24 @@ import youth3 from '../assets/Projects/september_month/Youth and huma/youth-3.jp
 
 import oruNodiNidhanamPoster from '../assets/Projects/september_month/oru noodi nithanam/oru-nodi-nidhanam-awareness.jpg';
 
+// August & September 2026 Missing Projects Imports
+import sync1 from '../assets/Projects/August_month/Synchronisation/sync-1.jpg';
+import sync2 from '../assets/Projects/August_month/Synchronisation/sync-2.jpg';
+import sync3 from '../assets/Projects/August_month/Synchronisation/sync-3.jpg';
+
+import vanga1 from '../assets/Projects/August_month/Vanga Pazhagalam/vanga-1.jpg';
+import vanga2 from '../assets/Projects/August_month/Vanga Pazhagalam/vanga-2.jpg';
+import vanga3 from '../assets/Projects/August_month/Vanga Pazhagalam/vanga-3.jpg';
+import vanga4 from '../assets/Projects/August_month/Vanga Pazhagalam/vanga-4.jpg';
+import vanga5 from '../assets/Projects/August_month/Vanga Pazhagalam/vanga-5.jpg';
+import vanga6 from '../assets/Projects/August_month/Vanga Pazhagalam/vanga-6.jpg';
+
+import vfx1 from '../assets/Projects/August_month/Career on VFX/vfx-1.jpg';
+
+import giftOfSight1 from '../assets/Projects/september_month/The Gift of Sight/gift-of-sight-1.jpg';
+
+import letterheadStAnns1 from '../assets/Projects/september_month/Letterhead exchange (Rotaract Club of St. Ann\'s Degree College/letterhead-st-anns-1.jpg';
+
 // The 5 avenues of service
 export type Avenue = 'Club Service' | 'Community Service' | 'Professional Service' | 'International Service' | 'Sports';
 
@@ -378,6 +396,67 @@ export const PROJECTS_DATA: Project[] = [
     aspectRatio: 'aspect-[3/4]',
     alignments: [{ fit: 'contain' }],
     images: [oruNodiNidhanamPoster],
+  },
+  {
+    title: 'Synchronization with the Universe',
+    category: 'International Youth Alignment',
+    avenue: 'International Service',
+    date: 'August 2026',
+    description: 'In alignment with International Youth Day, the Rotaract Club of Salem Midtown participated in "Synchronization with the Universe" — a global youth reflection and connectivity drive encouraging youth to align their goals, foster mindfulness, and build cross-border harmony.',
+    status: 'Completed',
+    featured: false,
+    color: '#0284c7',
+    fg: 'light',
+    images: [sync1, sync2, sync3],
+  },
+  {
+    title: 'Vanga Pazhagalam (வாருங்கள் பழகலாம்)',
+    category: 'Cultural & Fellowship Exchange',
+    avenue: 'Club Service',
+    date: 'August 2026',
+    description: 'Celebrating Independence Day and traditional Tamil hospitality, "Vanga Pazhagalam" (வாருங்கள் பழகலாம்) brought together Midtown Rotaractors and guests for a vibrant cultural gathering, interactive icebreakers, and fellowship bonding.',
+    status: 'Completed',
+    featured: true,
+    color: '#d97706',
+    fg: 'light',
+    images: [vanga1, vanga2, vanga3, vanga4, vanga5, vanga6],
+  },
+  {
+    title: 'Career on VFX',
+    category: 'Vocational Skill Seminar',
+    avenue: 'Professional Service',
+    date: 'August 2026',
+    description: 'A dedicated career guidance and skill development seminar on Visual Effects (VFX), 3D animation, and digital media arts, guiding aspiring youth and students toward career pathways in the creative and entertainment tech industries.',
+    status: 'Completed',
+    featured: false,
+    color: '#7c3aed',
+    fg: 'light',
+    images: [vfx1],
+  },
+  {
+    title: 'The Gift of Sight 👁️',
+    category: 'Eye Care & Organ Donation Awareness',
+    avenue: 'Community Service',
+    date: 'September 2026',
+    description: 'Organized on National Eye Donation Awareness Day, "The Gift of Sight" campaign educated the public on corneal transplantation, eye health care, and inspiring organ donor pledges to eliminate preventable blindness.',
+    status: 'Completed',
+    featured: true,
+    color: '#059669',
+    fg: 'light',
+    images: [giftOfSight1],
+  },
+  {
+    title: 'Letterhead Exchange — RAC St. Ann\'s Degree College',
+    category: 'Club Twinning & Partnership',
+    avenue: 'International Service',
+    date: 'September 2026',
+    description: 'To foster inter-district fellowship and organizational collaboration, the Rotaract Club of Salem Midtown exchanged official letterheads with the Rotaract Club of St. Ann’s Degree College for Women (RID 3150), formalising a partnership for joint service initiatives.',
+    status: 'Completed',
+    featured: false,
+    color: '#2563eb',
+    fg: 'light',
+    alignments: [{ fit: 'contain' }],
+    images: [letterheadStAnns1],
   },
   // Auto-appears once the homepage announcement banner stops showing it
   ...(isAnnouncementLive() ? [] : []),
